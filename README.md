@@ -1,6 +1,7 @@
 # Initiallisation Docker
 
-1. lancer la commande `docker compose -f docker-compose.dev.yml up --build`
+1. Verifier que l'extension Prettier est installée
+2. lancer la commande `docker compose -f docker-compose.dev.yml up --build`
 
 HOP-LA !
 
