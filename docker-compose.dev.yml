@@ -13,7 +13,7 @@ services:
     command: sh -c "rsync -arv /usr/src/cache/node_modules/. /usr/src/app/node_modules && pnpm run dev"
 
     ports:
-      - 5174:5174
+      - 5173:5173
 
     # Nommer le container
     container_name: petfoster-client
