@@ -25,7 +25,7 @@ WORKDIR /usr/src/app
 COPY ./ ./
 
 # Exposer le port pour pouvoir acceder au container depuis l'explorateur
-EXPOSE 5173
+EXPOSE 5174
 
 # Commande à effectuer pour initialiser le container (Ici : 'pnpm run dev')
 CMD [ "pnpm", "run", "dev" ]
