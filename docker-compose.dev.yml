@@ -22,4 +22,4 @@ services:
       - ./:/usr/src/app
 
 volumes:
-  petfoster-volume:
+  petfoster-client-volume:
