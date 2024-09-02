@@ -1,0 +1,25 @@
+# Definir la liste des services (container) dont nous aurons besoin
+
+services:
+  # Definition du container contenant l'api
+  client:
+    # build du container à partir du dossier . au travers du dockerfile 'Dockerfile.dev'
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+
+    # Lier le port 3000 du container au port 3000 local
+    ports:
+      - 5173:5173
+
+    # Nommer le container
+    container_name: petfoster-client
+
+    volumes:
+      # mon répertoire de travail perso, avec les sources
+      # de mon appli est le répertoire de travail
+      # du conteneur
+      - ./:/usr/src/app
+
+volumes:
+  petfoster-volume:
