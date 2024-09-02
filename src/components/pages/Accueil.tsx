@@ -1,5 +1,6 @@
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { LatLngExpression } from 'leaflet';
+import { Heading } from 'react-bulma-components';
 const position: LatLngExpression = [43.3365, 1.3396];
 function Accueil() {
 
@@ -8,6 +9,7 @@ function Accueil() {
        <main>
         <div>
         <h1 className="title">Pet foster</h1>
+        <Heading></Heading>
         
     </div>
     <div>
