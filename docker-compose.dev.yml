@@ -8,7 +8,10 @@ services:
       context: .
       dockerfile: Dockerfile.dev
 
-    # Lier le port 3000 du container au port 3000 local
+    # Lier le port 5173 du container au port 3000 local
+
+    command: sh -c "rsync -arv /usr/src/cache/node_modules/. /usr/src/app/node_modules && pnpm run dev"
+
     ports:
       - 5173:5173
 
@@ -20,6 +23,6 @@ services:
       # de mon appli est le répertoire de travail
       # du conteneur
       - ./:/usr/src/app
-
+      # - ./node_modules/:/usr/src/app/node_modules
 volumes:
   petfoster-client-volume:
