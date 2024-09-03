@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Form, Button, Box, Columns, Notification } from 'react-bulma-components';
+import { useState } from 'react';
+import { Form, Button, Columns, Notification, Heading } from 'react-bulma-components';
 
 const { Field, Control, Input, Label } = Form;
 
 const EditProfileForm = () => {
   const [formData, setFormData] = useState({
-    prenom: '',
+    nom: '',
     tel: '',
     pays: '',
     codePostal: '',
@@ -30,6 +30,7 @@ const EditProfileForm = () => {
   return (
 
       <form onSubmit={handleSubmit}>
+        <Heading renderAs='h3'>éditer votre profil</Heading>
         <Field>
           <Label>Nom</Label>
           <Control>

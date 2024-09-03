@@ -57,7 +57,7 @@ function ProfilUtilisateur() {
         <Button 
   color="primary" 
   className="is-pulled-right" 
-  onClick={() => openModal('contacter')} 
+  onClick={() => openModal('contactUser')} 
 >
           < Envelope /> contacter
         </Button>

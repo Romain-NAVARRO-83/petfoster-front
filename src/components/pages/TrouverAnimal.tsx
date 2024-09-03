@@ -1,4 +1,5 @@
 import { Heading, Dropdown, Icon, Button } from "react-bulma-components";
+import AnimalItemList from "../partials/AnimalItemList";
 
 
 function TrouverAnimal() {
@@ -72,109 +73,11 @@ function TrouverAnimal() {
                 <div className="container columns">
 
                     <div className="column is-full-mobile is-full-tablet is-half-desktop">
-                        <article className="box">
-                            <div className="columns is-vcentered">
-                                {/* Conteneur pour l'image */}
-                                <div className="column is-narrow has-text-centered">
-                                    <figure className="image is-128x128 is-inline-block">
-                                        <img className="is-rounded" src="https://bulma.io/assets/images/placeholders/128x128.png" alt="Animal" />
-                                    </figure>
-                                </div>
-
-                                {/* Conteneur pour le texte et les textarea  */}
-                                <div className="column is-narrow">
-                                    <p className="has-text-weight-bold has-text-left">Nom animal</p>
-                                    <textarea
-                                        className="textarea mt-2" placeholder="Espèce" rows="1"></textarea>
-                                    <textarea
-                                        className="textarea mt-2" placeholder="Age" rows="1"></textarea>
-                                    <textarea className="textarea mt-2" placeholder="Sexe" rows="1"></textarea>
-                                </div>
-
-                                {/* Conteneur pour le bouton */}
-                                <div className="column is-narrow has-text-centered">
-                                    <Button color="info" className="mt-4" renderAs="span">Voir</Button>
-                                </div>
-                            </div>
-                        </article>
-
-                        <article className="box">
-                            <div className="columns is-vcentered">
-                                {/* Conteneur pour l'image */}
-                                <div className="column is-narrow has-text-centered">
-                                    <figure className="image is-128x128 is-inline-block">
-                                        <img className="is-rounded" src="https://bulma.io/assets/images/placeholders/128x128.png" alt="Animal" />
-                                    </figure>
-                                </div>
-
-                                {/* Conteneur pour le texte et les textarea  */}
-                                <div className="column is-narrow">
-                                    <p className="has-text-weight-bold has-text-left">Nom animal</p>
-                                    <textarea
-                                        className="textarea mt-2" placeholder="Espèce" rows="1"></textarea>
-                                    <textarea
-                                        className="textarea mt-2" placeholder="Age" rows="1"></textarea>
-                                    <textarea className="textarea mt-2" placeholder="Sexe" rows="1"></textarea>
-                                </div>
-
-                                {/* Conteneur pour le bouton */}
-                                <div className="column is-narrow has-text-centered">
-                                    <Button color="info" className="mt-4" renderAs="span">Voir</Button>
-                                </div>
-                            </div>
-                        </article>
-
-                        <article className="box">
-                            <div className="columns is-vcentered">
-                                {/* Conteneur pour l'image */}
-                                <div className="column is-narrow has-text-centered">
-                                    <figure className="image is-128x128 is-inline-block">
-                                        <img className="is-rounded" src="https://bulma.io/assets/images/placeholders/128x128.png" alt="Animal" />
-                                    </figure>
-                                </div>
-
-                                {/* Conteneur pour le texte et les textarea  */}
-                                <div className="column is-narrow">
-                                    <p className="has-text-weight-bold has-text-left">Nom animal</p>
-                                    <textarea
-                                        className="textarea mt-2" placeholder="Espèce" rows="1"></textarea>
-                                    <textarea
-                                        className="textarea mt-2" placeholder="Age" rows="1"></textarea>
-                                    <textarea className="textarea mt-2" placeholder="Sexe" rows="1"></textarea>
-                                </div>
-
-                                {/* Conteneur pour le bouton */}
-                                <div className="column is-narrow has-text-centered">
-                                    <Button color="info" className="mt-4" renderAs="span">Voir</Button>
-                                </div>
-                            </div>
-                        </article>
-
-                        <article className="box">
-                            <div className="columns is-vcentered">
-                                {/* Conteneur pour l'image */}
-                                <div className="column is-narrow has-text-centered">
-                                    <figure className="image is-128x128 is-inline-block">
-                                        <img className="is-rounded" src="https://bulma.io/assets/images/placeholders/128x128.png" alt="Animal" />
-                                    </figure>
-                                </div>
-
-                                {/* Conteneur pour le texte et les textarea  */}
-                                <div className="column is-narrow">
-                                    <p className="has-text-weight-bold has-text-left">Nom animal</p>
-                                    <textarea
-                                        className="textarea mt-2" placeholder="Espèce" rows="1"></textarea>
-                                    <textarea
-                                        className="textarea mt-2" placeholder="Age" rows="1"></textarea>
-                                    <textarea className="textarea mt-2" placeholder="Sexe" rows="1"></textarea>
-                                </div>
-
-                                {/* Conteneur pour le bouton */}
-                                <div className="column is-narrow has-text-centered">
-                                    <Button color="info" className="mt-4" renderAs="span">Voir</Button>
-                                </div>
-                            </div>
-                        </article>
+                        
+< AnimalItemList />
+< AnimalItemList />
+< AnimalItemList />
+                        
 
                     </div>
                     <div id="map" className="column is-full-mobile is-full-tablet is-half-desktop">
