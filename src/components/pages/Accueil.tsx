@@ -1,5 +1,7 @@
-import { MapContainer, TileLayer, useMap, Marker, Popup } from 'react-leaflet';
-// import { LatLng, LatLngExpression } from 'leaflet';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { LatLngExpression } from 'leaflet';
+import { Heading } from 'react-bulma-components';
+const position: LatLngExpression = [43.3365, 1.3396];
 function Accueil() {
 
 
@@ -7,16 +9,17 @@ function Accueil() {
        <main>
         <div>
         <h1 className="title">Pet foster</h1>
+        <Heading></Heading>
         
     </div>
     <div>
-    <h2>Test map</h2>
-        <MapContainer center={[43.3365, 1.3396]} zoom={13} scrollWheelZoom={false} style={{height:'300px'}}>
+    
+        <MapContainer center={position} zoom={13} scrollWheelZoom={false} style={{height:'300px'}}>
   <TileLayer
-    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    
     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
   />
-  <Marker position={[43.3365, 1.3396]}>
+  <Marker position={position}>
     <Popup>
       C'est mon bled !
     </Popup>
