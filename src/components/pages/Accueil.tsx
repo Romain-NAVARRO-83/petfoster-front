@@ -1,32 +1,34 @@
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { LatLngExpression } from 'leaflet';
-import {
-  Heading,
-  Button,
-  Tabs,
-  Container,
-  Notification,
-} from 'react-bulma-components';
+import { Heading, Button, Container, Columns } from 'react-bulma-components';
 import AnimalItemList from '../partials/AnimalItemList';
 const position: LatLngExpression = [43.3365, 1.3396];
 function Accueil() {
   return (
     <main>
-      <div>
-        <Heading size={1} renderAs="h1">
-          Bienvenue sur Pet Foster
-        </Heading>
-        <Tabs align="center">
-          <Button color="primary" className="js-modal-trigger">
-            Créer mon compte
-          </Button>
-        </Tabs>
-        <Heading>
+      <Columns>
+        <Columns.Column
+          mobile={{ size: 12 }}
+          tablet={{ size: 12 }}
+          desktop={{ size: 6 }}
+        >
+          <Heading>Bienvenue sur Pet Foster</Heading>
+        </Columns.Column>
+        <Columns.Column
+          mobile={{ size: 12 }}
+          tablet={{ size: 12 }}
+          desktop={{ size: 6 }}
+        >
+          <Button color="primary">Créer mon compte</Button>
+        </Columns.Column>
+      </Columns>
+      <Container>
+        <Heading renderAs="h2">
           XX animaux dans votre secteur dans XX familles d'accueil et XX
           associations
         </Heading>
-      </div>
-      <div>
+      </Container>
+      <Container>
         <MapContainer
           center={position}
           zoom={13}
@@ -39,7 +41,15 @@ function Accueil() {
           </Marker>
         </MapContainer>
         <AnimalItemList />
-      </div>
+        <AnimalItemList />
+        <AnimalItemList />
+        <AnimalItemList />
+        <AnimalItemList />
+      </Container>
+      <Container>
+        <Heading renderAs="h2">Vous souhaitez affiner votre recherche?</Heading>
+        <Button color="primary">Voir les animaux</Button>
+      </Container>
     </main>
   );
 }
