@@ -13,8 +13,8 @@ function FosterlingProfile (){
               <td>30 Km</td>
               <td className='has-text-right'>
               
-              <Button color="primary"   onClick={openModal} size="small" data-tooltip-id="edit-tooltip" data-tooltip-content="éditer">
-          < Pencil size={15}/>
+              <Button color="primary"   onClick={() => openModal('updateForsterlingProfile')} size="small" data-tooltip-id="edit-tooltip" data-tooltip-content="updateForsterlingProfile">
+          < Pencil size={15} />
         </Button>
         
                 <Button color="danger" size="small" data-tooltip-id="edit-tooltip" data-tooltip-content="Supprimer">

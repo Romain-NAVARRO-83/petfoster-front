@@ -29,7 +29,7 @@ const UpdateFosterlingProfileForm = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Heading renderAs="h3">Ajouter un profil d'accueil</Heading>
+      <Heading renderAs="h3">Modifiez le profil d'accueil</Heading>
       <Notification color={'info'} light={true}>
         <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Temporibus, nemo quod? Sit tempore rerum, possimus libero neque facere earum ullam sequi, iure, saepe dolore. Eos odio eaque laboriosam reprehenderit est.</p>
         </Notification>

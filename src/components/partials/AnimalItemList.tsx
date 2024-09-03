@@ -16,7 +16,7 @@ const AnimalItemList: React.FC = () => {
         </Columns.Column>
 
         {/* Conteneur pour le texte et les textarea */}
-        <Columns.Column narrow>
+        <Columns.Column >
           <p className="has-text-weight-bold has-text-left">Nom animal</p>
           <p>
             Espèce

@@ -1,11 +1,12 @@
-import React from 'react';
-import { Modal, Box, Columns } from 'react-bulma-components';
+// import React from 'react';
+import { Modal, Box } from 'react-bulma-components';
 import { useModal } from '../../hooks/ModalContext';
 import EditProfileForm from '../formulaires/EditProfileForm';
 import ContactUserForm from '../formulaires/ContactUserForm';
 import AddFosterlingProfileForm from '../formulaires/AddFosterlingProfileForm';
+import UpdateFosterlingProfileForm from '../formulaires/UpdateFosterlingProfileForm';
 
-const MainModal: React.FC = () => {
+function MainModal(){
   const { modalContent, isActive, closeModal } = useModal();
 
   return (
@@ -21,6 +22,9 @@ const MainModal: React.FC = () => {
    )}
    {modalContent === "addForsterlingProfile" && (
             < AddFosterlingProfileForm />
+   )}
+   {modalContent === "updateForsterlingProfile" && (
+            < UpdateFosterlingProfileForm />
    )}
           
         </Box>

@@ -1,5 +1,5 @@
 import { Section, Heading, Image, Button, Table, Container, Columns } from 'react-bulma-components';
-import { Envelope, Pencil, PlusSmall, Trash } from 'react-flaticons';
+import { Envelope, Pencil, PlusSmall } from 'react-flaticons';
 
 import { useModal } from '../../hooks/ModalContext';
 import FosterlingProfile from '../partials/FosterlingProfile';
