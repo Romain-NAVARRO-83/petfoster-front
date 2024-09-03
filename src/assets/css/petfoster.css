@@ -1,8 +1,25 @@
-div:has(>h1) {
+:root {
+    --green: hsl(152, 36%, 70%);
+    --yellow: hsl(48, 100%, 84%);
+
+    --bulma-primary-h: 152;
+    --bulma-primary-s: 36%;
+    --bulma-primary-l: 70%;
+}
+
+
+div:not(#splash-screen, #splash-screen > *):has(>h1) {
     padding-top: 30vh;
     background-color: #96ceb4;
-    /* background: rgb(150, 206, 180);
-    background: linear-gradient(0deg, rgba(150, 206, 180, 1) 0%, rgba(94, 149, 123, 1) 100%); */
+    background-image: url("/img/main-background.jpg");
+    background-size: cover;
+    background-blend-mode: luminosity;
+    background-position: center;
+}
+
+#splash-screen {
+    min-height: 50vh;
+    background-color: #96ceb4;
     background-image: url("/img/main-background.jpg");
     background-size: cover;
     background-blend-mode: luminosity;
@@ -15,19 +32,40 @@ h1 {
     padding: 1rem
 }
 
+h2,
+h3,
+h4,
+h5,
+h6 {
+    text-align: center;
+}
+
 header {
     position: sticky;
     top: 0;
+    z-index: 99;
+}
+
+header.scrolled nav {
+    background-color: #fff;
+    transition: all ease-out .5s;
+}
+
+header.scrolled nav .navbar-item {
+    color: #000;
+    transition: all ease-out .5s;
 }
 
 nav.navbar {
     position: absolute;
     width: 100%;
     background-color: transparent;
+    transition: all ease-out .5s;
 }
 
 .navbar-item {
     color: #fff;
+    transition: all ease-out .5s;
 }
 
 /* footer>div {
@@ -39,6 +77,11 @@ footer>div>ul {
     columns: 2
 }
 
-#map {
-    height: 500px
+#home-map-container>* {
+    height: 80vh
+}
+
+#home-map-container+.animal-list {
+    max-height: 80vh;
+    overflow-y: auto;
 }

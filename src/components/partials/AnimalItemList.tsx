@@ -9,8 +9,8 @@ const AnimalItemList: React.FC = () => {
         <Columns.Column narrow textAlign="centered">
           <Image
             rounded
-            size={128}
-            src="https://bulma.io/assets/images/placeholders/128x128.png"
+            size={64}
+            src="https://bulma.io/assets/images/placeholders/64x64.png"
             alt="Animal"
           />
         </Columns.Column>
