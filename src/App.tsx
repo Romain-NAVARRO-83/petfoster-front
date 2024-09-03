@@ -4,7 +4,7 @@ import Header from "./components/Header"
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 // Composants
-import TrouverAnimal from "./components/pages/TrouverAnimal";
+import TrouverAnimal  from "./components/pages/TrouverAnimal/TrouverAnimal";
 import Error404 from "./components/pages/404";
 import Accueil from "./components/pages/Accueil";
 import Information from "./components/pages/Information";
