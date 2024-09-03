@@ -1,4 +1,4 @@
-// problème sur les faux pays / temps de chargement long => pouvoir écrire / téléphone a vérifier / 
+// problème sur les faux pays / temps de chargement long => pouvoir écrire / téléphone a vérifier / lien condition général a faire
 
 // API RestCountries : Cette API sert à récupérer la liste des pays. Elle fournit des informations sur tous les pays du monde, y compris leurs noms, codes, et autres détails.
 
