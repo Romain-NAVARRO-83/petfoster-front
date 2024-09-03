@@ -1,10 +1,12 @@
+import { Heading } from "react-bulma-components";
+
 function Information() {
 
 
     return (
        <main>
         <div>
-        <h1 className="title">Information</h1>
+        <Heading>Information</Heading> 
     </div>
     
         </main>
