@@ -3,8 +3,8 @@
 ## Initialisation
 
 1. Verifier que l'extension Prettier est installée
-2. lancer la commande `docker compose -f docker-compose.dev.yml up --build` (On devrait se retrouver dans l'instace Vite exposant le localhost:5173)
-3. Lancer un second terminal et y lancer la commander `docker exec -it 'petfoster-client' bash`; Pour avoir un acces au container et y lancer des commandes de bases comme `pnpm i`.
+2. lancer la commande `pnpm run compose:dev` (On devrait se retrouver dans l'instace Vite exposant le localhost:5173)
+3. Lancer un second terminal et y lancer la commander `pnpm run container:client`; Pour avoir un acces au container et y lancer des commandes de bases comme `pnpm i`.
 
 HOP-LA !
 
@@ -14,5 +14,5 @@ HOP-LA !
 
 ## Si besoin de reinitialiser les container
 
-1. `docker rm -v -f $(docker ps -qa)`
-2. `docker compose -f docker-compose.dev.yml up --build`
+1. `pnpm run rm:container`
+2. `pnpm run compose:dev`
