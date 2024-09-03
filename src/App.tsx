@@ -1,35 +1,50 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
-import './App.css';
+import Footer from "./components/Footer"
+import Header from "./components/Header"
+
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
+// Composants
+import TrouverAnimal from "./components/pages/TrouverAnimal";
+import Error404 from "./components/pages/404";
+import Accueil from "./components/pages/Accueil";
+import Information from "./components/pages/Information";
+import PolitiqueDeConfidentialite from "./components/pages/PolitiqueDeConfidentialite.";
+import MesAnimaux from "./components/pages/MesAnimaux";
+import MesDemandes from "./components/pages/MesDemandes";
+import Contact from "./components/pages/Contact";
+import ProfilAnimal from "./components/pages/ProfilAnimal";
+import ProfilUtilisateur from "./components/pages/ProfilUtilisateur";
+import Connexion from "./components/pages/Connexion";
+
+
+
 
 function App() {
-  const [count, setCount] = useState(0);
+
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <Router>
+    <Header />
+    
+    <Routes>
+        <Route path="/" element={< Accueil />} />
+        <Route path="/information" element={< Information />} />
+        <Route path="/politique-de-confidentialite" element={< PolitiqueDeConfidentialite />} />
+        <Route path="/contact" element={< Contact />} />
+        <Route path="/mes-animaux" element={< MesAnimaux />} />
+        <Route path="/mes-demandes" element={< MesDemandes />} />
+        <Route path="/trouver-animal" element={< TrouverAnimal />} />
+        <Route path="/profil-animal" element={< ProfilAnimal />} />
+        <Route path="/profil" element={< ProfilUtilisateur />} />
+        <Route path="/connexion" element={< Connexion />} />
+        <Route path="*" element={< Error404 />} />
+      </Routes>
+    </Router>
+    
+      <Footer />
     </>
-  );
+  )
 }
 
-export default App;
+export default App
