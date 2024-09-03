@@ -1,9 +1,9 @@
 import { Section, Heading, Image, Button, Table, Container, Columns } from 'react-bulma-components';
 import { Envelope, Pencil, PlusSmall, Trash } from 'react-flaticons';
-import MainModal from '../partials/Modal';
+
 import { useModal } from '../../hooks/ModalContext';
 import FosterlingProfile from '../partials/FosterlingProfile';
-import  LazyImage  from '../partials/LazyImage';
+// import  LazyImage  from '../partials/LazyImage';
 function ProfilUtilisateur() {
   const { openModal } = useModal();
 
@@ -88,7 +88,7 @@ function ProfilUtilisateur() {
         </Table>
         </Container>
       </Section>
-      < MainModal />
+      
         </main>
     )
   }

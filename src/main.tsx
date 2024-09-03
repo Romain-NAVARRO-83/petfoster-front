@@ -1,6 +1,7 @@
 
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
+import MainModal from './components/partials/Modal';
 import './assets/css/bulma-no-dark-mode.css';
 import './assets/css/petfoster.css';
 import 'leaflet/dist/leaflet.css';
@@ -12,5 +13,6 @@ import { ModalProvider } from "./hooks/ModalContext";
 createRoot(document.getElementById('root')!).render(
     <ModalProvider>
     <App />
+    < MainModal />
     </ModalProvider>
 )
