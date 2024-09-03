@@ -33,13 +33,13 @@ function Header() {
         <Navbar.Menu className={isActive ? 'is-active' : ''}>
           <Navbar.Container align="right">
             {/* <Navbar.Item href="/trouver-animal" renderAs='NavLink'>Voir les animaux</Navbar.Item> */}
-            <NavLink to="/trouver-animal" exact className="navbar-item">
+            <NavLink to="/trouver-animal" className="navbar-item">
               Voir les animaux
             </NavLink>
-            <NavLink to="/mes-demandes" exact className="navbar-item">
+            <NavLink to="/mes-demandes" className="navbar-item">
               Mes demandes
             </NavLink>
-            <NavLink to="/mes-animaux" exact className="navbar-item">
+            <NavLink to="/mes-animaux" className="navbar-item">
               Mes animaux
             </NavLink>
             {/* <Navbar.Item href="/mes-demandes">Mes demandes</Navbar.Item> */}

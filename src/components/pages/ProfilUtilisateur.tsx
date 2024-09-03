@@ -1,6 +1,9 @@
-import { Section, Heading, Image, Button, Table, Container, Columns, Column } from 'react-bulma-components';
+import { Section, Heading, Image, Button, Table, Container, Columns } from 'react-bulma-components';
+import { Envelope, Pencil, PlusSmall, Trash } from 'react-flaticons';
 import MainModal from '../partials/Modal';
 import { useModal } from '../../hooks/ModalContext';
+import FosterlingProfile from '../partials/FosterlingProfile';
+import  LazyImage  from '../partials/LazyImage';
 function ProfilUtilisateur() {
   const { openModal } = useModal();
 
@@ -13,12 +16,19 @@ function ProfilUtilisateur() {
       <Section>
       <Container>
       <Columns>
-        <Columns.Column size={{ mobile: 12, tablet: 12, desktop: 6 }}>
-        <picture>
-          <Image src="#" alt="profile picture" size={300} />
-        </picture>
+        <Columns.Column 
+        mobile={{ size: 12 }} 
+        tablet={{ size: 12 }} 
+        desktop={{ size: 6 }}>
+
+          {/* < LazyImage src="#" alt="profile picture" size={300} /> */}
+          <Image src="https://placehold.co/600x400" alt="profile picture" size={300} loading="lazy" />
+
         </Columns.Column >
-        <Columns.Column size={{ mobile: 12, tablet: 12, desktop: 6 }}>
+        <Columns.Column 
+        mobile={{ size: 12 }} 
+        tablet={{ size: 12 }} 
+        desktop={{ size: 6 }}>
         <ul>
           <li>Nom</li>
           <li>Prénom</li>
@@ -35,8 +45,7 @@ function ProfilUtilisateur() {
       </Container>
       </Section>
       <Section>
-       
-        
+        < Container >
         <Heading size={2} renderAs='h2'>Description</Heading>
         <Section>
           <p>
@@ -45,40 +54,39 @@ function ProfilUtilisateur() {
             molestiae id laboriosam eum.
           </p>
         </Section>
-        <Button color="primary" className="js-modal-trigger" onClick={openModal}>
-          Contacter ou modifier
+        <Button color="primary"  className="is-pulled-right"  onClick={openModal}>
+          < Envelope /> contacter
         </Button>
+        <Button color="primary"  className="is-pulled-right"  onClick={openModal}>
+          <Pencil /> éditer
+        </Button>
+        </Container>
       </Section>
       <Section>
+        <Container>
         <Heading size={2} renderAs='h2'>Profils d'accueil</Heading>
         <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Accusamus praesentium sint eos sequi nobis, suscipit aut quisquam enim maxime vitae voluptate culpa debitis ea officiis molestias est quia a? Sunt.</p>
-        <Button color="primary" className="js-modal-trigger" onClick={openModal}>
-          Ajouter
+        <Button color="primary" className="is-pulled-right"  onClick={openModal}>
+          < PlusSmall /> Ajouter
         </Button>
-        <Table>
-          <thead>
+        <Table className='is-fullwidth has-text-centered card'>
+          <thead >
             <tr>
-              <th>Espèce</th>
-              <th>Age</th>
-              <th>Sexe</th>
-              <th>Perimètre</th>
-              <th>Suppr.</th>
+              <th className='has-text-centered'>Espèce</th>
+              <th className='has-text-centered'>Age</th>
+              <th className='has-text-centered'>Sexe</th>
+              <th className='has-text-centered'>Perimètre</th>
+              <th className='has-text-right'>Contrôle</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Chat</td>
-              <td>-5ans</td>
-              <td>Mâle</td>
-              <td>30 Km</td>
-              <td>
-                <Button color="danger" className="is-dark">
-                  Suppr
-                </Button>
-              </td>
-            </tr>
+            < FosterlingProfile />
+            < FosterlingProfile />
+            < FosterlingProfile />
+            < FosterlingProfile />
           </tbody>
         </Table>
+        </Container>
       </Section>
       < MainModal />
         </main>

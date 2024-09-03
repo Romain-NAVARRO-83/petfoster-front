@@ -28,8 +28,8 @@ export default tseslint.config(
       },
       ecmaVersion: 'latest',
       sourceType: 'module',
-      project: './tsconfig.app.json', // LIGNE TRÈS IMPORTANTE !
-      tsconfigRootDir: __dirname,
+      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      tsconfigRootDir: import.meta.dirname,
     },
     plugins: ['@typescript-eslint', 'react', 'react-refresh', 'prettier'],
     rules: {
