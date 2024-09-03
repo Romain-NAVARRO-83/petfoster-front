@@ -1,20 +1,20 @@
 import React from 'react';
-import { Modal, Button, Box } from 'react-bulma-components';
+import { Modal, Box } from 'react-bulma-components';
 import { useModal } from '../../hooks/ModalContext';
 import EditProfileForm from '../formulaires/EditProfileForm';
 
-const MainModal = () => {
-  const { isActive, closeModal } = useModal(); // Use context state
+const MainModal: React.FC = () => {
+  const { modalContent, isActive, closeModal } = useModal();
 
   return (
     <Modal show={isActive} onClose={closeModal} closeOnBlur={true}>
       <Modal.Content>
         <Box>
-        <button class="delete" onClick={closeModal} aria-label='Fermer la modale'></button>
-          < EditProfileForm />
-          {/* <Button color="primary" onClick={closeModal}>
-            Close
-          </Button> */}
+          <button className="delete is-pull-right" onClick={closeModal} aria-label="Close modal"></button>
+          {modalContent === "editUserProfile" && (
+            < EditProfileForm />
+   )}
+          
         </Box>
       </Modal.Content>
     </Modal>

@@ -54,10 +54,18 @@ function ProfilUtilisateur() {
             molestiae id laboriosam eum.
           </p>
         </Section>
-        <Button color="primary"  className="is-pulled-right"  onClick={openModal}>
+        <Button 
+  color="primary" 
+  className="is-pulled-right" 
+  onClick={() => openModal('contacter')} 
+>
           < Envelope /> contacter
         </Button>
-        <Button color="primary"  className="is-pulled-right"  onClick={openModal}>
+        <Button 
+  color="primary" 
+  className="is-pulled-right" 
+  onClick={() => openModal('editUserProfile')} 
+>
           <Pencil /> éditer
         </Button>
         </Container>
@@ -66,7 +74,11 @@ function ProfilUtilisateur() {
         <Container>
         <Heading size={2} renderAs='h2'>Profils d'accueil</Heading>
         <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Accusamus praesentium sint eos sequi nobis, suscipit aut quisquam enim maxime vitae voluptate culpa debitis ea officiis molestias est quia a? Sunt.</p>
-        <Button color="primary" className="is-pulled-right"  onClick={openModal}>
+        <Button 
+  color="primary" 
+  className="is-pulled-right" 
+  onClick={() => openModal('addForsterlingProfile')} 
+>
           < PlusSmall /> Ajouter
         </Button>
         <Table className='is-fullwidth has-text-centered card'>
