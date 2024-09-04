@@ -32,6 +32,7 @@ const RegistrationPage: React.FC = () => {
     const [countryDialCode, setCountryDialCode] = useState(''); // Pour stocker l'indicatif du pays sélectionné
     const [postalCodeError, setPostalCodeError] = useState('');
     const [selectedCountryCode, setSelectedCountryCode] = useState(''); 
+    const [userType, setUserType] = useState(''); // Pour stocker le type d'utilisateur sélectionné
 
     // Validation de l'email
     const validateEmail = (email: string) => {
@@ -86,6 +87,12 @@ const RegistrationPage: React.FC = () => {
         } 
         else {
             setPhoneError('');
+        }
+
+        //vérifier que l'utilisateur a bien sélectionné un type 
+        if (!userType) {
+            console.error("Veuillez sélectionner un type d'utilisateur.");
+            isValid = false;
         }
     
         // Validation du code postal (appel à l'API Zippopotam.us)
@@ -296,6 +303,62 @@ const RegistrationPage: React.FC = () => {
 
                         // Formulaire de création de compte
                         <form action="/submit_registration" method="post" onSubmit={handleSubmit}>
+
+                            <div className="field">
+
+                                <label className="label">Type d'utilisateur <span className="has-text-danger">*</span> :</label>
+
+                                <div className="control">
+
+                                    <label className="radio">
+
+                                        <input
+
+                                            type="radio"
+                                            name="userType"
+                                            value="adoptant"
+                                            checked={userType === 'adoptant'}
+                                            onChange={(e) => setUserType(e.target.value)}
+
+                                        />
+
+                                        Adoptant
+
+                                    </label>
+
+                                    <label className="radio">
+
+                                        <input
+
+                                            type="radio"
+                                            name="userType"
+                                            value="famille"
+                                            checked={userType === 'famille'}
+                                            onChange={(e) => setUserType(e.target.value)}
+
+                                        />
+
+                                        Famille d'accueil
+
+                                    </label>
+
+                                    <label className="radio">
+
+                                        <input
+                                            type="radio"
+                                            name="userType"
+                                            value="association"
+                                            checked={userType === 'association'}
+                                            onChange={(e) => setUserType(e.target.value)}
+                                        />
+
+                                        Association
+
+                                    </label>
+
+                                </div>
+
+                            </div>
 
                             <div className="field">
 
