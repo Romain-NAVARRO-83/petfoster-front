@@ -1,4 +1,4 @@
-// problème sur les faux pays / lien condition général a faire / problème au niveau de ville lors de la resélection de pays / Ajouté choix type user button radio / vérification code postal
+// problème sur les faux pays / lien condition général a faire / problème au niveau de ville lors de la resélection de pays / Ajouté choix type user button radio / 
 
 // API RestCountries : Cette API sert à récupérer la liste des pays. Elle fournit des informations sur tous les pays du monde, y compris leurs noms, codes, et autres détails.
 
@@ -6,7 +6,7 @@
 
 //Zippopotam.us : Cette API permet de récupérer les informations de code postal à partir d'une ville et d'un pays.
 
-// API react-select 
+// API react-select : permet de créer des composants de sélection (dropdown) stylisés et interactifs.
 
 import React, { useState, useEffect } from 'react';
 import { Container, Section, Heading, Box, Button, Tabs } from 'react-bulma-components';
@@ -90,14 +90,18 @@ const RegistrationPage: React.FC = () => {
     
         // Validation du code postal (appel à l'API Zippopotam.us)
         if (selectedCountryCode) {
+
             const isPostalCodeValid = await validatePostalCode(selectedCountryCode, selectedCity, postalCode);
+
             if (!isPostalCodeValid) {
                 setPostalCodeError("Le code postal ne correspond pas à la ville sélectionnée.");
                 isValid = false;
-            } else {
+            } 
+            else {
                 setPostalCodeError('');
             }
-        } else {
+        } 
+        else {
             console.error("Code ISO du pays non défini.");
             isValid = false;
         }
@@ -112,6 +116,7 @@ const RegistrationPage: React.FC = () => {
 
     // Récupération de la liste des pays via l'API REST Countries, avec leurs indicatifs
     useEffect(() => {
+
         fetch('https://restcountries.com/v3.1/all')
             .then(response => response.json())
             .then(data => {
@@ -128,11 +133,14 @@ const RegistrationPage: React.FC = () => {
 
     // Récupération des villes en fonction du pays sélectionné via l'API CountriesNow
     useEffect(() => {
+
         if (selectedCountry) {
+
             // Rechercher les données du pays sélectionné
             const selectedCountryData = countries.find(country => country.name === selectedCountry);
     
             if (selectedCountryData) {
+
                 // Mise à jour de l'indicatif du pays
                 setCountryDialCode(selectedCountryData.dialCode); 
                 setPhoneNumber(selectedCountryData.dialCode); // Mettre à jour le numéro de téléphone avec l'indicatif
@@ -157,10 +165,12 @@ const RegistrationPage: React.FC = () => {
                     setSelectedCity(''); // Réinitialiser la ville sélectionnée
                 })
                 .catch(error => console.error("Erreur lors de la récupération des villes:", error));
-            } else {
+            } 
+            else {
                 console.error("Erreur: Pays non trouvé dans la liste des pays.");
             }
-        } else {
+        } 
+        else {
             // Réinitialisation si aucun pays n'est sélectionné
             setCities([]);
             setPhoneNumber(''); // Réinitialiser le champ téléphone
@@ -172,7 +182,9 @@ const RegistrationPage: React.FC = () => {
 
     // Fonction pour valider le code postal via l'API Zippopotam.us
     const validatePostalCode = async (country: string, city: string, postalCode: string): Promise<boolean> => {
+
         try {
+
             // Utiliser le code ISO alpha-2 en minuscule
             const apiUrl = `https://api.zippopotam.us/${country.toLowerCase()}/${postalCode}`;
             console.log("Requête à l'API Zippopotam.us avec l'URL :", apiUrl);
@@ -194,7 +206,8 @@ const RegistrationPage: React.FC = () => {
             } else {
                 return false;
             }
-        } catch (error) {
+        } 
+        catch (error) {
             console.error("Erreur lors de la validation du code postal:", error);
             return false;
         }
@@ -439,7 +452,7 @@ const RegistrationPage: React.FC = () => {
 
                             <div className="field">
 
-                                <label className="label" htmlFor="adresse">Adresse <span className="has-text-danger">*</span> :</label>
+                                <label className="label" htmlFor="adresse">Adresse :</label>
 
                                 <div className="control">
                                     <input className="input" type="text" id="adresse" name="adresse" required />
