@@ -1,7 +1,10 @@
 import React from 'react';
 import { Box, Columns, Image, Button } from 'react-bulma-components';
+import { Envelope, Pencil } from 'react-flaticons';
+import { useModal } from '../../hooks/ModalContext';
 
 const AnimalItemList: React.FC = () => {
+  const { openModal } = useModal();
   return (
     <Box>
       <Columns vCentered>
@@ -26,9 +29,14 @@ const AnimalItemList: React.FC = () => {
         </Columns.Column>
 
         {/* Conteneur pour le bouton */}
+
         <Columns.Column narrow textAlign="centered">
-          <Button color="info" className="mt-4">
-            Voir
+          <Button color="info">Voir</Button>
+          <Button
+            color="primary"
+            onClick={() => openModal('editAnimalProfile')}
+          >
+            <Pencil /> Editer
           </Button>
         </Columns.Column>
       </Columns>
