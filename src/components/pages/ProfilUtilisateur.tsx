@@ -1,11 +1,14 @@
 import { Section, Heading, Image, Button, Table, Container, Columns } from 'react-bulma-components';
 import { Envelope, Pencil, PlusSmall } from 'react-flaticons';
+import Slider from 'react-slick';
 
 import { useModal } from '../../hooks/ModalContext';
 import FosterlingProfile from '../partials/FosterlingProfile';
 // import  LazyImage  from '../partials/LazyImage';
 function ProfilUtilisateur() {
   const { openModal } = useModal();
+
+  // Configuration de la galerie d'images
 
     return (
        <main>
@@ -22,7 +25,8 @@ function ProfilUtilisateur() {
         desktop={{ size: 6 }}>
 
           {/* < LazyImage src="#" alt="profile picture" size={300} /> */}
-          <Image src="https://placehold.co/600x400" alt="profile picture" size={300} loading="lazy" />
+          {/* <Image src="https://placehold.co/600x400" alt="profile picture" size={300} loading="lazy" /> */}
+
 
         </Columns.Column >
         <Columns.Column 
