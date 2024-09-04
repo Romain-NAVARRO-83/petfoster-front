@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
 import { Heading, Dropdown, Icon, Button, Section, Columns, Form} from "react-bulma-components";
 const { Field, Label, Input } = Form;
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
@@ -37,20 +39,61 @@ function TrouverAnimal() {
     });
   };
 
+  
+
+//   GESTION DU FETCH des animaux
+const [allAnimals, setAllAnimals] = useState<any>(null);
+const [loading, setLoading] = useState(true);
+const [fetchError, setFetchError] = useState<string | null>(null);
+
+useEffect(() => {
+
+  axios
+    .get('http://localhost:3000/api/animals') 
+    .then((response) => {
+      setAllAnimals(response.data);  
+      setLoading(false);       
+    })
+    .catch(() => {
+    setFetchError('Error fetching data');  
+      setLoading(false);
+    });
+}, []); 
+
+//   GESTION DU FETCH des utilisateurs
+const [allUsers, setAllUsers] = useState<any>(null);
+const [loadingUsers, setLoadingUsers] = useState(true);
+const [fetchUsersError, setFetchUsersError] = useState<string | null>(null);
+
+useEffect(() => {
+
+  axios
+    .get('http://localhost:3000/api/users') 
+    .then((response) => {
+      setAllUsers(response.data);  
+      setLoadingUsers(false);       
+    })
+    .catch(() => {
+        setFetchUsersError('Error fetching data');  
+      setLoadingUsers(false);
+    });
+}, []); 
 
   return (
     <main>
       <div>
         <Heading>Trouver un animal</Heading>
       </div>
+      {/* {JSON.stringify(data)} */}
 
      
 
       <Section className="columns">
         <Columns.Column mobile={{ size: 12 }} tablet={{ size: 12 }} desktop={{ size: 6 }}>
-          <AnimalItemList />
-          <AnimalItemList />
-          <AnimalItemList />
+        {allAnimals && allAnimals.map((item: any) => (
+          <AnimalItemList animal={item}/>
+        ))}
+          
         </Columns.Column>
 
         <Columns.Column
@@ -87,7 +130,22 @@ function TrouverAnimal() {
                 <Link to="/profil">Profil user</Link>
               </Popup>
             </Marker>
+{/* Marquers des utilisateurs */}
+{allUsers && allUsers.map((user: any) => (
+  <Marker 
+    key={user.id} 
+    position={[parseFloat(user.latitude), parseFloat(user.longitude)]} // Use user’s latitude and longitude
+  > 
+    <Popup>
+      {user.name}
+      <br />
+      <Link to={`/profil/${user.id}`}>Voir le profil</Link>
+    </Popup>
+  </Marker>
+))}
           </MapContainer>
+          {/* {JSON.stringify(allUsers)} */}
+          
         </Columns.Column>
       </Section>
       <Section Section id="animal-filter">

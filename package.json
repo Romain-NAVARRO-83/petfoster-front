@@ -15,6 +15,7 @@
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",
+    "axios": "^1.7.7",
     "leaflet": "^1.9.4",
     "libphonenumber-js": "^1.11.7",
     "react": "^18.3.1",
@@ -24,7 +25,6 @@
     "react-leaflet": "^4.2.1",
     "react-router-dom": "^6.26.1",
     "react-select": "^5.8.0",
-    "react-tooltip": "^5.28.0",
     "react-slick": "^0.30.2",
     "react-tooltip": "^5.28.0",
     "slick-carousel": "^1.8.1"

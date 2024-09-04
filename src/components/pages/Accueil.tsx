@@ -49,7 +49,7 @@ function Accueil() {
             center={position}
             zoom={13}
             scrollWheelZoom={false}
-            style={{ height: '80vh' }}
+            style={{ height: '80vh', zIndex: 1 }}
           >
             <TileLayer
               url="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
