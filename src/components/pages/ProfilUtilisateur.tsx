@@ -112,7 +112,7 @@ function ProfilUtilisateur() {
                     alt="Thumb 3"
                     loading="lazy"
                   />
-                </div>
+                </div> 
                 <div>
                   <img
                     src="https://via.placeholder.com/150x100?text=Thumb+4"

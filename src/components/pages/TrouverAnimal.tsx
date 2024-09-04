@@ -1,4 +1,6 @@
-import { Heading, Dropdown, Icon, Button, Section, Columns } from "react-bulma-components";
+import React, { useState } from 'react';
+import { Heading, Dropdown, Icon, Button, Section, Columns, Form} from "react-bulma-components";
+const { Field, Label, Input } = Form;
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { LatLngExpression } from 'leaflet';
 import AnimalItemList from "../partials/AnimalItemList";
@@ -16,60 +18,33 @@ function TrouverAnimal() {
   // Utiliser la position de l'utilisateur (ou celle par défaut)
   const mapCenter: LatLngExpression = location ? [location.lat, location.lng] : defaultPosition;
 
+
+
+   // State de form data
+   const [formData, setFormData] = useState({
+    species: '',
+    age: '',
+    sexe: '',
+    search_area: '10', // Default search area value
+  });
+
+  // Handle changes des éléments du form
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+
   return (
     <main>
       <div>
         <Heading>Trouver un animal</Heading>
       </div>
 
-      <section className="section">
-        <div className="container box">
-          <Heading renderAs="h2">Affinez votre recherche</Heading>
-          <div className="is-flex is-justify-content-center is-align-items-center">
-
-            {/* Filtre de recherche */}
-            <div className="mx-6">
-              <Dropdown
-                closeOnSelect={false}
-                color=""
-                icon={<Icon><i aria-hidden="true" className="fas fa-angle-down" /></Icon>}
-                label="Espèce"
-              >
-                <Dropdown.Item  value="Toutes">Toutes</Dropdown.Item>
-                <Dropdown.Item  value="chien">Chien</Dropdown.Item>
-                <Dropdown.Item  value="Chat">Chat</Dropdown.Item>
-              </Dropdown>
-            </div>
-
-            <div className="mx-6">
-              <Dropdown
-                closeOnSelect={false}
-                color=""
-                icon={<Icon><i aria-hidden="true" className="fas fa-angle-down" /></Icon>}
-                label="Age"
-              >
-                <Dropdown.Item  value="Moins d'1 an">Moins d'1 an </Dropdown.Item>
-                <Dropdown.Item  value="Entre 1 an et 3 ans">Entre 1 an et 3 ans</Dropdown.Item>
-                <Dropdown.Item  value="Entre 3 ans et 6 ans">Entre 3 ans et 6 ans</Dropdown.Item>
-                <Dropdown.Item  value="Plus de 6 ans">Plus de 6 ans</Dropdown.Item>
-              </Dropdown>
-            </div>
-
-            <div className="mx-6">
-              <Dropdown
-                closeOnSelect={false}
-                color=""
-                icon={<Icon><i aria-hidden="true" className="fas fa-angle-down" /></Icon>}
-                label="Sexe"
-              >
-                <Dropdown.Item  value="Tous">Tous</Dropdown.Item>
-                <Dropdown.Item  value="Mâle">Mâle</Dropdown.Item>
-                <Dropdown.Item  value="Femelle">Femelle</Dropdown.Item>
-              </Dropdown>
-            </div>
-          </div>
-        </div>
-      </section>
+     
 
       <Section className="columns">
         <Columns.Column mobile={{ size: 12 }} tablet={{ size: 12 }} desktop={{ size: 6 }}>
@@ -98,7 +73,7 @@ function TrouverAnimal() {
             center={mapCenter}  // Centre de la carte sur l'utilisateur (ou position défaut)
             zoom={13}
             scrollWheelZoom={false}
-            style={{ height: '80vh' }}
+            style={{ height: '80vh', zIndex: 1 }}
           >
             <TileLayer
               url="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
@@ -114,6 +89,77 @@ function TrouverAnimal() {
             </Marker>
           </MapContainer>
         </Columns.Column>
+      </Section>
+      <Section Section id="animal-filter">
+      <Heading renderAs="h2" className="is-size-5">
+          Affinez votre recherche
+      </Heading>
+      <form>
+      <Columns className="container">
+          <Columns.Column>
+          <Field> 
+      <Label htmlFor="species-dropdown">Espèce</Label>
+      <Dropdown
+        id="species-dropdown"
+        closeOnSelect={false}
+        icon={<Icon><i aria-hidden="true" className="fas fa-angle-down" /></Icon>}
+        label="Espèce"
+      >
+        <Dropdown.Item value="Toutes">Toutes</Dropdown.Item>
+        <Dropdown.Item value="chien">Chien</Dropdown.Item>
+        <Dropdown.Item value="Chat">Chat</Dropdown.Item>
+      </Dropdown>
+   </Field>
+          </Columns.Column>
+          <Columns.Column>
+          <Field> 
+      <Label htmlFor="age-dropdown">Age</Label>
+      <Dropdown
+        id="age-dropdown"
+        closeOnSelect={false}
+        icon={<Icon><i aria-hidden="true" className="fas fa-angle-down" /></Icon>}
+        label="Age"
+      >
+        <Dropdown.Item value="#">- de 1 an</Dropdown.Item>
+        <Dropdown.Item value="#">entre 1 et 3 ans</Dropdown.Item>
+        <Dropdown.Item value="#">entre 3 et 5 ans</Dropdown.Item>
+        <Dropdown.Item value="#">+ de 5 ans</Dropdown.Item>
+      </Dropdown>
+   </Field>
+          </Columns.Column>
+          <Columns.Column>
+          <Field> 
+      <Label htmlFor="sexe-dropdown">Sexe</Label>
+      <Dropdown
+        id="sexe-dropdown"
+        closeOnSelect={false}
+        icon={<Icon><i aria-hidden="true" className="fas fa-angle-down" /></Icon>}
+        label="Sexe"
+      >
+        <Dropdown.Item value="#">Indifférent</Dropdown.Item>
+        <Dropdown.Item value="#">Mâle</Dropdown.Item>
+        <Dropdown.Item value="#">Femelle</Dropdown.Item>
+        <Dropdown.Item value="#">Fabulous</Dropdown.Item>
+      </Dropdown>
+   </Field>
+          </Columns.Column>
+          <Columns.Column>
+             {/* Champ Périmètre */}
+        <Field>
+        <Label>Périmètre</Label>
+        <Input
+          type="range"
+          name="search_area"
+          value={formData.search_area}
+          onChange={handleChange}
+          min="10"
+          max="200"
+        />
+        <p>Périmètre : {formData.search_area} Km</p>
+      </Field>
+          </Columns.Column>
+      </Columns>
+      </form>
       </Section>
     </main>
   );

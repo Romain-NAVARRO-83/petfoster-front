@@ -1,6 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Box, Columns, Image, Button } from 'react-bulma-components';
-import { Envelope, Pencil } from 'react-flaticons';
+import { Envelope, Pencil, Eye } from 'react-flaticons';
 import { useModal } from '../../hooks/ModalContext';
 
 const AnimalItemList: React.FC = () => {
@@ -30,13 +31,14 @@ const AnimalItemList: React.FC = () => {
 
         {/* Conteneur pour le bouton */}
 
-        <Columns.Column narrow textAlign="centered">
-          <Button color="info">Voir</Button>
+        <Columns.Column narrow textAlign="centered" vCentered>
+          <Link color="info"  to="/profil-animal">< Eye /></Link>
           <Button
             color="primary"
+            className="is-ghost is-primary"
             onClick={() => openModal('editAnimalProfile')}
           >
-            <Pencil /> Editer
+            <Pencil />
           </Button>
         </Columns.Column>
       </Columns>
