@@ -5,14 +5,21 @@ import MainModal from './components/partials/Modal';
 import './assets/css/bulma-no-dark-mode.css';
 import './assets/css/petfoster.css';
 import 'leaflet/dist/leaflet.css';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
 
 // Hooks
 import { ModalProvider } from "./hooks/ModalContext";
+import { GeolocationProvider} from "./hooks/GeolocationContext";
+
 
 
 createRoot(document.getElementById('root')!).render(
     <ModalProvider>
+        <GeolocationProvider>
     <App />
     < MainModal />
+    </GeolocationProvider>
     </ModalProvider>
 )
