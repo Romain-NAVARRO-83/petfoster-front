@@ -1,6 +1,6 @@
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { LatLngExpression } from 'leaflet';
-import { Heading, Button, Container, Columns } from 'react-bulma-components';
+import { Heading, Button, Container, Columns, Section } from 'react-bulma-components';
 import AnimalItemList from '../partials/AnimalItemList';
 import { Link } from 'react-router-dom';
 const position: LatLngExpression = [43.3365, 1.3396];
@@ -41,9 +41,16 @@ function Accueil() {
           scrollWheelZoom={false}
           style={{ height: '80vh' }}
         >
-          <TileLayer url="https://{s}.tile.openstreetmap.org/%7Bz%7D/%7Bx%7D/%7By%7D.png" />
+          <TileLayer
+  url="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
+  attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>'
+/>
+
           <Marker position={position}>
-            <Popup>C'est mon bled !</Popup>
+            <Popup>C'est mon bled !
+
+              <Link to="/profil">Profil user</Link>
+            </Popup>
           </Marker>
         </MapContainer>
       </Columns.Column>
@@ -58,10 +65,23 @@ function Accueil() {
         </Columns.Column>
         
       </Columns>
-      <Container>
-        <Heading renderAs="h2">Vous souhaitez affiner votre recherche?</Heading>
-        <Button color="primary">Voir les animaux</Button>
-      </Container>
+      <Section className='info-block'>
+      <Heading renderAs="h2">Vous souhaitez affiner votre recherche?</Heading>
+        <Columns className='container'>
+          <Columns.Column mobile={{ size: 12 }}
+          tablet={{ size: 12 }}
+          desktop={{ size: 6 }}>
+          <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Debitis facere iure similique cum ab maiores iste quod. Temporibus facilis facere enim ad voluptatum! Nihil recusandae, iure soluta nam cum explicabo.</p>
+          </Columns.Column>
+          <Columns.Column mobile={{ size: 12 }}
+          tablet={{ size: 12 }}
+          desktop={{ size: 6 }} className='has-text-centered'>
+          <Link className='is-primary button' to='http://localhost:5173/trouver-animal'>Voir les animaux</Link>
+          </Columns.Column>
+        </Columns>
+
+      </Section>
+     
     </main>
   );
 }

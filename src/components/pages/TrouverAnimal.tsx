@@ -1,5 +1,10 @@
 import { Heading, Dropdown, Icon, Button } from "react-bulma-components";
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { LatLngExpression } from 'leaflet';
 import AnimalItemList from "../partials/AnimalItemList";
+import { Link } from 'react-router-dom';
+
+const position: LatLngExpression = [43.3365, 1.3396];
 
 
 function TrouverAnimal() {
@@ -81,7 +86,24 @@ function TrouverAnimal() {
 
                     </div>
                     <div id="map" className="column is-full-mobile is-full-tablet is-half-desktop">
-                        map
+                    <MapContainer
+          center={position}
+          zoom={13}
+          scrollWheelZoom={false}
+          style={{ height: '80vh' }}
+        >
+          <TileLayer
+  url="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
+  attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>'
+/>
+
+          <Marker position={position}>
+            <Popup>C'est mon bled !
+
+              <Link to="/profil">Profil user</Link>
+            </Popup>
+          </Marker>
+        </MapContainer>
                     </div>
                 </div>
 
