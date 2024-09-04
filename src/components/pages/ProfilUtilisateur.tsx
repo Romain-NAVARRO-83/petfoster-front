@@ -1,3 +1,5 @@
+import React, { useState } from 'react';
+
 import { Section, Heading, Image, Button, Table, Container, Columns } from 'react-bulma-components';
 import { Envelope, Pencil, PlusSmall } from 'react-flaticons';
 import Slider from 'react-slick';
@@ -5,10 +7,32 @@ import Slider from 'react-slick';
 import { useModal } from '../../hooks/ModalContext';
 import FosterlingProfile from '../partials/FosterlingProfile';
 // import  LazyImage  from '../partials/LazyImage';
+  // Configuration de la galerie d'images
+
+  
 function ProfilUtilisateur() {
   const { openModal } = useModal();
+  const [nav1, setNav1] = useState<Slider | null>(null);
+  const [nav2, setNav2] = useState<Slider | null>(null);
 
-  // Configuration de la galerie d'images
+  const mainSliderSettings = {
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: false,
+    fade: true,
+    asNavFor: nav2,
+  };
+
+  const navSliderSettings = {
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    asNavFor: nav1,
+    dots: false,
+    centerMode: true,
+    focusOnSelect: true,
+  };
+
+
 
     return (
        <main>
@@ -24,8 +48,37 @@ function ProfilUtilisateur() {
         tablet={{ size: 12 }} 
         desktop={{ size: 6 }}>
 
-          {/* < LazyImage src="#" alt="profile picture" size={300} /> */}
-          {/* <Image src="https://placehold.co/600x400" alt="profile picture" size={300} loading="lazy" /> */}
+          {/* Main Slider */}
+      <Slider {...mainSliderSettings} ref={(slider: Slider | null) => setNav1(slider)}>
+        <div>
+          <img src="https://via.placeholder.com/800x400?text=Slide+1" alt="Slide 1" loading="lazy"/>
+        </div>
+        <div>
+          <img src="https://via.placeholder.com/800x400?text=Slide+2" alt="Slide 2" loading="lazy"/>
+        </div>
+        <div>
+          <img src="https://via.placeholder.com/800x400?text=Slide+3" alt="Slide 3" loading="lazy"/>
+        </div>
+        <div>
+          <img src="https://via.placeholder.com/800x400?text=Slide+4" alt="Slide 4" loading="lazy"/>
+        </div>
+      </Slider>
+
+      {/* Navigation Slider (Thumbnails) */}
+      <Slider {...navSliderSettings} ref={(slider: Slider | null) => setNav2(slider)}>
+        <div>
+          <img src="https://via.placeholder.com/150x100?text=Thumb+1" alt="Thumb 1" loading="lazy"/>
+        </div>
+        <div>
+          <img src="https://via.placeholder.com/150x100?text=Thumb+2" alt="Thumb 2" loading="lazy"/>
+        </div>
+        <div>
+          <img src="https://via.placeholder.com/150x100?text=Thumb+3" alt="Thumb 3" loading="lazy"/>
+        </div>
+        <div>
+          <img src="https://via.placeholder.com/150x100?text=Thumb+4" alt="Thumb 4" loading="lazy"/>
+        </div>
+      </Slider>
 
 
         </Columns.Column >

@@ -11,11 +11,15 @@ import 'slick-carousel/slick/slick-theme.css';
 
 // Hooks
 import { ModalProvider } from "./hooks/ModalContext";
+import { GeolocationProvider} from "./hooks/GeolocationContext";
+
 
 
 createRoot(document.getElementById('root')!).render(
     <ModalProvider>
+        <GeolocationProvider>
     <App />
     < MainModal />
+    </GeolocationProvider>
     </ModalProvider>
 )
