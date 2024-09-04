@@ -2,11 +2,12 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { LatLngExpression } from 'leaflet';
 import { Heading, Button, Container, Columns } from 'react-bulma-components';
 import AnimalItemList from '../partials/AnimalItemList';
+import { Link } from 'react-router-dom';
 const position: LatLngExpression = [43.3365, 1.3396];
 function Accueil() {
   return (
     <main>
-      <Columns id='splash-screen' vCentered>
+      <Columns id='splash-screen' vCentered className='has-text-centered'>
         <Columns.Column
           mobile={{ size: 12 }}
           tablet={{ size: 12 }}
@@ -19,8 +20,9 @@ function Accueil() {
           mobile={{ size: 12 }}
           tablet={{ size: 12 }}
           desktop={{ size: 6 }}
+          
         >
-          <Button color="primary" size="large">Créer mon compte</Button>
+           <Link className='is-primary is-large button' to='/connexion'>Créer mon compte</Link>
         </Columns.Column>
       </Columns>
       <Container>

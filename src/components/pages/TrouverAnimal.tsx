@@ -13,7 +13,7 @@ function TrouverAnimal() {
 
             <section className="section">
                 <div className="container box">
-                    <Heading subtitle>Affinez votre recherche</Heading>
+                    <Heading renderAs="h2">Affinez votre recherche</Heading>
                     <div className="is-flex is-justify-content-center is-align-items-center">
 
                         <div className="mx-6">

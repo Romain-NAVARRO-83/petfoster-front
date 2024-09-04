@@ -132,13 +132,16 @@ const RegistrationPage: React.FC = () => {
     }, [selectedCountry]);
 
     return (
+        <>
+        <div>
+            <Heading className="has-text-centered">Inscription</Heading>
 
+        </div>
         <Section>
 
             <Container>
 
-                <Heading size={2} className="has-text-centered">Inscription</Heading>
-
+                
                 <Tabs align="center">
 
                     <Tabs.Tab active={activeTab === 'login'} onClick={() => setActiveTab('login')}>
@@ -435,7 +438,7 @@ const RegistrationPage: React.FC = () => {
             </Container>
 
         </Section>
-
+        </>
     );
     
 };

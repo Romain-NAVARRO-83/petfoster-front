@@ -1,6 +1,7 @@
 // j'ai changé la fonction filtre par un tri alphabétique par click
 
 import React, { useState } from 'react';
+import { Heading, Section, Notification } from 'react-bulma-components';
 
 const FilterPage = () => {
 
@@ -65,7 +66,15 @@ const FilterPage = () => {
   };
 
   return (
-
+    <>
+<div>
+  <Heading>Mes demandes</Heading>
+</div>
+<Section>
+  < Notification color={'info'} light={true}>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi quisquam, commodi, atque dolorum delectus aspernatur perferendis magnam corrupti totam, suscipit ipsa nam impedit corporis accusantium molestias quia obcaecati esse eligendi.</p>
+   </ Notification >
+</Section>
     <section className="section">
 
       <div className="container">
@@ -121,6 +130,7 @@ const FilterPage = () => {
         </table>
       </div>
     </section>
+    </>
   );
 };
 
