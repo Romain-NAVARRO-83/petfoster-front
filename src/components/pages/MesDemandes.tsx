@@ -59,7 +59,6 @@ const FilterPage = () => {
   const handleConfirm = () => {
 
     if (window.confirm('Êtes-vous sûr de vouloir valider ?')) {
-      // Action à exécuter lors de la validation
     }
 
   };
@@ -75,53 +74,81 @@ const FilterPage = () => {
           <thead>
 
             <tr>
-                
-              <th></th>
+
+              <th></th>  
+
               <th>
+
                 <button className="button is-ghost" onClick={() => requestSort('animal')}>
                   Nom animal
                 </button>
+
               </th>
+
               <th>
+
                 <button className="button is-ghost" onClick={() => requestSort('demandeur')}>
                   Nom demandeur
                 </button>
+
               </th>
+
               <th>
+
                 <button className="button is-ghost" onClick={() => requestSort('statut')}>
                   Statut
                 </button>
+
               </th>
+
               <th>Valider</th>
+
             </tr>
+
           </thead>
+
           <tbody>
+
             {sortedData.map((item, index) => (
+
               <tr key={index}>
+
                 <td>
                   <figure className="image is-48x48">
                     <img src="avatar_placeholder.png" alt="Avatar" />
                   </figure>
                 </td>
+
                 <td>
                   <a href="#">{item.animal}</a>
                 </td>
+
                 <td>
                   <a href="#">{item.demandeur}</a>
                 </td>
+
                 <td>{item.statut}</td>
+
                 <td>
                   <button className="button is-primary" onClick={handleConfirm}>
                     Valider
                   </button>
                 </td>
+
               </tr>
+
             ))}
+
           </tbody>
+
         </table>
+
       </div>
+
     </section>
+
   );
+
 };
 
 export default FilterPage;
