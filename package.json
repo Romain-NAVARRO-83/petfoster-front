@@ -25,11 +25,15 @@
     "react-router-dom": "^6.26.1",
     "react-select": "^5.8.0",
     "react-tooltip": "^5.28.0"
+    "react-slick": "^0.30.2",
+    "react-tooltip": "^5.28.0",
+    "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "@types/react-slick": "^0.23.13",
     "@vitejs/plugin-react": "^4.3.1",
     "eslint": "^8.57.0",
     "eslint-config-airbnb": "^19.0.4",

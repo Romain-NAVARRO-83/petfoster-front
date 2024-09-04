@@ -1,22 +1,45 @@
 import {  NavLink } from 'react-router-dom';
-import { Navbar, Image, Dropdown } from 'react-bulma-components';
+import { Navbar} from 'react-bulma-components';
 import { User } from 'react-flaticons';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function Header() {
 
-    // State to manage the burger menu
+    // State du burger menu
     const [isActive, setIsActive] = useState(false);
   
-    // Function to toggle the menu
+    // Fonction de bascule du burger menu
     const handleBurgerClick = () => {
       setIsActive(!isActive);
     };
+
+    // State du scroll de la page
+    const [scrolled, setScrolled] = useState(false);
+
+    // Bascule de la classe du header (pour le fond blanc)
+    useEffect(() => {
+      const handleScroll = () => {
+        if (window.scrollY > 5) {
+          setScrolled(true);
+        } else {
+          setScrolled(false);
+        }
+      };
+  
+      // On écoute le scroll de la page
+      window.addEventListener('scroll', handleScroll);
+  
+      // On retire l'eventListener si le composant est démonté
+      return () => {
+        window.removeEventListener('scroll', handleScroll);
+      };
+    }, []);
+
   
 
     return (
-        <header>
+        <header  className={scrolled ? 'header scrolled' : 'header'}>
         <Navbar>
         <Navbar.Brand>
           <Navbar.Item href="/">

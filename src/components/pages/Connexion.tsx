@@ -182,9 +182,15 @@ const validatePostalCode = async (country: string, city: string, postalCode: str
     const cityOptions = cities.map(city => ({ value: city, label: city }));
 
     return (
+        <>
+        <div>
+            <Heading className="has-text-centered">Inscription</Heading>
+
+        </div>
         <Section>
             <Container>
-                <Heading size={2} className="has-text-centered">Inscription</Heading>
+
+                
                 <Tabs align="center">
                     <Tabs.Tab active={activeTab === 'login'} onClick={() => setActiveTab('login')}>
                         Connexion
@@ -375,6 +381,7 @@ const validatePostalCode = async (country: string, city: string, postalCode: str
                 </Box>
             </Container>
         </Section>
+        </>
     );
 };
 

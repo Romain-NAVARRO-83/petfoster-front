@@ -1,112 +1,72 @@
-// a faire modif mon profil animal
+import React from 'react';
+import { Link } from 'react-router-dom';
+import AnimalItemList from '../partials/AnimalItemList';
+import { Heading, Section, Columns, Container } from 'react-bulma-components';
 
-const AnimalProfile = () => {
-
-    return (
-
-      <section className="section">
-
-        <div className="container">
-  
-          {/* Button */}
-          <div className="has-text-centered">
-            <button className="button is-warning is-rounded is-large">créer le profil de mon animal</button>
-          </div>
-  
-          {/* Profile Box */}
-          <div className="box mt-5">
-
-            <div className="columns is-vcentered">
-  
-              {/* Image Placeholder */}
-              <div className="column is-one-quarter">
-
-                <div className="box has-text-centered" style={{ height: '200px' }}>
-                  PHOTOS DE L'ANIMAL
-                </div>
-
-              </div>
-  
-              {/* Animal Information */}
-              <div className="column">
-
-                <div className="columns">
-
-                  <div className="column has-text-centered">
-                    <p><strong>Espèce</strong></p>
-                  </div>
-
-                  <div className="column has-text-centered">
-                    <p><strong>Sexe</strong></p>
-                  </div>
-
-                  <div className="column has-text-centered">
-                    <p><strong>Date de naissance</strong></p>
-                  </div>
-
-                  <div className="column has-text-centered">
-                    <p><strong>Localisation</strong></p>
-                  </div>
-
-                </div>
-
-              </div>
-  
-            </div>
-  
-            {/* Descriptions */}
-            <div className="content mt-5">
-
-              <h2 className="subtitle is-5 has-text-centered">Description courte de l'animal</h2>
-
-              <div className="box">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi recusandae, velit exercitationem corrupti expedita laudantium adipisci ea, reprehenderit cupiditate nam aperiam maiores tempore qui ducimus rerum molestiae id laboriosam eum.</p>
-              </div>
-
-            </div>
-  
-            <div className="content mt-5">
-
-              <h2 className="subtitle is-5 has-text-centered">Description longue de l'animal</h2>
-
-              <div className="box">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi recusandae, velit exercitationem corrupti expedita laudantium adipisci ea, reprehenderit cupiditate nam aperiam maiores tempore qui ducimus rerum molestiae id laboriosam eum.</p>
-              </div>
-
-            </div>
-  
-            <div className="content mt-5">
-
-              <h2 className="subtitle is-5 has-text-centered">SANTÉ</h2>
-
-              <div className="box">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi recusandae, velit exercitationem corrupti expedita laudantium adipisci ea, reprehenderit cupiditate nam aperiam maiores tempore qui ducimus rerum molestiae id laboriosam eum.</p>
-              </div>
-
-            </div>
-  
-            {/* Localisation Button and Map */}
-            <div className="has-text-centered mt-5">
-
-              <button className="button is-light">Localisation</button>
-              <div className="box mt-3" style={{ height: '350px', maxWidth: '600px', margin: '0 auto' }}>
-
-                <figure className="image is-16by9">
-                  <img src="https://via.placeholder.com/" alt="Carte de localisation" />
-                </figure>
-
-              </div>
-
-            </div>
-  
-          </div>
-
+const MesAnimaux = () => {
+  return (
+    <>
+      {/* Section principale */}
+      <main>
+        <div>
+          <Heading className="has-text-centered">Mes animaux</Heading>
         </div>
 
-      </section>
-      
-    );
-    
-  };
-  
-  export default AnimalProfile;
+        {/* Section de création de profil */}
+        <section className="section">
+          <div className="has-text-centered">
+            <button className="button is-primary is-pulled-right is-rounded is-large">
+              Créer le profil de mon animal
+            </button>
+          </div>
+        </section>
+
+        {/* Liste des animaux */}
+        <Container>
+          <Columns className="is-multiline">
+            <Columns.Column size={12} className="is-fullwidth">
+              <AnimalItemList />
+              <AnimalItemList />
+              <AnimalItemList />
+              <AnimalItemList />
+              <AnimalItemList />
+            </Columns.Column>
+          </Columns>
+        </Container>
+
+        {/* Bloc d'information */}
+        <Section className="info-block">
+          <Heading renderAs="h2">
+            Vous souhaitez affiner votre recherche?
+          </Heading>
+          <Columns className="container">
+            <Columns.Column
+              mobile={{ size: 12 }}
+              tablet={{ size: 12 }}
+              desktop={{ size: 6 }}
+            >
+              <p>
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                Debitis facere iure similique cum ab maiores iste quod.
+                Temporibus facilis facere enim ad voluptatum! Nihil recusandae,
+                iure soluta nam cum explicabo.
+              </p>
+            </Columns.Column>
+            <Columns.Column
+              mobile={{ size: 12 }}
+              tablet={{ size: 12 }}
+              desktop={{ size: 6 }}
+              className="has-text-centered"
+            >
+              <Link className="is-primary button" to="/trouver-animal">
+                Voir les animaux
+              </Link>
+            </Columns.Column>
+          </Columns>
+        </Section>
+      </main>
+    </>
+  );
+};
+
+export default MesAnimaux;
