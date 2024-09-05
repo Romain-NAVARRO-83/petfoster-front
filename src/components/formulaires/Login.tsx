@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Button } from 'react-bulma-components';
 import axios from 'axios';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function LoginForm() {
   // State for login form data and errors
   const [emailLogin, setEmailLogin] = useState('');
@@ -9,6 +12,7 @@ function LoginForm() {
   const [emailErrorLogin, setEmailErrorLogin] = useState('');
   const [passwordErrorLogin, setPasswordErrorLogin] = useState('');
   const [submitErrorLogin, setSubmitErrorLogin] = useState('');
+  const [loginSuccess, setLoginSuccess] = useState(false);
 
   // Email validation function
   const validateEmailLogin = (email: string) => {
@@ -42,12 +46,13 @@ function LoginForm() {
     if (valid) {
       try {
         const response = await axios.post('http://localhost:3000/api/login', {
-          email: emailLogin, // Using the correct field names for the backend
+          email: emailLogin,
           password: passwordLogin,
         });
 
         if (response.status === 200) {
           console.log('Connexion réussie', response.data);
+          setLoginSuccess(true);
           // Handle successful login (e.g., store token, redirect)
         } else {
           setSubmitErrorLogin('Erreur de connexion: ' + (response.data.message || 'Erreur inconnue.'));
@@ -58,6 +63,29 @@ function LoginForm() {
     }
   };
 
+  // TOAST (retour du formulaire)
+// Function to trigger toast notifications
+const triggerToast = (message, type) => {
+  toast(message, { type });
+};
+
+
+
+
+  // const [showToast, setShowToast] = useState(false);
+  // const [toastMessage, setToastMessage] = useState('');
+  // const [toastType, setToastType] = useState('info');
+
+  // const triggerToast = (message, type) => {
+  //   setToastMessage(message);
+  //   setToastType(type);
+  //   setShowToast(true);
+
+  //   // Ferme apres 3 sec
+  //   setTimeout(() => {
+  //     setShowToast(false);
+  //   }, 3000);
+  // };
   return (
     <form onSubmit={handleSubmitLogin}>
       {/* Email Field */}
@@ -102,7 +130,19 @@ function LoginForm() {
       </div>
 
       {/* Submit Error */}
-      {submitErrorLogin && <p className="help is-danger">{submitErrorLogin}</p>}
+      {submitErrorLogin && triggerToast({submitErrorLogin}, 'danger')
+      // <p className="help is-danger has-text-centered">{submitErrorLogin}</p>
+      }
+      {/* Login success */}
+      {/* {loginSuccess && triggerToast('Connexion réussie!', 'success')
+      } */}
+         {loginSuccess && triggerToast('Login successful!', 'success')
+      }
+
+
+
+{/* Toast Container, required for the toast to be displayed */}
+<ToastContainer />
     </form>
   );
 }

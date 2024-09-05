@@ -13,7 +13,7 @@ const RegistrationPage = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [passwordError, setPasswordError] = useState('');
-    const [activeTab, setActiveTab] = useState<'login' | 'signup'>('signup');
+    const [activeTab, setActiveTab] = useState<'login' | 'signup'>('login');
     const [countries, setCountries] = useState<{ name: string, dialCode: string, isoCode: string }[]>([]);
     const [selectedCountry, setSelectedCountry] = useState('');
     const [cities, setCities] = useState<string[]>([]);
