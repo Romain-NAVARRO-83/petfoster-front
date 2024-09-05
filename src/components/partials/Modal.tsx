@@ -1,8 +1,9 @@
 import React from 'react';
 import { Modal, Box } from 'react-bulma-components';
 import { useModal } from '../../hooks/ModalContext';
-import ContactUserForm from '../formulaires/ContactUserForm'; // Assurez-vous que le chemin est correct
-import AddForsterlingRequestForm from '../formulaires/AddFosterlingProfileForm'; // Assurez-vous que le chemin est correct
+import ContactUserForm from '../formulaires/ContactUserForm'; 
+import AddForsterlingRequestForm from '../formulaires/AddFosterlingProfileForm'; 
+import EditAnimalProfileForm from '../formulaires/EditAnimalProfileForm'; 
 
 function MainModal() {
   const { modalContent, isActive, closeModal } = useModal();
@@ -13,13 +14,16 @@ function MainModal() {
         <Box>
           <button className="delete is-pulled-right" onClick={closeModal} aria-label="Close modal"></button>
           
-          {/* Vérifie le mot clé et affiche le contenu correspondant */}
+
           {modalContent === 'contactAssociation' && (
             <ContactUserForm />
           )}
 
           {modalContent === 'demandeAdoption' && (
             <AddForsterlingRequestForm />
+          )}
+          {modalContent === 'editAnimalProfile' && (
+            <EditAnimalProfileForm />
           )}
 
         </Box>
