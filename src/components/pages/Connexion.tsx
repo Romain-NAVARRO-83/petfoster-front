@@ -1,19 +1,11 @@
-// problème sur les faux pays / lien condition général a faire / problème au niveau de ville lors de la resélection de pays / Ajouté choix type user button radio / 
-
-// API RestCountries : Cette API sert à récupérer la liste des pays. Elle fournit des informations sur tous les pays du monde, y compris leurs noms, codes, et autres détails.
-
-// API CountriesNow : Cette API sert à récupérer les villes d'un pays spécifique. Lorsque vous sélectionnez un pays, l'API renvoie une liste des villes disponibles dans ce pays.
-
-//Zippopotam.us : Cette API permet de récupérer les informations de code postal à partir d'une ville et d'un pays.
-
-// API react-select : permet de créer des composants de sélection (dropdown) stylisés et interactifs.
-
 import React, { useState, useEffect } from 'react';
 import { Container, Section, Heading, Box, Button, Tabs } from 'react-bulma-components';
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import Select from 'react-select';
 
-const RegistrationPage: React.FC = () => {
+import LoginForm from '../formulaires/Login'
+
+const RegistrationPage = () => {
 
     // États pour gérer les valeurs des champs de formulaire
     const [email, setEmail] = useState('');
@@ -227,69 +219,6 @@ const RegistrationPage: React.FC = () => {
 
 
 
-    // State des erreurs et data du login form
-  const [emailLogin, setEmailLogin] = useState('');
-  const [passwordLogin, setPasswordLogin] = useState('');
-  const [emailErrorLogin, setEmailErrorLogin] = useState('');
-  const [passwordErrorLogin, setPasswordErrorLogin] = useState('');
-  const [submitError, setSubmitErrorLogin] = useState('');
-   // Email validation function
-   const validateEmailLogin = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-// Handle form submission (login)
-const handleSubmitLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // console.log('login submitted')
-    let valid = true;
-
-    // Reset errors
-    setEmailErrorLogin('');
-    setPasswordErrorLogin('');
-    setSubmitErrorLogin('');
-
-    // Validate email
-    if (!validateEmailLogin(emailLogin)) {
-      setEmailErrorLogin('Veuillez entrer une adresse email valide.');
-      valid = false;
-    }
-
-    // Validate password
-    if (passwordLogin.length < 12) {
-      setPasswordErrorLogin('Le mot de passe doit contenir au moins 12 caractères.');
-      valid = false;
-    }
-
-    // If form is valid, send the request
-    if (valid) {
-        console.log('isvalid');
-      try {
-        const response = await fetch('http://localhost:3000/api/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email,
-            password,
-          }),
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          console.log('Connexion réussie', data);
-          // Handle successful login (e.g., store token, redirect)
-        } else {
-          setSubmitErrorLogin('Erreur de connexion: ' + data.message || 'Erreur inconnue.');
-        }
-      } catch (error) {
-        setSubmitErrorLogin('Erreur réseau, veuillez réessayer.');
-      }
-    }
-  };
-
 
 
 
@@ -323,52 +252,53 @@ const handleSubmitLogin = async (e: React.FormEvent) => {
 
                     {activeTab === 'login' ? (
 
-                        // Formulaire de connexion
-                        <form onSubmit={handleSubmitLogin}>
+                        // // Formulaire de connexion
+                        // <form onSubmit={handleSubmitLogin}>
 
-                            <div className="field">
+                        //     <div className="field">
 
-                                <label className="label" htmlFor="email">Email :</label>
+                        //         <label className="label" htmlFor="email">Email :</label>
 
-                                <div className="control">
+                        //         <div className="control">
 
-                                    <input
+                        //             <input
 
-                                        className={`input ${emailError ? 'is-danger' : ''}`}
-                                        type="email"
-                                        id="email"
-                                        name="email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        required
+                        //                 className={`input ${emailError ? 'is-danger' : ''}`}
+                        //                 type="email"
+                        //                 id="email"
+                        //                 name="email"
+                        //                 value={email}
+                        //                 onChange={(e) => setEmail(e.target.value)}
+                        //                 required
                                         
-                                    />
+                        //             />
 
-                                </div>
+                        //         </div>
 
-                                {emailError && <p className="help is-danger">{emailError}</p>}
+                        //         {emailError && <p className="help is-danger">{emailError}</p>}
 
-                            </div>
+                        //     </div>
 
-                            <div className="field">
+                        //     <div className="field">
 
-                                <label className="label" htmlFor="password">Mot de passe :</label>
+                        //         <label className="label" htmlFor="password">Mot de passe :</label>
 
-                                <div className="control">
-                                    <input className="input" type="password" id="password" name="password" required />
-                                </div>
+                        //         <div className="control">
+                        //             <input className="input" type="password" id="password" name="password" required />
+                        //         </div>
 
-                            </div>
+                        //     </div>
 
-                            <div className="field">
+                        //     <div className="field">
 
-                                <div className="control">
-                                    <Button color="primary" fullwidth>S'inscrire</Button>
-                                </div>
+                        //         <div className="control">
+                        //             <Button color="primary" fullwidth>S'inscrire</Button>
+                        //         </div>
 
-                            </div>
+                        //     </div>
 
-                        </form>
+                        // </form>
+                        <LoginForm />
 
                     ) : (
 
