@@ -1,25 +1,50 @@
+// Importation des dépendances nécessaires
 
-import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
-import MainModal from './components/partials/Modal';
+// Importation de la fonction createRoot de ReactDOM pour gérer l'affichage de l'application React
+import { createRoot } from 'react-dom/client';
+
+// Importation du composant principal de l'application (App) qui contient la logique et les vues principales de l'application
+import App from './App.tsx';
+
+// Importation du composant de modal (MainModal) qui est utilisé pour afficher des fenêtres modales (pop-ups) dans l'application
+import MainModal from './components/partials/Modal.tsx';
+
+// Importation de fichiers CSS pour appliquer des styles à l'application
+
 import './assets/css/bulma-no-dark-mode.css';
 import './assets/css/petfoster.css';
 import 'leaflet/dist/leaflet.css';
+
+// Fichiers CSS pour Slick Carousel, une bibliothèque permettant de créer des carrousels d'images/éléments
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 
-// Hooks
+// Importation des hooks pour gérer l'état global de l'application
+
+// ModalProvider fournit un contexte pour gérer l'état des fenêtres modales à travers l'application
 import { ModalProvider } from "./hooks/ModalContext";
-import { GeolocationProvider} from "./hooks/GeolocationContext";
+
+// GeolocationProvider fournit un contexte pour gérer la géolocalisation (exemple : localisation de l'utilisateur)
+import { GeolocationProvider } from "./hooks/GeolocationContext";
 
 
+// Initialisation de l'application
 
 createRoot(document.getElementById('root')!).render(
+
     <ModalProvider>
+    
+        // GeolocationProvider entoure également toute l'application et permet l'utilisation du contexte de géolocalisation
         <GeolocationProvider>
-    <App />
-    < MainModal />
-    </GeolocationProvider>
+        
+            // App est le composant principal de l'application qui sera rendu
+            <App />
+            
+            // MainModal est un composant probablement utilisé pour afficher une fenêtre modale globale dans l'application
+            <MainModal />
+        
+        </GeolocationProvider>
+    
     </ModalProvider>
-)
+);
