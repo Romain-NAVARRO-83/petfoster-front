@@ -14,8 +14,8 @@ function MainModal() {
         <Box>
           <button className="delete is-pulled-right" onClick={closeModal} aria-label="Close modal"></button>
           
-          {/* Vérifie le mot clé et affiche le contenu correspondant */}
-          {modalContent === 'contactAssociation' && (
+
+          {modalContent === 'ContactUser' && (
             <ContactUserForm />
           )}
 
@@ -26,11 +26,16 @@ function MainModal() {
           {modalContent === 'addFosterlingProfile' && (
             <AddForsterlingRequestForm />  
           )}
-
+          
           {modalContent === 'editUserProfile' && <EditProfileForm />}
+
 
           {modalContent === 'demandeAdoption' && (
             <AddForsterlingRequestForm />
+          )}
+          
+          {modalContent === 'editAnimalProfile' && (
+            <EditAnimalProfileForm />
           )}
 
         </Box>

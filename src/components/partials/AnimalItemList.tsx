@@ -76,7 +76,7 @@ function AnimalItemList({ animal }: AnimalListItemProps) {
 
         {/* Button container */}
         <Columns.Column narrow textAlign="centered">
-          <Link to="/profil-animal">
+        <Link to={`/animal/${animal.id}`}>
             <Eye />
           </Link>
           <Button

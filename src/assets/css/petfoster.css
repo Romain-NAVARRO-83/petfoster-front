@@ -7,11 +7,23 @@
     --bulma-primary-l: 70%;
 }
 
+/* .navbar-brand {
+    height: 100px;
+    margin-bottom: -50px
+} */
+.navbar-brand a img:first-child {
+    margin: 10px 20px -30px 20px;
+    vertical-align: top;
+}
+
+.navbar-brand a img:nth-child(2) {
+    margin-top: 20px
+}
 
 div:not(#splash-screen, #splash-screen > *):has(>h1) {
-    padding-top: 30vh;
+    padding-top: 20vh;
     background-color: #96ceb4;
-    background-image: url("/img/main-background.jpg");
+    background-image: url("/img/main-background-2.jpg");
     background-size: cover;
     background-blend-mode: luminosity;
     background-position: center;
@@ -20,13 +32,17 @@ div:not(#splash-screen, #splash-screen > *):has(>h1) {
 #splash-screen {
     min-height: 50vh;
     background-color: #96ceb4;
-    background-image: url("/img/main-background.jpg");
+    background-image: url("/img/main-background-2.jpg");
     background-size: cover;
     background-blend-mode: luminosity;
     background-position: center;
 }
 
-h1 {
+#splash-screen>div:nth-child(1) {
+    background-color: rgba(255, 255, 255, .5);
+}
+
+h1:not(#splash-screen h1) {
     background-color: rgba(255, 255, 255, .5);
     text-align: center;
     padding: 1rem
@@ -84,18 +100,13 @@ footer>div>ul {
     height: 80vh
 }
 
-#home-map-container+.animal-list {
-    max-height: 80vh;
+.animal-list {
+    /* max-height: 80vh; */
+    height: 80vh;
     overflow-y: auto;
 }
 
-#animal-filter {
-    position: sticky;
-    bottom: 0;
-    z-index: 999;
-    background-color: #fff;
-    border-top: solid 1px #ddd;
-}
+
 
 .animal-miniature {
     aspect-ratio: 1/1;
@@ -112,17 +123,28 @@ footer>div>ul {
 }
 
 #animal-filter {
+    position: sticky;
+    bottom: 0;
+    z-index: 999;
+    background-color: var(--yellow);
+    border-top: solid 1px #ddd;
     padding-top: 0;
 }
 
 #animal-filter form {
-    height: 0;
+    max-height: 0;
     overflow: hidden;
     transition: all ease-out .3s;
 }
 
 #animal-filter.open form {
     height: auto;
+    max-height: 100%;
     transition: all ease-out .3s;
+}
+
+.info-block {
+    padding-top: 70px;
+    padding-bottom: 70px;
 
 }

@@ -2,9 +2,10 @@
 
 import { useModal } from '../../hooks/ModalContext';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Box, Heading, Section, Columns } from 'react-bulma-components';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import axios from 'axios';
 import Slider from 'react-slick';
 
 const AnimalProfile = () => {
@@ -33,10 +34,35 @@ const navSliderSettings: Record<string, any> = {
   arrows: true
 };
 
+// Chargement de l'animal
+const { id } = useParams(); // Get animal ID from the URL
+  const [animal, setAnimal] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    axios.get(`http://localhost:3000/api/animals/${id}`)
+      .then(response => {
+        setAnimal(response.data); 
+        setLoading(false);
+      })
+      .catch(error => {
+        setError(error); 
+        setLoading(false); 
+      });
+  }, [id]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
   return (
     <>
     <div>
-      <Heading>Nom animal</Heading>
+      <Heading>{animal.name}</Heading>
     </div>
     <Section className="container columns is-4">
     {/* Galerie d'images */}

@@ -8,7 +8,7 @@ function Footer() {
 
             <div className="column is-one-third-desktop">
 
-                <figure className="image is-128x128 is-inline-block">
+                <figure className="image is-64x64 is-inline-block">
                     <img src="/img/vector/petfoster-logo-grad.svg" alt="Logo" width="75" />
                 </figure>
 

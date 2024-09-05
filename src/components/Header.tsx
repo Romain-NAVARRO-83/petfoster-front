@@ -1,4 +1,4 @@
-import {  NavLink } from 'react-router-dom';
+import {  NavLink, Link } from 'react-router-dom';
 import { Navbar} from 'react-bulma-components';
 import { User } from 'react-flaticons';
 
@@ -42,10 +42,11 @@ function Header() {
         <header  className={scrolled ? 'header scrolled' : 'header'}>
         <Navbar>
         <Navbar.Brand>
-          <Navbar.Item href="/">
-            <img src="/img/vector/petfoster-logo-grad.svg" alt="Logo" width={100}/>
+          {/* <Navbar.Item href="/"> */}
+            <Link to="/"><img src="/img/vector/petfoster-logo-grad.svg" alt="Logo" width={75}/>
             <img src="/img/vector/petfoster-title-grad.svg" alt="Pet Foster" width={200}/>
-          </Navbar.Item>
+            </Link>
+          {/* </Navbar.Item> */}
           <Navbar.Burger
             className={isActive ? 'is-active' : ''}
             onClick={handleBurgerClick}
