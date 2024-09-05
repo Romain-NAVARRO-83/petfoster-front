@@ -7,9 +7,21 @@
     --bulma-primary-l: 70%;
 }
 
+/* .navbar-brand {
+    height: 100px;
+    margin-bottom: -50px
+} */
+.navbar-brand a img:first-child {
+    margin: 10px 20px -30px 20px;
+    vertical-align: top;
+}
+
+.navbar-brand a img:nth-child(2) {
+    margin-top: 20px
+}
 
 div:not(#splash-screen, #splash-screen > *):has(>h1) {
-    padding-top: 30vh;
+    padding-top: 20vh;
     background-color: #96ceb4;
     background-image: url("/img/main-background-2.jpg");
     background-size: cover;
@@ -26,7 +38,11 @@ div:not(#splash-screen, #splash-screen > *):has(>h1) {
     background-position: center;
 }
 
-h1 {
+#splash-screen>div:nth-child(1) {
+    background-color: rgba(255, 255, 255, .5);
+}
+
+h1:not(#splash-screen h1) {
     background-color: rgba(255, 255, 255, .5);
     text-align: center;
     padding: 1rem

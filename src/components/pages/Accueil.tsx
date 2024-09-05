@@ -74,6 +74,7 @@ useEffect(() => {
           mobile={{ size: 12 }}
           tablet={{ size: 12 }}
           desktop={{ size: 6 }}
+          narrow
         >
           <Heading>Bienvenue sur Pet Foster !</Heading>
           <Heading renderAs="h2">Cette phrase vous va comme un slogan</Heading>

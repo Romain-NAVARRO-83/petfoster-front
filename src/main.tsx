@@ -33,18 +33,10 @@ import { GeolocationProvider } from "./hooks/GeolocationContext";
 
 createRoot(document.getElementById('root')!).render(
 
-    <ModalProvider>
-    
-        // GeolocationProvider entoure également toute l'application et permet l'utilisation du contexte de géolocalisation
+    <ModalProvider>  
         <GeolocationProvider>
-        
-            // App est le composant principal de l'application qui sera rendu
             <App />
-            
-            // MainModal est un composant probablement utilisé pour afficher une fenêtre modale globale dans l'application
-            <MainModal />
-        
+            <MainModal />      
         </GeolocationProvider>
-    
     </ModalProvider>
 );
