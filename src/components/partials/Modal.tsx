@@ -15,7 +15,7 @@ function MainModal() {
           <button className="delete is-pulled-right" onClick={closeModal} aria-label="Close modal"></button>
           
 
-          {modalContent === 'contactAssociation' && (
+          {modalContent === 'ContactUser' && (
             <ContactUserForm />
           )}
 
