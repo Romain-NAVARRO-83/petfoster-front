@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+//http://localhost:5173/Profil
 
+import React, { useState } from 'react';
 import {
   Section,
   Heading,
@@ -154,13 +155,15 @@ function ProfilUtilisateur() {
               qui ducimus rerum molestiae id laboriosam eum.
             </p>
           </Section>
+
           <Button
             color="primary"
             className="is-pulled-right"
-            onClick={() => openModal('contactUser')}
+            onClick={() => openModal('contactUserForm')}
           >
-            <Envelope /> contacter
+            <Envelope /> Contacter
           </Button>
+
           <Button
             color="primary"
             className="is-pulled-right"
@@ -168,7 +171,9 @@ function ProfilUtilisateur() {
           >
             <Pencil /> éditer
           </Button>
+
         </Container>
+        
       </Section>
       <Section>
         <Container>
@@ -181,13 +186,15 @@ function ProfilUtilisateur() {
             vitae voluptate culpa debitis ea officiis molestias est quia a?
             Sunt.
           </p>
+
           <Button
             color="primary"
             className="is-pulled-right"
-            onClick={() => openModal('addForsterlingProfile')}
+            onClick={() => openModal('addFosterlingProfile')} // Mettez un mot clé cohérent
           >
             <PlusSmall /> Ajouter
           </Button>
+          
           <Table className="is-fullwidth has-text-centered card">
             <thead>
               <tr>
