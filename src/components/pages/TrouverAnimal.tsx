@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import { Heading, Dropdown, Icon, Button, Section, Columns, Form } from "react-bulma-components";
+import { Heading, Button, Section, Columns, Form } from "react-bulma-components";
 const { Field, Label, Input } = Form;
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { LatLngExpression, Icon as LeafletIcon } from 'leaflet';
@@ -33,14 +33,6 @@ function TrouverAnimal() {
     sexe: '',
     search_area: '10', // Default search area value
   });
-
-  // State to handle filter toggle
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-
-  // Function to toggle the filter open/close state
-  const toggleFilter = () => {
-    setIsFilterOpen(!isFilterOpen);
-  };
 
   // Handle form input changes
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
@@ -94,7 +86,7 @@ function TrouverAnimal() {
       </div>
 
       <Section className="columns">
-        <Columns.Column mobile={{ size: 12 }} tablet={{ size: 12 }} desktop={{ size: 6 }}>
+        <Columns.Column mobile={{ size: 12 }} tablet={{ size: 12 }} desktop={{ size: 6 }} className="animal-list">
           {allAnimals && allAnimals.map((item: any) => (
             <AnimalItemList animal={item} key={item.id} />
           ))}
@@ -105,6 +97,7 @@ function TrouverAnimal() {
           mobile={{ size: 12 }}
           tablet={{ size: 12 }}
           desktop={{ size: 6 }}
+          
         >
           <Heading renderAs="h3">Votre position :</Heading>
           {error && <p>Erreur: {error}</p>}
@@ -152,63 +145,47 @@ function TrouverAnimal() {
         </Columns.Column>
       </Section>
 
-      <Section id="animal-filter" className={isFilterOpen ? 'open' : ''}> 
-        <Button className="is-secondary is-fullwidth" id="filter-toggler" onClick={toggleFilter}>
-          Affinez votre recherche
-        </Button>
+      <Section id="animal-filter" className="open">
         <form>
           <Columns className="container">
             <Columns.Column>
-              <Field> 
+              <Field>
                 <Label htmlFor="species-dropdown">Espèce</Label>
-                <Dropdown
-                  id="species-dropdown"
-                  closeOnSelect={false}
-                  icon={<Icon><i aria-hidden="true" className="fas fa-angle-down" /></Icon>}
-                  label="Espèce"
-                >
-                  <Dropdown.Item value="Toutes">Toutes</Dropdown.Item>
-                  <Dropdown.Item value="chien">Chien</Dropdown.Item>
-                  <Dropdown.Item value="Chat">Chat</Dropdown.Item>
-                </Dropdown>
+                <select name="species" value={formData.species} onChange={handleChange}>
+                  <option value="">Toutes</option>
+                  <option value="Chien">Chien</option>
+                  <option value="Chat">Chat</option>
+                </select>
               </Field>
             </Columns.Column>
+
             <Columns.Column>
-              <Field> 
+              <Field>
                 <Label htmlFor="age-dropdown">Age</Label>
-                <Dropdown
-                  id="age-dropdown"
-                  closeOnSelect={false}
-                  icon={<Icon><i aria-hidden="true" className="fas fa-angle-down" /></Icon>}
-                  label="Age"
-                >
-                  <Dropdown.Item value="#">- de 1 an</Dropdown.Item>
-                  <Dropdown.Item value="#">entre 1 et 3 ans</Dropdown.Item>
-                  <Dropdown.Item value="#">entre 3 et 5 ans</Dropdown.Item>
-                  <Dropdown.Item value="#">+ de 5 ans</Dropdown.Item>
-                </Dropdown>
+                <select name="age" value={formData.age} onChange={handleChange}>
+                  <option value="">- de 1 an</option>
+                  <option value="1-3 ans">entre 1 et 3 ans</option>
+                  <option value="3-5 ans">entre 3 et 5 ans</option>
+                  <option value="+ de 5 ans">+ de 5 ans</option>
+                </select>
               </Field>
             </Columns.Column>
+
             <Columns.Column>
-              <Field> 
+              <Field>
                 <Label htmlFor="sexe-dropdown">Sexe</Label>
-                <Dropdown
-                  id="sexe-dropdown"
-                  closeOnSelect={false}
-                  icon={<Icon><i aria-hidden="true" className="fas fa-angle-down" /></Icon>}
-                  label="Sexe"
-                >
-                  <Dropdown.Item value="#">Indifférent</Dropdown.Item>
-                  <Dropdown.Item value="#">Mâle</Dropdown.Item>
-                  <Dropdown.Item value="#">Femelle</Dropdown.Item>
-                  <Dropdown.Item value="#">Fabulous</Dropdown.Item>
-                </Dropdown>
+                <select name="sexe" value={formData.sexe} onChange={handleChange}>
+                  <option value="">Indifférent</option>
+                  <option value="Mâle">Mâle</option>
+                  <option value="Femelle">Femelle</option>
+                </select>
               </Field>
             </Columns.Column>
+
             <Columns.Column>
               <Field>
                 <Label>Périmètre</Label>
-                <Input
+                <input
                   type="range"
                   name="search_area"
                   value={formData.search_area}
@@ -219,7 +196,11 @@ function TrouverAnimal() {
                 <p>Périmètre : {formData.search_area} Km</p>
               </Field>
             </Columns.Column>
+            <Columns.Column narrow>
+            <Button type="submit" color="primary">Ok</Button>
+            </Columns.Column>
           </Columns>
+          
         </form>
       </Section>
     </main>

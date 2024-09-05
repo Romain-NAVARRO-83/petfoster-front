@@ -88,10 +88,9 @@ useEffect(() => {
           </Link>
         </Columns.Column>
       </Columns>
-      <Container>
+      <Container className="info-block">
         <Heading renderAs="h2">
-          XX animaux dans votre secteur dans XX familles d'accueil et XX
-          associations
+          {allAnimals?.length} animaux et {allUsers?.length} associations dans votre secteur
         </Heading>
       </Container>
       <Columns>
