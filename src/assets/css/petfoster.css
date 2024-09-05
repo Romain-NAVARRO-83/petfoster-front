@@ -110,3 +110,19 @@ footer>div>ul {
     object-fit: cover;
     height: 100%;
 }
+
+#animal-filter {
+    padding-top: 0;
+}
+
+#animal-filter form {
+    height: 0;
+    overflow: hidden;
+    transition: all ease-out .3s;
+}
+
+#animal-filter.open form {
+    height: auto;
+    transition: all ease-out .3s;
+
+}
