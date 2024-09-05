@@ -55,18 +55,18 @@ function AnimalItemList({ animal }: AnimalListItemProps) {
     <Box>
       <Columns className="is-vcentered">
         {/* Image container */}
-        <Columns.Column narrow textAlign="centered">
+        <Columns.Column narrow textAlign="centered" className="animal-miniature">
           <Image
-            rounded
             size={64}
-            src="https://bulma.io/assets/images/placeholders/64x64.png"
+            src={`/img/animaux/${animal?.id}-${animal?.name}-1.webp`} 
             alt="Animal"
+            
           />
         </Columns.Column>
 
         {/* Text container */}
         <Columns.Column>
-          <p className="has-text-weight-bold has-text-left">{animal?.name}</p>
+          <p className="has-text-weight-bold has-text-left">{animal?.name} </p>
           <Columns>
             <Columns.Column>Espèce: {animal?.species_id}</Columns.Column>
             <Columns.Column>Age: {computeAge(animal?.date_of_birth)}</Columns.Column>

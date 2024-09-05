@@ -96,3 +96,17 @@ footer>div>ul {
     background-color: #fff;
     border-top: solid 1px #ddd;
 }
+
+.animal-miniature {
+    aspect-ratio: 1/1;
+    width: 64px;
+    height: 64px;
+    overflow: hidden;
+    border-radius: 50%;
+    padding: 0;
+}
+
+.animal-miniature img {
+    object-fit: cover;
+    height: 100%;
+}
