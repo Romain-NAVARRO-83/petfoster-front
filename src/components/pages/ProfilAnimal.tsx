@@ -8,6 +8,9 @@ import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Slider from 'react-slick';
 
+// Utilitaires
+import computeAge from '../../utils/computeAge'
+
 const AnimalProfile = () => {
   const { openModal } = useModal();
 
@@ -44,6 +47,7 @@ const { id } = useParams(); // Get animal ID from the URL
     axios.get(`http://localhost:3000/api/animals/${id}`)
       .then(response => {
         setAnimal(response.data); 
+        
         setLoading(false);
       })
       .catch(error => {
@@ -64,6 +68,7 @@ const { id } = useParams(); // Get animal ID from the URL
     <div>
       <Heading>{animal.name}</Heading>
     </div>
+    {console.log(animal)}
     <Section className="container columns is-4">
     {/* Galerie d'images */}
       <Columns.Column mobile={{ size: 12 }}
@@ -149,17 +154,17 @@ const { id } = useParams(); // Get animal ID from the URL
       <Columns.Column mobile={{ size: 12 }}
               tablet={{ size: 12 }}
               desktop={{ size: 6 }}>
-        Race
+        {animal.race}
       </Columns.Column>
       <Columns.Column mobile={{ size: 12 }}
               tablet={{ size: 12 }}
               desktop={{ size: 6 }}>
-        Sexe
+        {animal.sexe}
       </Columns.Column>
       <Columns.Column mobile={{ size: 12 }}
               tablet={{ size: 12 }}
               desktop={{ size: 6 }}>
-        Age
+        {computeAge(animal?.date_of_birth)}
       </Columns.Column>
       <Columns.Column mobile={{ size: 12 }}
               tablet={{ size: 12 }}
@@ -169,20 +174,20 @@ const { id } = useParams(); // Get animal ID from the URL
        <Columns.Column mobile={{ size: 12 }}
               tablet={{ size: 12 }}
               desktop={{ size: 12 }}>
-       <p>Description courte ... Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus, eos.</p>
+       {animal.short_story}
        </Columns.Column>
       </Columns>
       
     </Section>
     <Section className="container box">
-      <Heading renderAs="h2">A propos de (nom animal)</Heading>
+      <Heading renderAs="h2">A propos de {animal.name}</Heading>
       <div>
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. A repellat sequi error officiis, facere eligendi temporibus consequatur numquam placeat consequuntur quis adipisci ea tenetur nesciunt similique ex! Fuga, laboriosam quidem!
+      {animal.long_story}
       </div>
       <Heading renderAs="h3">Santé</Heading>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam, officiis?</p>
+      {animal.health}
     </Section>
-    <Heading renderAs="h2">Où se trouve (nom animal) ?</Heading>
+    <Heading renderAs="h2">Où se trouve {animal.name} ?</Heading>
     <Section id="localisation" className="container">
       
       <Columns>
@@ -194,9 +199,14 @@ const { id } = useParams(); // Get animal ID from the URL
       <Columns.Column mobile={{ size: 12 }}
               tablet={{ size: 12 }}
               desktop={{ size: 6 }}>
-      <p>
-        Description asso + adresse
-        </p>
+               <p>
+               {animal.creator.name}<br />
+      {animal.creator.address}<br />
+      {animal.creator.city}<br />
+      {animal.creator.country}<br />
+      <Link to={animal.creator.website}>{animal.creator.website}</Link><br />
+               </p>
+      
                 {/* Boutons d'action */}
 
         <Columns className="is-variable is-4">
@@ -205,7 +215,7 @@ const { id } = useParams(); // Get animal ID from the URL
               tablet={{ size: 12 }}
               desktop={{ size: 6 }}>
                 
-            <Button color="primary"  className="is-full" onClick={() => openModal('contactAssociation')}>
+            <Button color="primary"  className="is-full" onClick={() => openModal('contactUser')}>
               Contacter association
             </Button>
 
@@ -214,7 +224,7 @@ const { id } = useParams(); // Get animal ID from the URL
           <Columns.Column mobile={{ size: 12 }}
               tablet={{ size: 12 }}
               desktop={{ size: 6 }}>
-            <Button color="secondary" className="is-full" onClick={() => openModal('demandeAdoption')}>
+            <Button color="secondary" className="is-full" onClick={() => openModal('addFosterlingRequest')}>
             Faire une demande d'adoption <br/>(ou d'accueil selon user)
             </Button>
           </Columns.Column>
