@@ -1,3 +1,5 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { LatLngExpression } from 'leaflet';
 import {
@@ -9,8 +11,47 @@ import {
 } from 'react-bulma-components';
 import AnimalItemList from '../partials/AnimalItemList';
 import { Link } from 'react-router-dom';
+
 const position: LatLngExpression = [43.3365, 1.3396];
+
 function Accueil() {
+  // GESTION DU FETCH des animaux
+  const [allAnimals, setAllAnimals] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:3000/api/animals') 
+      .then((response) => {
+        setAllAnimals(response.data);  
+        setLoading(false);       
+      })
+      .catch(() => {
+        setFetchError('Error fetching data');  
+        setLoading(false);
+      });
+  }, []);
+
+  //   GESTION DU FETCH des utilisateurs
+const [allUsers, setAllUsers] = useState<any>(null);
+const [loadingUsers, setLoadingUsers] = useState(true);
+const [fetchUsersError, setFetchUsersError] = useState<string | null>(null);
+
+useEffect(() => {
+
+  axios
+    .get('http://localhost:3000/api/users') 
+    .then((response) => {
+      setAllUsers(response.data);  
+      setLoadingUsers(false);       
+    })
+    .catch(() => {
+        setFetchUsersError('Error fetching data');  
+      setLoadingUsers(false);
+    });
+}, []); 
+
   return (
     <main>
       <Columns id="splash-screen" vCentered className="has-text-centered">
@@ -47,7 +88,7 @@ function Accueil() {
         >
           <MapContainer
             center={position}
-            zoom={13}
+            zoom={7}
             scrollWheelZoom={false}
             style={{ height: '80vh', zIndex: 1 }}
           >
@@ -55,12 +96,27 @@ function Accueil() {
               url="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
               attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>'
             />
-
+  {/* marqueur de la position par défaut */}
             <Marker position={position}>
               <Popup>
                 C'est mon bled !<Link to="/profil">Profil user</Link>
               </Popup>
             </Marker>
+
+
+            {/* Marquers des utilisateurs */}
+{allUsers && allUsers.map((user: any) => (
+  <Marker 
+    key={user.id} 
+    position={[parseFloat(user.latitude), parseFloat(user.longitude)]} 
+  > 
+    <Popup>
+      {user.name}
+      <br />
+      <Link to={`/profil/${user.id}`}>Voir le profil</Link>
+    </Popup>
+  </Marker>
+))}
           </MapContainer>
         </Columns.Column>
         <Columns.Column
@@ -69,11 +125,9 @@ function Accueil() {
           desktop={{ size: 4 }}
           className="animal-list"
         >
-          <AnimalItemList />
-          <AnimalItemList />
-          <AnimalItemList />
-          <AnimalItemList />
-          <AnimalItemList />
+           {allAnimals && allAnimals.map((item: any) => (
+          <AnimalItemList animal={item}/>
+        ))}
         </Columns.Column>
       </Columns>
       <Section className="info-block">

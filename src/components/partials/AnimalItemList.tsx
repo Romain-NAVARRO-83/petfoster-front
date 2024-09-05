@@ -69,7 +69,7 @@ function AnimalItemList({ animal }: AnimalListItemProps) {
           <p className="has-text-weight-bold has-text-left">{animal?.name}</p>
           <Columns>
             <Columns.Column>Espèce: {animal?.species_id}</Columns.Column>
-            <Columns.Column>Age: {computeAge(animal?.date_of_birth)} ans</Columns.Column>
+            <Columns.Column>Age: {computeAge(animal?.date_of_birth)}</Columns.Column>
             <Columns.Column>Sexe: {animal?.sexe}</Columns.Column>
           </Columns>
         </Columns.Column>

@@ -134,7 +134,7 @@ useEffect(() => {
 {allUsers && allUsers.map((user: any) => (
   <Marker 
     key={user.id} 
-    position={[parseFloat(user.latitude), parseFloat(user.longitude)]} // Use user’s latitude and longitude
+    position={[parseFloat(user.latitude), parseFloat(user.longitude)]} 
   > 
     <Popup>
       {user.name}
