@@ -99,7 +99,7 @@ function Accueil() {
           >
             <Link
               className="is-primary button"
-              to="http://localhost:5173/trouver-animal"
+              to="/trouver-animal"
             >
               Voir les animaux
             </Link>
