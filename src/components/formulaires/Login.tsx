@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bulma-components';
 import axios from 'axios';
-
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function LoginForm() {
+const LoginForm: React.FC = () => {
   // State for login form data and errors
-  const [emailLogin, setEmailLogin] = useState('');
-  const [passwordLogin, setPasswordLogin] = useState('');
-  const [emailErrorLogin, setEmailErrorLogin] = useState('');
-  const [passwordErrorLogin, setPasswordErrorLogin] = useState('');
-  const [submitErrorLogin, setSubmitErrorLogin] = useState('');
-  const [loginSuccess, setLoginSuccess] = useState(false);
+  const [emailLogin, setEmailLogin] = useState<string>('');
+  const [passwordLogin, setPasswordLogin] = useState<string>('');
+  const [emailErrorLogin, setEmailErrorLogin] = useState<string>('');
+  const [passwordErrorLogin, setPasswordErrorLogin] = useState<string>('');
+  const [submitErrorLogin, setSubmitErrorLogin] = useState<string>('');
+  const [loginSuccess, setLoginSuccess] = useState<boolean>(false);
+  const [token, setToken] = useState<string>('');
 
   // Email validation function
-  const validateEmailLogin = (email: string) => {
+  const validateEmailLogin = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
@@ -53,7 +53,8 @@ function LoginForm() {
         if (response.status === 200) {
           console.log('Connexion réussie', response.data);
           setLoginSuccess(true);
-          // Handle successful login (e.g., store token, redirect)
+          setToken(response.data.token);
+          localStorage.setItem('token', response.data.token);
         } else {
           setSubmitErrorLogin('Erreur de connexion: ' + (response.data.message || 'Erreur inconnue.'));
         }
@@ -64,28 +65,10 @@ function LoginForm() {
   };
 
   // TOAST (retour du formulaire)
-// Function to trigger toast notifications
-const triggerToast = (message, type) => {
-  toast(message, { type });
-};
+  const triggerToast = (message: string, type: 'success' | 'danger' | 'info' | 'warning') => {
+    toast(message, { type });
+  };
 
-
-
-
-  // const [showToast, setShowToast] = useState(false);
-  // const [toastMessage, setToastMessage] = useState('');
-  // const [toastType, setToastType] = useState('info');
-
-  // const triggerToast = (message, type) => {
-  //   setToastMessage(message);
-  //   setToastType(type);
-  //   setShowToast(true);
-
-  //   // Ferme apres 3 sec
-  //   setTimeout(() => {
-  //     setShowToast(false);
-  //   }, 3000);
-  // };
   return (
     <form onSubmit={handleSubmitLogin}>
       {/* Email Field */}
@@ -130,19 +113,12 @@ const triggerToast = (message, type) => {
       </div>
 
       {/* Submit Error */}
-      {submitErrorLogin && triggerToast({submitErrorLogin}, 'danger')
-      // <p className="help is-danger has-text-centered">{submitErrorLogin}</p>
-      }
+      {submitErrorLogin && triggerToast(submitErrorLogin, 'danger')}
+
       {/* Login success */}
-      {/* {loginSuccess && triggerToast('Connexion réussie!', 'success')
-      } */}
-         {loginSuccess && triggerToast('Login successful!', 'success')
-      }
+      {loginSuccess && triggerToast('Connexion réussie!', 'success')}
 
-
-
-{/* Toast Container, required for the toast to be displayed */}
-<ToastContainer />
+      <ToastContainer />
     </form>
   );
 }
