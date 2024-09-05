@@ -1,12 +1,10 @@
-// import React from 'react';
+import React from 'react';
 import { Modal, Box } from 'react-bulma-components';
 import { useModal } from '../../hooks/ModalContext';
-import EditProfileForm from '../formulaires/EditProfileForm';
-import ContactUserForm from '../formulaires/ContactUserForm';
-import AddFosterlingProfileForm from '../formulaires/AddFosterlingProfileForm';
-import UpdateFosterlingProfileForm from '../formulaires/UpdateFosterlingProfileForm';
+import ContactUserForm from '../formulaires/ContactUserForm'; // Assurez-vous que le chemin est correct
+import AddForsterlingRequestForm from '../formulaires/AddFosterlingProfileForm'; // Assurez-vous que le chemin est correct
 
-function MainModal(){
+function MainModal() {
   const { modalContent, isActive, closeModal } = useModal();
 
   return (
@@ -14,25 +12,21 @@ function MainModal(){
       <Modal.Content>
         <Box>
           <button className="delete is-pulled-right" onClick={closeModal} aria-label="Close modal"></button>
-          {modalContent === "editUserProfile" && (
-            < EditProfileForm />
-   )}
-   {modalContent === "contactUser" && (
-            < ContactUserForm />
-   )}
-   {modalContent === "addForsterlingProfile" && (
-            < AddFosterlingProfileForm />
-   )}
-   {modalContent === "updateForsterlingProfile" && (
-            < UpdateFosterlingProfileForm />
-   )}
           
+          {/* Vérifie le mot clé et affiche le contenu correspondant */}
+          {modalContent === 'contactAssociation' && (
+            <ContactUserForm />
+          )}
+
+          {modalContent === 'demandeAdoption' && (
+            <AddForsterlingRequestForm />
+          )}
+
         </Box>
       </Modal.Content>
     </Modal>
   );
-};
+}
 
 export default MainModal;
-
 
