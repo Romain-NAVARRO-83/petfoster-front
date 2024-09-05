@@ -51,7 +51,7 @@ const RegistrationPage: React.FC = () => {
         setPhoneNumber(phone);
     };
 
-    // Gestion de la soumission du formulaire
+    // Gestion de la soumission du formulaire (inscription)
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();  // Empêcher la soumission par défaut
         let isValid = true;
@@ -224,6 +224,77 @@ const RegistrationPage: React.FC = () => {
     // Transformer la liste des villes en format compatible avec react-select
     const cityOptions = cities.map(city => ({ value: city, label: city }));
 
+
+
+
+    // State des erreurs et data du login form
+  const [emailLogin, setEmailLogin] = useState('');
+  const [passwordLogin, setPasswordLogin] = useState('');
+  const [emailErrorLogin, setEmailErrorLogin] = useState('');
+  const [passwordErrorLogin, setPasswordErrorLogin] = useState('');
+  const [submitError, setSubmitErrorLogin] = useState('');
+   // Email validation function
+   const validateEmailLogin = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+// Handle form submission (login)
+const handleSubmitLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    // console.log('login submitted')
+    let valid = true;
+
+    // Reset errors
+    setEmailErrorLogin('');
+    setPasswordErrorLogin('');
+    setSubmitErrorLogin('');
+
+    // Validate email
+    if (!validateEmailLogin(emailLogin)) {
+      setEmailErrorLogin('Veuillez entrer une adresse email valide.');
+      valid = false;
+    }
+
+    // Validate password
+    if (passwordLogin.length < 12) {
+      setPasswordErrorLogin('Le mot de passe doit contenir au moins 12 caractères.');
+      valid = false;
+    }
+
+    // If form is valid, send the request
+    if (valid) {
+        console.log('isvalid');
+      try {
+        const response = await fetch('http://localhost:3000/api/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          console.log('Connexion réussie', data);
+          // Handle successful login (e.g., store token, redirect)
+        } else {
+          setSubmitErrorLogin('Erreur de connexion: ' + data.message || 'Erreur inconnue.');
+        }
+      } catch (error) {
+        setSubmitErrorLogin('Erreur réseau, veuillez réessayer.');
+      }
+    }
+  };
+
+
+
+
+
+
     return (
 
         <>
@@ -253,7 +324,7 @@ const RegistrationPage: React.FC = () => {
                     {activeTab === 'login' ? (
 
                         // Formulaire de connexion
-                        <form>
+                        <form onSubmit={handleSubmitLogin}>
 
                             <div className="field">
 

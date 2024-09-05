@@ -40,4 +40,3 @@ createRoot(document.getElementById('root')!).render(
         </GeolocationProvider>
     </ModalProvider>
 );
-contactAssociation
