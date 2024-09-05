@@ -4,7 +4,6 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { LatLngExpression, Icon } from 'leaflet';
 import {
   Heading,
-  Button,
   Container,
   Columns,
   Section,
@@ -19,10 +18,10 @@ const defaultPosition: LatLngExpression = [43.3365, 1.3396];
 
 // Icône personnalisée pour l'utilisateur
 const userIcon = new Icon({
-  iconUrl: '/img/vector/your-position-marker.svg', // URL de l'image personnalisée pour l'utilisateur
-  iconSize: [25, 41],  // Taille du marqueur
-  iconAnchor: [12, 41], // Position de l'ancre (la pointe du marqueur)
-  popupAnchor: [1, -34], // Position du popup par rapport au marqueur
+  iconUrl: '/img/vector/your-position-marker.svg', 
+  iconSize: [25, 41],  
+  iconAnchor: [12, 41], 
+  popupAnchor: [1, -34], 
 });
 
 function Accueil() {
