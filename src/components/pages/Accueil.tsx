@@ -93,7 +93,7 @@ useEffect(() => {
           {allAnimals?.length} animaux et {allUsers?.length} associations dans votre secteur
         </Heading>
       </Container>
-      <Columns>
+      <Columns className='container is-fluid'>
         <Columns.Column
           mobile={{ size: 12 }}
           tablet={{ size: 12 }}

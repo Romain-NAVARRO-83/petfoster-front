@@ -8,6 +8,9 @@ import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Slider from 'react-slick';
 
+// Interfaces
+import { Animal } from 'src/@interfaces/animal';
+
 // Utilitaires
 import computeAge from '../../utils/computeAge'
 
@@ -39,7 +42,7 @@ const navSliderSettings: Record<string, any> = {
 
 // Chargement de l'animal
 const { id } = useParams(); // Get animal ID from the URL
-  const [animal, setAnimal] = useState(null);
+  const [animal, setAnimal] = useState<Animal | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -66,7 +69,7 @@ const { id } = useParams(); // Get animal ID from the URL
   return (
     <>
     <div>
-      <Heading>{animal.name}</Heading>
+      <Heading>{animal?.name}</Heading>
     </div>
     {console.log(animal)}
     <Section className="container columns is-4">
@@ -81,28 +84,28 @@ const { id } = useParams(); // Get animal ID from the URL
               >
                 <div>
                   <img
-                    src="https://via.placeholder.com/800x400?text=Slide+1"
+                    src="https://placehold.co/600x400?text=Slide+1"
                     alt="Slide 1"
                     loading="lazy"
                   />
                 </div>
                 <div>
                   <img
-                    src="https://via.placeholder.com/800x400?text=Slide+2"
+                    src="https://placehold.co/600x400?text=Slide+2"
                     alt="Slide 2"
                     loading="lazy"
                   />
                 </div>
                 <div>
                   <img
-                    src="https://via.placeholder.com/800x400?text=Slide+3"
+                    src="https://placehold.co/600x400?text=Slide+3"
                     alt="Slide 3"
                     loading="lazy"
                   />
                 </div>
                 <div>
                   <img
-                    src="https://via.placeholder.com/800x400?text=Slide+4"
+                    src="https://placehold.co/600x400?text=Slide+4"
                     alt="Slide 4"
                     loading="lazy"
                   />
@@ -116,28 +119,28 @@ const { id } = useParams(); // Get animal ID from the URL
               >
                 <div>
                   <img
-                    src="https://via.placeholder.com/150x100?text=Thumb+1"
+                    src="https://placehold.co/600x400?text=Slide+1"
                     alt="Thumb 1"
                     loading="lazy"
                   />
                 </div>
                 <div>
                   <img
-                    src="https://via.placeholder.com/150x100?text=Thumb+2"
+                    src="https://placehold.co/600x400?text=Slide+2"
                     alt="Thumb 2"
                     loading="lazy"
                   />
                 </div>
                 <div>
                   <img
-                    src="https://via.placeholder.com/150x100?text=Thumb+3"
+                    src="https://placehold.co/600x400?text=Slide+3"
                     alt="Thumb 3"
                     loading="lazy"
                   />
                 </div>
                 <div>
                   <img
-                    src="https://via.placeholder.com/150x100?text=Thumb+4"
+                    src="https://placehold.co/600x400?text=Slide+4"
                     alt="Thumb 4"
                     loading="lazy"
                   />
@@ -154,12 +157,12 @@ const { id } = useParams(); // Get animal ID from the URL
       <Columns.Column mobile={{ size: 12 }}
               tablet={{ size: 12 }}
               desktop={{ size: 6 }}>
-        {animal.race}
+        {animal?.race}
       </Columns.Column>
       <Columns.Column mobile={{ size: 12 }}
               tablet={{ size: 12 }}
               desktop={{ size: 6 }}>
-        {animal.sexe}
+        {animal?.sexe}
       </Columns.Column>
       <Columns.Column mobile={{ size: 12 }}
               tablet={{ size: 12 }}
@@ -174,20 +177,20 @@ const { id } = useParams(); // Get animal ID from the URL
        <Columns.Column mobile={{ size: 12 }}
               tablet={{ size: 12 }}
               desktop={{ size: 12 }}>
-       {animal.short_story}
+       {animal?.short_story}
        </Columns.Column>
       </Columns>
       
     </Section>
     <Section className="container box">
-      <Heading renderAs="h2">A propos de {animal.name}</Heading>
+      <Heading renderAs="h2">A propos de {animal?.name}</Heading>
       <div>
-      {animal.long_story}
+      {animal?.long_story}
       </div>
       <Heading renderAs="h3">Santé</Heading>
-      {animal.health}
+      {animal?.health}
     </Section>
-    <Heading renderAs="h2">Où se trouve {animal.name} ?</Heading>
+    <Heading renderAs="h2">Où se trouve {animal?.name} ?</Heading>
     <Section id="localisation" className="container">
       
       <Columns>
@@ -200,11 +203,11 @@ const { id } = useParams(); // Get animal ID from the URL
               tablet={{ size: 12 }}
               desktop={{ size: 6 }}>
                <p>
-               {animal.creator.name}<br />
-      {animal.creator.address}<br />
-      {animal.creator.city}<br />
-      {animal.creator.country}<br />
-      <Link to={animal.creator.website}>{animal.creator.website}</Link><br />
+               {animal?.creator.name}<br />
+      {animal?.creator.address}<br />
+      {animal?.creator.city}<br />
+      {animal?.creator.country}<br />
+      <Link to={animal?.creator.website}>{animal?.creator.website}</Link><br />
                </p>
       
                 {/* Boutons d'action */}

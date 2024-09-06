@@ -148,3 +148,7 @@ footer>div>ul {
     padding-bottom: 70px;
 
 }
+
+footer {
+    border-top: solid 2px var(--green);
+}

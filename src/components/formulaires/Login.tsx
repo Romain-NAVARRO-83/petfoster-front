@@ -65,7 +65,7 @@ const LoginForm: React.FC = () => {
   };
 
   // TOAST (retour du formulaire)
-  const triggerToast = (message: string, type: 'success' | 'danger' | 'info' | 'warning') => {
+  const triggerToast = (message: string, type: 'success' | 'error' | 'info' | 'warning') => {
     toast(message, { type });
   };
 
@@ -113,7 +113,7 @@ const LoginForm: React.FC = () => {
       </div>
 
       {/* Submit Error */}
-      {submitErrorLogin && triggerToast(submitErrorLogin, 'danger')}
+      {submitErrorLogin && triggerToast(submitErrorLogin, 'error')}
 
       {/* Login success */}
       {loginSuccess && triggerToast('Connexion réussie!', 'success')}
