@@ -216,14 +216,6 @@ const RegistrationPage = () => {
     // Transformer la liste des villes en format compatible avec react-select
     const cityOptions = cities.map(city => ({ value: city, label: city }));
 
-
-
-
-
-
-
-
-
     return (
 
         <>
@@ -252,52 +244,6 @@ const RegistrationPage = () => {
 
                     {activeTab === 'login' ? (
 
-                        // // Formulaire de connexion
-                        // <form onSubmit={handleSubmitLogin}>
-
-                        //     <div className="field">
-
-                        //         <label className="label" htmlFor="email">Email :</label>
-
-                        //         <div className="control">
-
-                        //             <input
-
-                        //                 className={`input ${emailError ? 'is-danger' : ''}`}
-                        //                 type="email"
-                        //                 id="email"
-                        //                 name="email"
-                        //                 value={email}
-                        //                 onChange={(e) => setEmail(e.target.value)}
-                        //                 required
-                                        
-                        //             />
-
-                        //         </div>
-
-                        //         {emailError && <p className="help is-danger">{emailError}</p>}
-
-                        //     </div>
-
-                        //     <div className="field">
-
-                        //         <label className="label" htmlFor="password">Mot de passe :</label>
-
-                        //         <div className="control">
-                        //             <input className="input" type="password" id="password" name="password" required />
-                        //         </div>
-
-                        //     </div>
-
-                        //     <div className="field">
-
-                        //         <div className="control">
-                        //             <Button color="primary" fullwidth>S'inscrire</Button>
-                        //         </div>
-
-                        //     </div>
-
-                        // </form>
                         <LoginForm />
 
                     ) : (
