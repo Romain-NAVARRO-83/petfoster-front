@@ -9,6 +9,7 @@ import AnimalItemList from "../partials/AnimalItemList";
 import { Link } from 'react-router-dom';
 import { useGeolocation } from "../../hooks/GeolocationContext";
 
+
 // Position par défaut
 const defaultPosition: LatLngExpression = [43.3365, 1.3396];
 
