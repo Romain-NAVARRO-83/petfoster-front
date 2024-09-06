@@ -94,7 +94,7 @@ const ContactUserForm = () => {
       </Field>
 
       {/* Bouton de soumission */}
-      <Button color="primary" type="submit" disabled={isSubmitting}>
+      <Button color="primary" type="submit" disabled={isSubmitting} className='is-fullwidth'>
         {isSubmitting ? 'Envoi en cours...' : 'Envoyer'}
       </Button>
     </form>

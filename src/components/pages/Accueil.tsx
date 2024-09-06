@@ -88,23 +88,40 @@ useEffect(() => {
           </Link>
         </Columns.Column>
       </Columns>
+      <Section>
+        <Columns className='container'>
+          <Columns.Column>
+            <Heading renderAs='h3'>Associations</Heading>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, quo laudantium velit sit impedit rerum maxime, amet perspiciatis magni, ipsa distinctio quas labore vero fugit facere numquam minus facilis eius?</p>
+          </Columns.Column>
+          <Columns.Column>
+            <Heading renderAs='h3'>Familles d'accueil</Heading>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, quo laudantium velit sit impedit rerum maxime, amet perspiciatis magni, ipsa distinctio quas labore vero fugit facere numquam minus facilis eius?</p>
+          </Columns.Column>
+          <Columns.Column>
+            <Heading renderAs='h3'>Adoptants</Heading>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, quo laudantium velit sit impedit rerum maxime, amet perspiciatis magni, ipsa distinctio quas labore vero fugit facere numquam minus facilis eius?</p>
+          </Columns.Column>
+        </Columns>
+      </Section>
+      <Section className='yellow-line'>
       <Container className="info-block">
         <Heading renderAs="h2">
           {allAnimals?.length} animaux et {allUsers?.length} associations dans votre secteur
         </Heading>
       </Container>
-      <Columns className='container is-fluid'>
+      <Columns className='container '>
         <Columns.Column
           mobile={{ size: 12 }}
           tablet={{ size: 12 }}
-          desktop={{ size: 8 }}
+          desktop={{ size: 6 }}
           id="home-map-container"
         >
           <MapContainer
             center={defaultPosition}
             zoom={7}
             scrollWheelZoom={false}
-            style={{ height: '80vh', zIndex: 1 }}
+            // style={{ height: '80vh', zIndex: 1 }}
           >
             <TileLayer
               url="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
@@ -136,7 +153,7 @@ useEffect(() => {
         <Columns.Column
           mobile={{ size: 12 }}
           tablet={{ size: 12 }}
-          desktop={{ size: 4 }}
+          desktop={{ size: 6 }}
           className="animal-list"
         >
            {allAnimals && allAnimals.map((item: any) => (
@@ -144,6 +161,7 @@ useEffect(() => {
         ))}
         </Columns.Column>
       </Columns>
+      </Section>
       <Section className="info-block">
         <Heading renderAs="h2">Vous souhaitez affiner votre recherche?</Heading>
         <Columns className="container">
