@@ -45,7 +45,7 @@ const navSliderSettings: Record<string, any> = {
 const { id } = useParams(); // Get animal ID from the URL
   const [animal, setAnimal] = useState<Animal | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     axios.get(`http://localhost:3000/api/animals/${id}`)
@@ -168,7 +168,7 @@ const { id } = useParams(); // Get animal ID from the URL
       <Columns.Column mobile={{ size: 12 }}
               tablet={{ size: 12 }}
               desktop={{ size: 6 }}>
-        {computeAge(animal?.date_of_birth)}
+        {computeAge(animal?.date_of_birth ?? '')}
       </Columns.Column>
       <Columns.Column mobile={{ size: 12 }}
               tablet={{ size: 12 }}
@@ -208,7 +208,7 @@ const { id } = useParams(); // Get animal ID from the URL
       {animal?.creator.address}<br />
       {animal?.creator.city}<br />
       {animal?.creator.country}<br />
-      <Link to={animal?.creator.website}>{animal?.creator.website}</Link><br />
+      <Link to={animal?.creator.website ?? '#'}>{animal?.creator.website ?? 'Site web non disponible'}</Link>
                </p>
       
                 {/* Boutons d'action */}
