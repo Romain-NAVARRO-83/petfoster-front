@@ -131,6 +131,10 @@ footer>div>ul {
     padding-top: 0;
 }
 
+#animal-filter:not(.open) {
+    padding-bottom: 0;
+}
+
 #animal-filter form {
     max-height: 0;
     overflow: hidden;

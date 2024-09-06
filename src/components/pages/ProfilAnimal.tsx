@@ -2,11 +2,12 @@
 
 import { useModal } from '../../hooks/ModalContext';
 
-import React, { useState, useEffect } from 'react';
-import { Button, Box, Heading, Section, Columns } from 'react-bulma-components';
+import { useState, useEffect } from 'react';
+import { Button, Heading, Section, Columns } from 'react-bulma-components';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Slider from 'react-slick';
+import MapComponent from '../partials/MapComponent';
 
 // Interfaces
 import { Animal } from 'src/@interfaces/animal';
@@ -197,7 +198,7 @@ const { id } = useParams(); // Get animal ID from the URL
       <Columns.Column mobile={{ size: 12 }}
               tablet={{ size: 12 }}
               desktop={{ size: 6 }}>
-      Map
+                <MapComponent />
       </Columns.Column>
       <Columns.Column mobile={{ size: 12 }}
               tablet={{ size: 12 }}

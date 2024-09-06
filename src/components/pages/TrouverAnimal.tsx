@@ -79,6 +79,14 @@ function TrouverAnimal() {
       });
   }, []);
 
+
+
+  // Déploiement des filtres
+  const [filterOpen, setFilterOpen] = useState<boolean>(false);
+  // Handler du toggle des filtres
+  const handleFilterOpen = () => {
+    setFilterOpen(!filterOpen);  // Toggle the clicked state
+  };
   return (
     <main>
       <div>
@@ -145,7 +153,12 @@ function TrouverAnimal() {
         </Columns.Column>
       </Section>
 
-      <Section id="animal-filter" className="open">
+      <Section id="animal-filter" className={filterOpen ? "open" : ""}>
+        <Button onClick={handleFilterOpen} className='is-ghost is-fullwidth'>
+        <Heading renderAs="h2">
+          {filterOpen ? "Cacher les filtres" : "Afficher les filtres"}
+        </Heading>
+        </Button>
         <form>
           <Columns className="container">
             <Columns.Column>

@@ -37,31 +37,31 @@ function ProfilUtilisateur() {
   };
 
   // Récupérer les données de l'utilisateur et des profils d'accueil depuis l'API
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const userResponse = await axios.get(`http://localhost:3000/api/users/${id}`);
-        setUser(userResponse.data);
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     try {
+  //       const userResponse = await axios.get(`http://localhost:3000/api/users/${id}`);
+  //       setUser(userResponse.data);
         
-        const fosterlingResponse = await axios.get(`http://localhost:3000/api/users/${id}/fosterlings`);
-        setFosterlingProfiles(fosterlingResponse.data); // Charger les profils d'accueil
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  //       const fosterlingResponse = await axios.get(`http://localhost:3000/api/users/${id}/fosterlings`);
+  //       setFosterlingProfiles(fosterlingResponse.data); // Charger les profils d'accueil
+  //     } catch (error) {
+  //       setError(error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchUserData();
-  }, [id]);
+  //   fetchUserData();
+  // }, [id]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
+  // if (error) {
+  //   return <div>Error: {error.message}</div>;
+  // }
 
   return (
     <main>
@@ -74,34 +74,86 @@ function ProfilUtilisateur() {
           <Columns>
             <Columns.Column mobile={{ size: 12 }} tablet={{ size: 12 }} desktop={{ size: 6 }}>
               {/* Main Slider */}
-              <Slider {...mainSliderSettings} ref={(slider) => setNav1(slider)}>
-                {user && user.images && user.images.map((image, index) => (
-                  <div key={index}>
-                    <img src={image.url} alt={`Slide ${index + 1}`} loading="lazy" />
-                  </div>
-                ))}
+       <Slider
+                {...mainSliderSettings}
+                ref={(slider: Slider | null) => setNav1(slider)}
+              >
+                <div>
+                  <img
+                    src="https://placehold.co/600x400?text=Slide+1"
+                    alt="Slide 1"
+                    loading="lazy"
+                  />
+                </div>
+                <div>
+                  <img
+                    src="https://placehold.co/600x400?text=Slide+2"
+                    alt="Slide 2"
+                    loading="lazy"
+                  />
+                </div>
+                <div>
+                  <img
+                    src="https://placehold.co/600x400?text=Slide+3"
+                    alt="Slide 3"
+                    loading="lazy"
+                  />
+                </div>
+                <div>
+                  <img
+                    src="https://placehold.co/600x400?text=Slide+4"
+                    alt="Slide 4"
+                    loading="lazy"
+                  />
+                </div>
               </Slider>
 
               {/* Navigation Slider (Thumbnails) */}
-              <Slider {...navSliderSettings} ref={(slider) => setNav2(slider)}>
-                {user && user.images && user.images.map((image, index) => (
-                  <div key={index}>
-                    <img src={image.thumbnail} alt={`Thumb ${index + 1}`} loading="lazy" />
-                  </div>
-                ))}
+              <Slider
+                {...navSliderSettings}
+                ref={(slider: Slider | null) => setNav2(slider)}
+              >
+                <div>
+                  <img
+                    src="https://placehold.co/600x400?text=Slide+1"
+                    alt="Thumb 1"
+                    loading="lazy"
+                  />
+                </div>
+                <div>
+                  <img
+                    src="https://placehold.co/600x400?text=Slide+2"
+                    alt="Thumb 2"
+                    loading="lazy"
+                  />
+                </div>
+                <div>
+                  <img
+                    src="https://placehold.co/600x400?text=Slide+3"
+                    alt="Thumb 3"
+                    loading="lazy"
+                  />
+                </div>
+                <div>
+                  <img
+                    src="https://placehold.co/600x400?text=Slide+4"
+                    alt="Thumb 4"
+                    loading="lazy"
+                  />
+                </div>
               </Slider>
             </Columns.Column>
 
             <Columns.Column mobile={{ size: 12 }} tablet={{ size: 12 }} desktop={{ size: 6 }}>
               <ul>
-                <li><strong>Nom:</strong> {user.name}</li>
-                <li><strong>Prénom:</strong> {user.first_name}</li>
-                <li><strong>Email:</strong> {user.email}</li>
-                <li><strong>Tél:</strong> {user.phone}</li>
-                <li><strong>Pays:</strong> {user.country}</li>
-                <li><strong>Code postal:</strong> {user.zipcode}</li>
-                <li><strong>Ville:</strong> {user.city}</li>
-                <li><strong>Adresse:</strong> {user.address}</li>
+                <li><strong>Nom:</strong> </li>
+                <li><strong>Prénom:</strong></li>
+                <li><strong>Email:</strong></li>
+                <li><strong>Tél:</strong></li>
+                <li><strong>Pays:</strong></li>
+                <li><strong>Code postal:</strong></li>
+                <li><strong>Ville:</strong> </li>
+                <li><strong>Adresse:</strong> </li>
               </ul>
             </Columns.Column>
           </Columns>
@@ -114,7 +166,7 @@ function ProfilUtilisateur() {
             Description
           </Heading>
           <Section>
-            <p>{user.description}</p>
+            <p>Description : Lorem ipsum dolor sit amet consectetur adipisicing elit. Non quis quod excepturi aperiam nam neque quae architecto, quo quisquam necessitatibus est magnam, accusamus pariatur in. Optio incidunt minima vero molestias.</p>
           </Section>
 
           <Button color="primary" className="is-pulled-right" onClick={() => openModal('contactUser')}>
@@ -132,7 +184,7 @@ function ProfilUtilisateur() {
           <Heading size={2} renderAs="h2">
             Profils d'accueil
           </Heading>
-          <p>{user.fosterlingDescription}</p>
+          <p>profil accueil</p>
 
           <Button color="primary" className="is-pulled-right" onClick={() => openModal('addFosterlingProfile')}>
             <PlusSmall /> Ajouter
@@ -149,9 +201,12 @@ function ProfilUtilisateur() {
               </tr>
             </thead>
             <tbody>
-              {fosterlingProfiles.map((profile) => (
+              {/* {fosterlingProfiles.map((profile) => (
                 <FosterlingProfile key={profile.id} profile={profile} />
-              ))}
+              ))} */}
+              <FosterlingProfile />
+              <FosterlingProfile />
+              <FosterlingProfile />
             </tbody>
           </Table>
         </Container>

@@ -140,7 +140,7 @@ useEffect(() => {
           className="animal-list"
         >
            {allAnimals && allAnimals.map((item: any) => (
-          <AnimalItemList animal={item}/>
+          <AnimalItemList animal={item} key={item.id}/>
         ))}
         </Columns.Column>
       </Columns>

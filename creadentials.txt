@@ -1,0 +1,2 @@
+alice.dupont@example.com
+hashed_password1

@@ -59,7 +59,7 @@ const LoginForm: React.FC = () => {
           setSubmitErrorLogin('Erreur de connexion: ' + (response.data.message || 'Erreur inconnue.'));
         }
       } catch (error) {
-        setSubmitErrorLogin('Erreur réseau, veuillez réessayer.');
+        setSubmitErrorLogin('Erreur, veuillez réessayer.');
       }
     }
   };
