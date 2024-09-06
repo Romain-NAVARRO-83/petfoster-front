@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { Button, Heading, Section, Columns } from 'react-bulma-components';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
-import Slider from 'react-slick';
+// import Slider from 'react-slick';
 import MapComponent from '../partials/MapComponent';
 
 // Interfaces
@@ -14,38 +14,39 @@ import { Animal } from 'src/@interfaces/animal';
 
 // Utilitaires
 import computeAge from '../../utils/computeAge'
+import GalleryComponent from '../partials/GalleryComponent';
 
 const AnimalProfile = () => {
   const { openModal } = useModal();
 
   // Configuration du slider
-  const [nav1, setNav1] = useState<Slider | null>(null);
-  const [nav2, setNav2] = useState<Slider | null>(null);
+//   const [nav1, setNav1] = useState<Slider | null>(null);
+//   const [nav2, setNav2] = useState<Slider | null>(null);
 
-const mainSliderSettings: Record<string, any> = {
-  slidesToShow: 1,
-  slidesToScroll: 1,
-  arrows: false,
-  fade: true,
-  asNavFor: nav2,
-};
+// const mainSliderSettings: Record<string, any> = {
+//   slidesToShow: 1,
+//   slidesToScroll: 1,
+//   arrows: false,
+//   fade: true,
+//   asNavFor: nav2,
+// };
 
-const navSliderSettings: Record<string, any> = {
-  slidesToShow: 3,
-  slidesToScroll: 1,
-  asNavFor: nav1,
-  dots: true,
-  centerMode: true,
-  focusOnSelect: true,
-  navigation: true,
-  arrows: true
-};
+// const navSliderSettings: Record<string, any> = {
+//   slidesToShow: 3,
+//   slidesToScroll: 1,
+//   asNavFor: nav1,
+//   dots: true,
+//   centerMode: true,
+//   focusOnSelect: true,
+//   navigation: true,
+//   arrows: true
+// };
 
 // Chargement de l'animal
 const { id } = useParams(); // Get animal ID from the URL
   const [animal, setAnimal] = useState<Animal | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     axios.get(`http://localhost:3000/api/animals/${id}`)
@@ -79,7 +80,7 @@ const { id } = useParams(); // Get animal ID from the URL
               tablet={{ size: 12 }}
               desktop={{ size: 6 }}>
        {/* Main Slider */}
-       <Slider
+       {/* <Slider
                 {...mainSliderSettings}
                 ref={(slider: Slider | null) => setNav1(slider)}
               >
@@ -113,7 +114,7 @@ const { id } = useParams(); // Get animal ID from the URL
                 </div>
               </Slider>
 
-              {/* Navigation Slider (Thumbnails) */}
+              {/* Navigation Slider (Thumbnails) 
               <Slider
                 {...navSliderSettings}
                 ref={(slider: Slider | null) => setNav2(slider)}
@@ -146,14 +147,16 @@ const { id } = useParams(); // Get animal ID from the URL
                     loading="lazy"
                   />
                 </div>
-              </Slider>
+              </Slider> */}
+
+              <GalleryComponent pictures={animal.pictures}/>
       </Columns.Column>
       {/* Info animal*/}
       <Columns className="has-text-weight-bold">
       <Columns.Column mobile={{ size: 12 }}
               tablet={{ size: 12 }}
               desktop={{ size: 6 }}>
-        Espèce
+        {animal?.species.name}
       </Columns.Column>
       <Columns.Column mobile={{ size: 12 }}
               tablet={{ size: 12 }}
@@ -168,7 +171,7 @@ const { id } = useParams(); // Get animal ID from the URL
       <Columns.Column mobile={{ size: 12 }}
               tablet={{ size: 12 }}
               desktop={{ size: 6 }}>
-        {computeAge(animal?.date_of_birth ?? '')}
+        {computeAge(animal?.date_of_birth)}
       </Columns.Column>
       <Columns.Column mobile={{ size: 12 }}
               tablet={{ size: 12 }}
@@ -208,7 +211,7 @@ const { id } = useParams(); // Get animal ID from the URL
       {animal?.creator.address}<br />
       {animal?.creator.city}<br />
       {animal?.creator.country}<br />
-      <Link to={animal?.creator.website ?? '#'}>{animal?.creator.website ?? 'Site web non disponible'}</Link>
+      <Link to={animal?.creator.website}>{animal?.creator.website}</Link><br />
                </p>
       
                 {/* Boutons d'action */}

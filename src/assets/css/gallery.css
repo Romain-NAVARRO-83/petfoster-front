@@ -1,0 +1,21 @@
+.mainslider {
+  aspect-ratio: 1/0.6;
+  border: solid 1px #ddd;
+  overflow: hidden;
+}
+
+.mainslider img,
+.navslider img {
+  object-fit: contain;
+  height: 100%;
+}
+
+.slick-list,
+.slick-track,
+.slick-slide div {
+  height: 100%;
+}
+
+.navslider {
+  height: 100px;
+}
