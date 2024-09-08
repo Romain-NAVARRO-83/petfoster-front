@@ -15,35 +15,17 @@ import { Animal } from 'src/@interfaces/animal';
 // Utilitaires
 import computeAge from '../../utils/computeAge'
 import GalleryComponent from '../partials/GalleryComponent';
+import { useAuth } from '../../hooks/AuthContext'; // Importer le contexte d'authentification
+
 
 const AnimalProfile = () => {
   const { openModal } = useModal();
 
-  // Configuration du slider
-//   const [nav1, setNav1] = useState<Slider | null>(null);
-//   const [nav2, setNav2] = useState<Slider | null>(null);
 
-// const mainSliderSettings: Record<string, any> = {
-//   slidesToShow: 1,
-//   slidesToScroll: 1,
-//   arrows: false,
-//   fade: true,
-//   asNavFor: nav2,
-// };
-
-// const navSliderSettings: Record<string, any> = {
-//   slidesToShow: 3,
-//   slidesToScroll: 1,
-//   asNavFor: nav1,
-//   dots: true,
-//   centerMode: true,
-//   focusOnSelect: true,
-//   navigation: true,
-//   arrows: true
-// };
-
+  // Obtenir l'utilisateur connecté à partir du contexte d'authentification
+  const { user: connectedUser } = useAuth(); 
 // Chargement de l'animal
-const { id } = useParams(); // Get animal ID from the URL
+const { id } = useParams(); // On récupère l'id de l'animal
   const [animal, setAnimal] = useState<Animal | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -79,77 +61,7 @@ const { id } = useParams(); // Get animal ID from the URL
       <Columns.Column mobile={{ size: 12 }}
               tablet={{ size: 12 }}
               desktop={{ size: 6 }}>
-       {/* Main Slider */}
-       {/* <Slider
-                {...mainSliderSettings}
-                ref={(slider: Slider | null) => setNav1(slider)}
-              >
-                <div>
-                  <img
-                    src="https://placehold.co/600x400?text=Slide+1"
-                    alt="Slide 1"
-                    loading="lazy"
-                  />
-                </div>
-                <div>
-                  <img
-                    src="https://placehold.co/600x400?text=Slide+2"
-                    alt="Slide 2"
-                    loading="lazy"
-                  />
-                </div>
-                <div>
-                  <img
-                    src="https://placehold.co/600x400?text=Slide+3"
-                    alt="Slide 3"
-                    loading="lazy"
-                  />
-                </div>
-                <div>
-                  <img
-                    src="https://placehold.co/600x400?text=Slide+4"
-                    alt="Slide 4"
-                    loading="lazy"
-                  />
-                </div>
-              </Slider>
-
-              {/* Navigation Slider (Thumbnails) 
-              <Slider
-                {...navSliderSettings}
-                ref={(slider: Slider | null) => setNav2(slider)}
-              >
-                <div>
-                  <img
-                    src="https://placehold.co/600x400?text=Slide+1"
-                    alt="Thumb 1"
-                    loading="lazy"
-                  />
-                </div>
-                <div>
-                  <img
-                    src="https://placehold.co/600x400?text=Slide+2"
-                    alt="Thumb 2"
-                    loading="lazy"
-                  />
-                </div>
-                <div>
-                  <img
-                    src="https://placehold.co/600x400?text=Slide+3"
-                    alt="Thumb 3"
-                    loading="lazy"
-                  />
-                </div>
-                <div>
-                  <img
-                    src="https://placehold.co/600x400?text=Slide+4"
-                    alt="Thumb 4"
-                    loading="lazy"
-                  />
-                </div>
-              </Slider> */}
-
-              <GalleryComponent pictures={animal.pictures}/>
+              <GalleryComponent pictures={animal?.pictures}/>
       </Columns.Column>
       {/* Info animal*/}
       <Columns className="has-text-weight-bold">
@@ -183,6 +95,15 @@ const { id } = useParams(); // Get animal ID from the URL
               desktop={{ size: 12 }}>
        {animal?.short_story}
        </Columns.Column>
+       {/* info "Éditer" - Affiché uniquement si l'utilisateur connecté est le propriétaire du profil */}
+{connectedUser && connectedUser.userId === animal?.creator.id && (
+  <div className='notification is-info is-light is-fullwidth column '>
+    <p>En tant que créateur du profil de cet animal, vous pouvez en éditer le contenu.</p>
+    <button className="button is-pulled-right is-primary" onClick={() => openModal('editAnimalProfile')}>
+    Éditer
+  </button>
+    </div>
+)}
       </Columns>
       
     </Section>

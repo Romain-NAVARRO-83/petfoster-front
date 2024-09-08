@@ -9,6 +9,7 @@ import {
   Section,
 } from 'react-bulma-components';
 import AnimalItemList from '../partials/AnimalItemList';
+import MapComponent from '../partials/MapComponent';
 import { Link } from 'react-router-dom';
 
 import { useGeolocation } from "../../hooks/GeolocationContext";
@@ -117,7 +118,7 @@ useEffect(() => {
           desktop={{ size: 6 }}
           id="home-map-container"
         >
-          <MapContainer
+          {/* <MapContainer
             center={defaultPosition}
             zoom={7}
             scrollWheelZoom={false}
@@ -127,15 +128,15 @@ useEffect(() => {
               url="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
               attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>'
             />
-  {/* marqueur de la position de l'user */}
-  <Marker position={mapCenter} icon={userIcon}> {/* Marqueur sur la position de l'utilisateur (ou défaut) */}
+  
+  <Marker position={mapCenter} icon={userIcon}> 
               <Popup>
                 Votre position
               </Popup>
             </Marker>
 
 
-            {/* Marquers des utilisateurs */}
+           
 {allUsers && allUsers.map((user: any) => (
   <Marker 
     key={user.id} 
@@ -148,7 +149,8 @@ useEffect(() => {
     </Popup>
   </Marker>
 ))}
-          </MapContainer>
+          </MapContainer> */}
+          <MapComponent users={allUsers}/>
         </Columns.Column>
         <Columns.Column
           mobile={{ size: 12 }}

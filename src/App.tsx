@@ -37,7 +37,7 @@ function App() {
         <Route path="/trouver-animal" element={< TrouverAnimal />} />
         {/* <Route path="/profil-animal" element={< ProfilAnimal />} /> */}
         <Route path="/animal/:id" element={< ProfilAnimal />} />
-        <Route path="/profil" element={< ProfilUtilisateur />} />
+        <Route path="/profil/:id" element={< ProfilUtilisateur />} />
         <Route path="/connexion" element={< Connexion />} />
         <Route path="*" element={< Error404 />} />
       </Routes>

@@ -13,7 +13,7 @@ const userIcon = new LeafletIcon({
   iconAnchor: [12, 41], // Position de l'ancre (la pointe du marqueur)
   popupAnchor: [1, -34], // Position du popup par rapport au marqueur
 });
-function MapComponent(){
+function MapComponent({users}){
   const { location, error } = useGeolocation();
 
   // Utiliser la position de l'utilisateur (ou celle par défaut)
@@ -37,6 +37,20 @@ function MapComponent(){
                 <Link to="/profil">Profil user</Link>
               </Popup>
             </Marker>
+
+
+            {users && users.map((user: any) => (
+  <Marker 
+    key={user.id} 
+    position={[parseFloat(user.latitude), parseFloat(user.longitude)]} 
+  > 
+    <Popup>
+      {user.name}
+      <br />
+      <Link to={`/profil/${user.id}`}>Voir le profil</Link>
+    </Popup>
+  </Marker>
+))}
           </MapContainer>
   )
 }

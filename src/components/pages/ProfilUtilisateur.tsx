@@ -1,26 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Box, Heading, Section, Columns, Container, Table } from 'react-bulma-components';
+import { Button, Heading, Section, Columns, Container, Table } from 'react-bulma-components';
 import { Envelope, Pencil, PlusSmall } from 'react-flaticons';
 import Slider from 'react-slick';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useModal } from '../../hooks/ModalContext';
 import FosterlingProfile from '../partials/FosterlingProfile'; // Profils d'accueil dynamique
-
+import { useAuth } from '../../hooks/AuthContext'; // Importer le contexte d'authentification
+import { Animal } from 'src/@interfaces/animal';
 
 // Définir le type User
 interface User {
+  id: number;
+  type_user: "adoptant" | "foster" | "autre"; 
   name: string;
-  first_name: string;
   email: string;
-  phone: string;
+  password: string; 
   country: string;
-  zipcode: string;
+  zip: number;
   city: string;
+  longitude: number; 
+  latitude: number;  
+  phone: string;
   address: string;
+  website: string | null; // Le site peut être optionnel (nullable)
   description: string;
-  fosterlingDescription: string;
-  images: { url: string; thumbnail: string }[]; 
+  created_at: string; // Peut-être utiliser `Date` si vous préférez
+  updated_at: string | null;
+  userAnimals: Animal[]; 
 }
 
 // Définir le type pour les profils d'accueil
@@ -35,7 +42,7 @@ interface FosterlingProfileType {
 
 function ProfilUtilisateur() {
   const { openModal } = useModal();
-  const { id } = useParams(); // Récupérer l'ID de l'utilisateur à partir de l'URL
+  const { id } = useParams<{ id: string }>(); // Récupérer l'ID de l'utilisateur à partir de l'URL
   const [user, setUser] = useState<User | null>(null); // Stocker les données de l'utilisateur
   const [fosterlingProfiles, setFosterlingProfiles] = useState<FosterlingProfileType[]>([]); // Stocker les profils d'accueil
   const [loading, setLoading] = useState(true); // État de chargement
@@ -43,6 +50,9 @@ function ProfilUtilisateur() {
 
   const [nav1, setNav1] = useState<Slider | null>(null);
   const [nav2, setNav2] = useState<Slider | null>(null);
+
+  // Obtenir l'utilisateur connecté à partir du contexte d'authentification
+  const { user: connectedUser } = useAuth(); 
 
   // Configuration des sliders
   const mainSliderSettings = {
@@ -68,9 +78,10 @@ function ProfilUtilisateur() {
       try {
         const userResponse = await axios.get(`http://localhost:3000/api/users/${id}`);
         setUser(userResponse.data);
+        console.log(userResponse.data)
         
-        const fosterlingResponse = await axios.get(`http://localhost:3000/api/users/${id}/fosterlings`);
-        setFosterlingProfiles(fosterlingResponse.data);
+        // const fosterlingResponse = await axios.get(`http://localhost:3000/api/users/${id}/profils`);
+        // setFosterlingProfiles(fosterlingResponse.data);
       } catch (error) {
         if (typeof error === 'object' && error !== null && 'message' in error) {
           setError(error as Error); // Type assertion pour s'assurer qu'il s'agit d'une instance Error
@@ -96,13 +107,18 @@ function ProfilUtilisateur() {
   return (
     <main>
       <div>
-        <Heading size={1}>Profil utilisateur</Heading>
+        <Heading size={1}>{user?.name}</Heading>
       </div>
 
       <Section>
 
         <Container>
-
+{/* Info - Affiché uniquement si l'utilisateur connecté est le propriétaire du profil */}
+{connectedUser && user && connectedUser.userId === parseInt(id) && (
+  <p className='notification is-primary has-text-centered'>
+    Ceci est votre profil, vous pouvez l'éditer grâce au bouton présent plus bas.
+  </p>
+)}
           <Columns>
 
             <Columns.Column mobile={{ size: 12 }} tablet={{ size: 12 }} desktop={{ size: 6 }}>
@@ -134,16 +150,18 @@ function ProfilUtilisateur() {
             <Columns.Column mobile={{ size: 12 }} tablet={{ size: 12 }} desktop={{ size: 6 }}>
 
             {user && (
+              <>
+              <h2 className='title'>{user.type_user}</h2>
                 <ul>
                   <li><strong>Nom:</strong> {user.name}</li>
-                  <li><strong>Prénom:</strong> {user.first_name}</li>
                   <li><strong>Email:</strong> {user.email}</li>
                   <li><strong>Tél:</strong> {user.phone}</li>
                   <li><strong>Pays:</strong> {user.country}</li>
-                  <li><strong>Code postal:</strong> {user.zipcode}</li>
+                  <li><strong>Code postal:</strong> {user.zip}</li>
                   <li><strong>Ville:</strong> {user.city}</li>
                   <li><strong>Adresse:</strong> {user.address}</li>
                 </ul>
+                </>
               )}
 
             </Columns.Column>
@@ -165,14 +183,21 @@ function ProfilUtilisateur() {
           <Section>
             {user && <p>{user.description}</p>}
           </Section>
+{/* Bouton "Contacter" - Affiché uniquement si l'utilisateur connecté n'est pas le propriétaire du profil et s'il est connecté */}
+{(!connectedUser || (connectedUser && user && connectedUser.userId !== parseInt(id))) && (
+  <Button color="primary" className="is-pulled-right" onClick={() => openModal('contactUser')}>
+    <Envelope /> Contacter
+  </Button>
+)}
 
-          <Button color="primary" className="is-pulled-right" onClick={() => openModal('contactUser')}>
-            <Envelope /> Contacter
-          </Button>
+{/* Bouton "Éditer" - Affiché uniquement si l'utilisateur connecté est le propriétaire du profil */}
+{connectedUser && user && connectedUser.userId === parseInt(id) && (
+  <Button color="primary" className="is-pulled-right" onClick={() => openModal('editUserProfile')}>
+    <Pencil /> Éditer
+  </Button>
+)}
 
-          <Button color="primary" className="is-pulled-right" onClick={() => openModal('editUserProfile')}>
-            <Pencil /> Éditer
-          </Button>
+
 
         </Container>
 
@@ -182,15 +207,17 @@ function ProfilUtilisateur() {
 
         <Container>
           
-          <Heading size={2} renderAs="h2">
+          <h2 className='title'>
             Profils d'accueil
-          </Heading>
+          </h2>
 
-          {user && <p>{user.fosterlingDescription}</p>}
-
-          <Button color="primary" className="is-pulled-right" onClick={() => openModal('addFosterlingProfile')}>
-            <PlusSmall /> Ajouter
-          </Button>
+{/* Bouton "Ajouter" - Affiché uniquement si l'utilisateur connecté est le propriétaire du profil */}
+{connectedUser && user && connectedUser.userId === parseInt(id) && (
+  <Button color="primary" className="is-pulled-right" onClick={() => openModal('addFosterlingProfile')}>
+  <PlusSmall /> Ajouter
+</Button>
+)}
+          
 
           <Table className="is-fullwidth has-text-centered card">
 
@@ -208,22 +235,21 @@ function ProfilUtilisateur() {
 
             <tbody>
 
-              {fosterlingProfiles.map((profile) => (
+              {/* {fosterlingProfiles.map((profile) => (
                 <FosterlingProfile key={profile.id} profile={profile} />
-              ))}
+              ))} */}
 
             </tbody>
 
           </Table>
+          <h2 className='title'>Animaux</h2>
 
         </Container>
 
       </Section>
 
     </main>
-
   );
-  
 }
 
 export default ProfilUtilisateur;
