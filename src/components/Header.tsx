@@ -2,9 +2,10 @@ import { NavLink, Link } from 'react-router-dom';
 import { Navbar } from 'react-bulma-components';
 import { User } from 'react-flaticons';
 import { useState, useEffect } from 'react';
+import { useAuth } from '../hooks/AuthContext';
 
 function Header() {
-  // State for burger menu
+  // State du menu burger
   const [isActive, setIsActive] = useState(false);
 
   // Toggle burger menu
@@ -12,10 +13,10 @@ function Header() {
     setIsActive(!isActive);
   };
 
-  // State for scrolling behavior
+  // State pour le scroll
   const [scrolled, setScrolled] = useState(false);
 
-  // Handle scrolling for header background change
+  // Handle scrolling
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 5) {
@@ -24,15 +25,16 @@ function Header() {
         setScrolled(false);
       }
     };
-
-    // Add scroll event listener
     window.addEventListener('scroll', handleScroll);
 
-    // Cleanup scroll event listener on component unmount
+    // Supprimer le listener à l'unmount
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  // Contrôle du login
+  const { user, logout } = useAuth();
 
   return (
     <header className={scrolled ? 'header scrolled' : 'header'}>
@@ -56,12 +58,18 @@ function Header() {
             <NavLink to="/trouver-animal" className="navbar-item">
               Voir les animaux
             </NavLink>
-            <NavLink to="/mes-demandes" className="navbar-item">
+
+            {/* Menu items pour les users connectés */}
+            {user && (
+            <>
+              <NavLink to="/mes-demandes" className="navbar-item">
               Mes demandes
             </NavLink>
             <NavLink to="/mes-animaux" className="navbar-item">
               Mes animaux
             </NavLink>
+            </>
+            )}
             <Navbar.Item href="/connexion">
               <User size={24} />
             </Navbar.Item>

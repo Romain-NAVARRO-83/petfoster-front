@@ -188,17 +188,17 @@ function TrouverAnimal() {
                     <option value={species}>{species}</option>
                   ))} */}
                   <option value="Chat">Chat</option>
-<option value="Chien">Chien</option>
-<option value="Cheval">Cheval</option>
-<option value="Lapin">Lapin</option>
-<option value="Cochon d'Inde">Cochon d'Inde</option>
-<option value="Hamster">Hamster</option>
-<option value="Furet">Furet</option>
-<option value="Oiseau">Oiseau</option>
-<option value="Serpent">Serpent</option>
-<option value="Lézard">Lézard</option>
-<option value="Tortue">Tortue</option>
-<option value="Rat">Rat</option>
+                  <option value="Chien">Chien</option>
+                  <option value="Cheval">Cheval</option>
+                  <option value="Lapin">Lapin</option>
+                  <option value="Cochon d'Inde">Cochon d'Inde</option>
+                  <option value="Hamster">Hamster</option>
+                  <option value="Furet">Furet</option>
+                  <option value="Oiseau">Oiseau</option>
+                  <option value="Serpent">Serpent</option>
+                  <option value="Lézard">Lézard</option>
+                  <option value="Tortue">Tortue</option>
+                  <option value="Rat">Rat</option>
                 </select>
               </Field>
             </Columns.Column>

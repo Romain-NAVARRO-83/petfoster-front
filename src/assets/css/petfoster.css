@@ -48,7 +48,8 @@ div:not(#splash-screen, #splash-screen > *):has(>h1) {
     background-color: var(--orange)
 }
 
-#splash-screen::before {
+#splash-screen::before,
+div:not(#splash-screen, #splash-screen > *):has(>h1)::before {
     content: "";
     background: rgb(0, 0, 0);
     background: linear-gradient(180deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%);
