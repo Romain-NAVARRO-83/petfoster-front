@@ -128,7 +128,8 @@ nav.navbar {
     transition: all ease-out .5s;
 }
 
-.navbar-item {
+.navbar-item,
+.navbar-item a {
     color: #fff;
     transition: all ease-out .5s;
 }

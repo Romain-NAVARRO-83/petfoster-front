@@ -76,8 +76,9 @@ function Header() {
             <div className="navbar-item">
               {user ? (
                 <>
-                  <Link to={`/profil/${user.userId}`}>
-                    <User size={24} />
+                  <Link to={`/profil/${user.userId}`} className='has-text-centered'>
+                    <User size={24} /><br/>
+                    {user.userName}
                   </Link>
                   <button onClick={logout} className="navbar-item">Déconnexion</button>
                 </>
