@@ -12,12 +12,13 @@ import MainModal from './components/partials/Modal.tsx';
 // Importation de fichiers CSS pour appliquer des styles à l'application
 
 import './assets/css/bulma-no-dark-mode.css';
-import './assets/css/petfoster.css';
+
 import 'leaflet/dist/leaflet.css';
 
 // Fichiers CSS pour Slick Carousel, une bibliothèque permettant de créer des carrousels d'images/éléments
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import './assets/css/petfoster.css';
 
 
 // Importation des hooks pour gérer l'état global de l'application

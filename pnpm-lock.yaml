@@ -20,6 +20,9 @@ importers:
       axios:
         specifier: ^1.7.7
         version: 1.7.7
+      geolib:
+        specifier: ^3.3.4
+        version: 3.3.4
       jwt-decode:
         specifier: ^4.0.0
         version: 4.0.0
@@ -1268,6 +1271,9 @@ packages:
   gensync@1.0.0-beta.2:
     resolution: {integrity: sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==}
     engines: {node: '>=6.9.0'}
+
+  geolib@3.3.4:
+    resolution: {integrity: sha512-EicrlLLL3S42gE9/wde+11uiaYAaeSVDwCUIv2uMIoRBfNJCn8EsSI+6nS3r4TCKDO6+RQNM9ayLq2at+oZQWQ==}
 
   get-intrinsic@1.2.4:
     resolution: {integrity: sha512-5uYhsJH8VJBTv7oslg4BznJYhDoRI6waYCxMmCdnTrcCrHA/fCFKoTFz2JKKE0HdDFUF7/oQuhzumXJK7paBRQ==}
@@ -3483,6 +3489,8 @@ snapshots:
   functions-have-names@1.2.3: {}
 
   gensync@1.0.0-beta.2: {}
+
+  geolib@3.3.4: {}
 
   get-intrinsic@1.2.4:
     dependencies:

@@ -1,3 +1,4 @@
+// del
 import { Section, Container, Heading, Button } from 'react-bulma-components';
 
 function Error404() {
