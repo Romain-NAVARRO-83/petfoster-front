@@ -52,43 +52,43 @@ function AnimalItemList({ animal }: AnimalListItemProps) {
   const { openModal } = useModal();
 
   return (
-    <Box>
-      <Columns className="is-vcentered">
-        {/* Image container */}
-        <Columns.Column narrow textAlign="centered" className="animal-miniature">
-          <Image
-            size={64}
+    <article className='box'>
+      <div className="columns is-vcentered">
+        
+        <div className="animal-miniature is-narrow column has-text-centered">
+          <img
             src={`/img/animaux/${animal?.id}-${animal?.name}-1.webp`} 
             alt="Animal"
+            width="64"
+            height="64"
             
           />
-        </Columns.Column>
+        </div>
 
         {/* Text container */}
-        <Columns.Column>
+        <div className='column'>
           <p className="has-text-weight-bold has-text-left">{animal?.name} </p>
-          <Columns>
-            <Columns.Column>Espèce: {animal?.species.name}</Columns.Column>
-            <Columns.Column>Age: {computeAge(animal?.date_of_birth)}</Columns.Column>
-            <Columns.Column>Sexe: {animal?.sexe}</Columns.Column>
-          </Columns>
-        </Columns.Column>
+          <div className='columns'>
+            <div className='column'>Espèce: {animal?.species.name}</div>
+            <div className='column'>Age: {computeAge(animal?.date_of_birth)}</div>
+            <div className='column'>Sexe: {animal?.sexe}</div>
+          </div>
+        </div>
 
-        {/* Button container */}
-        <Columns.Column narrow textAlign="centered">
-        <Link to={`/animal/${animal?.id}`}>
+
+        <div className='column is-narrow has-text-centered'>
+        <Link to={`/animal/${animal?.id}`} className='button has-text-info'>
             <Eye />
           </Link>
-          <Button
-            color="primary"
-            className="is-ghost is-primary"
+          <button
+            className="has-text-success button"
             onClick={() => openModal('editAnimalProfile')}
           >
             <Pencil />
-          </Button>
-        </Columns.Column>
-      </Columns>
-    </Box>
+          </button>
+        </div>
+      </div>
+    </article>
   );
 }
 
