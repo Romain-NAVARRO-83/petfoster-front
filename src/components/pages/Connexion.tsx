@@ -1,9 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Section, Heading, Box, Button, Tabs } from 'react-bulma-components';
-import { isValidPhoneNumber } from 'libphonenumber-js';
 import LoginForm from '../formulaires/Login';
 import { SingleValue } from 'react-select';
 import AsyncSelect from 'react-select/async';
+
+
+type Coordinates = {
+    lat: number;
+    lng: number;
+  };
+
+
+  type CityOption = {
+    value: string;
+    label: string;
+};
 
 
 // Fonction pour récupérer les villes en fonction du pays et du terme de recherche
@@ -33,12 +44,7 @@ const fetchCities = async (country: string, searchTerm: string) => {
     }
 };
 
-type CityOption = {
-    value: string;
-    label: string;
-};
 
-// Composant principal de la page d'inscription
 const RegistrationPage = () => {
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState('');
@@ -54,11 +60,52 @@ const RegistrationPage = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [phoneError, setPhoneError] = useState('');
     const [userType, setUserType] = useState('');
-    const [countryDialCode, setCountryDialCode] = useState('');
-    const [selectedCountryCode, setSelectedCountryCode] = useState('');
+    const [selectedCountryCode, setSelectedCountryCode] = useState(''); // Mise à jour de cette ligne
     const [address, setAddress] = useState('');
     const [name, setName] = useState('');
-    
+    const [coordinates, setCoordinates] = useState<Coordinates>({ lat: 0, lng: 0 })
+    const [loading, setLoading] = useState(false);
+
+
+
+   // Callback pour mettre à jour les coordonnées
+   const handleCoordinatesUpdate = async () => {
+    try {
+        const response = await fetch(
+            `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(`${address}, ${postalCode} ${selectedCity}, ${selectedCountry}`)}`
+        );
+        const data = await response.json();
+
+        if (data.length > 0) {
+            const location = data[0];
+            setCoordinates({ lat: parseFloat(location.lat), lng: parseFloat(location.lon) });
+            return true;  // Retourne vrai si géocodage réussi
+        } else {
+            alert('Impossible de géolocaliser cette adresse.');
+            return false;  // Retourne faux si géocodage échoue
+        }
+    } catch (error) {
+        console.error("Erreur lors du géocodage:", error);
+        alert('Une erreur est survenue lors de la géolocalisation.');
+        return false;
+    }
+};
+
+    // Fonction pour gérer la sélection du pays
+    const handleCountryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedCountryName = event.target.value;
+        setSelectedCountry(selectedCountryName);
+
+        // Trouver les données du pays sélectionné
+        const selectedCountryData = countries.find(country => country.name === selectedCountryName);
+
+        if (selectedCountryData) {
+            setSelectedCountryCode(selectedCountryData.isoCode); // Mise à jour du code ISO du pays
+        } else {
+            setSelectedCountryCode(''); // Réinitialiser le code ISO si le pays n'est pas trouvé
+        }
+    };
+
     // Fonction loadCityOptions pour AsyncSelect
     const loadCityOptions = async (inputValue: string) => {
         if (inputValue.length > 0 && selectedCountry) {
@@ -74,30 +121,34 @@ const RegistrationPage = () => {
         return emailRegex.test(email);
     };
 
-    // Fonction pour gérer le changement de numéro de téléphone et ajouter l'indicatif si nécessaire
+    // Fonction pour gérer le changement de numéro de téléphone
     const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        let phone = e.target.value;
+        const phone = e.target.value;
+        const numericRegex = /^[0-9]*$/;
 
-        // Ajouter l'indicatif du pays si manquant
-        if (!phone.startsWith(countryDialCode)) {
-            phone = countryDialCode + phone;
+        // Valider si l'utilisateur n'entre que des chiffres
+        if (numericRegex.test(phone)) {
+            setPhoneNumber(phone);
+            setPhoneError('');
+        } else {
+            setPhoneError('Veuillez entrer uniquement des chiffres.');
         }
-        setPhoneNumber(phone);
     };
 
     // Soumission du formulaire (inscription)
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         let isValid = true;
-    
-        // Validation des champs
+
+        // Validation des champs email
         if (!validateEmail(email)) {
             setEmailError("Veuillez entrer une adresse email valide.");
             isValid = false;
         } else {
             setEmailError('');
         }
-    
+
+        // Validation des mots de passe
         if (password !== confirmPassword) {
             setPasswordError("Les mots de passe ne correspondent pas.");
             isValid = false;
@@ -107,20 +158,25 @@ const RegistrationPage = () => {
         } else {
             setPasswordError('');
         }
-    
-        if (phoneNumber && !isValidPhoneNumber(phoneNumber)) {
-            setPhoneError("Veuillez entrer un numéro de téléphone valide.");
+
+        // Validation du téléphone
+        if (phoneNumber && !/^[0-9]*$/.test(phoneNumber)) {
+            setPhoneError("Veuillez entrer uniquement des chiffres dans le numéro de téléphone.");
             isValid = false;
         } else {
             setPhoneError('');
         }
-    
+
         if (!userType) {
             console.error("Veuillez sélectionner un type d'utilisateur.");
             isValid = false;
         }
-    
-        if (selectedCountryCode) {
+
+        if (!selectedCountryCode) {
+            console.error("Code ISO du pays non défini.");
+            return; // Arrêter la soumission si le code ISO n'est pas défini
+        } 
+        else {
             const isPostalCodeValid = await validatePostalCode(selectedCountryCode, selectedCity, postalCode);
             if (!isPostalCodeValid) {
                 setPostalCodeError("Le code postal ne correspond pas à la ville sélectionnée.");
@@ -128,44 +184,93 @@ const RegistrationPage = () => {
             } else {
                 setPostalCodeError('');
             }
-        } else {
-            console.error("Code ISO du pays non défini.");
-            isValid = false;
-        }
-    
-        // Si toutes les validations sont passées
-        if (isValid) {
-            const newUser = {
-                type_user: userType,
-                name: name,
-                email: email,
-                password: password,
-                country: selectedCountry,
-                zip: postalCode,
-                city: selectedCity,
-                phone: phoneNumber,
-                address: address,
-            };
-    
-            try {
-                const response = await fetch('/api/users', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(newUser),
-                });
-    
-                const result = await response.json();
-                if (response.ok) {
-                    console.log("Utilisateur créé avec succès !");
-                } else {
-                    console.error("Erreur lors de la création de l'utilisateur :", result.error);
+
+            if (isValid) {
+                setLoading(true); // Démarrer le chargement
+                const success = await handleCoordinatesUpdate(); // Appel asynchrone avec await
+                setLoading(false); // Arrêter le chargement
+        
+                if (!success) {
+                    return; // Arrêter si la géolocalisation échoue
                 }
-            } catch (error) {
-                console.error("Erreur lors de la requête :", error);
+        
+
+                const newUser = {
+                    type_user: userType,
+                    name: name,
+                    email: email,
+                    password: password,
+                    country: selectedCountry,
+                    zip: postalCode,
+                    city: selectedCity,
+                    phone: phoneNumber,
+                    address: address,
+                    longitude: coordinates.lng,
+                    latitude: coordinates.lat,
+                };
+        
+                // Envoie des données au backend
+                try {
+                    const response = await fetch('http://localhost:3000/api/users', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(newUser),
+                    });
+        
+                    if (!response.ok) {
+                        throw new Error(`Erreur lors de la requête : ${response.status}`);
+                    }
+        
+                    const result = await response.json();
+                    console.log("Utilisateur créé avec succès :", result);
+                } catch (error) {
+                    console.error("Erreur lors de la requête :", error);
+                    alert("Une erreur est survenue lors de l'inscription. Veuillez réessayer.");
+                }
             }
         }
-    };
-    
+
+     // Si toutes les validations sont passées
+     if (isValid) {
+        const newUser = {
+            type_user: userType,
+            name: name,
+            email: email,
+            password: password,
+            country: selectedCountry,
+            zip: postalCode,
+            city: selectedCity,
+            phone: phoneNumber,
+            address: address,
+            longitude: coordinates.lng,
+            latitude: coordinates.lat,
+        };
+
+        console.log("Données envoyées au serveur : ", newUser);
+
+        try {
+            const response = await fetch('http://localhost:3000/api/users', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newUser),
+            });
+
+            if (!response.ok) {
+                // Ajoutez un log de la réponse pour voir plus de détails
+                const errorData = await response.json();
+                console.error("Erreur lors de la requête : ", errorData);
+                throw new Error(`Erreur lors de la requête : ${response.status}`);
+            }
+
+            const result = await response.json();
+            console.log("Utilisateur créé avec succès :", result);
+        } catch (error) {
+            console.error("Erreur lors de la requête :", error);
+            alert("Une erreur est survenue lors de l'inscription. Veuillez réessayer.");
+        }
+    }
+};
+
     // Récupération de la liste des pays via l'API REST Countries
     useEffect(() => {
         const fetchCountries = async () => {
@@ -324,19 +429,19 @@ const RegistrationPage = () => {
                                     <label className="label" htmlFor="pays">Pays <span className="has-text-danger">*</span> :</label>
                                     <div className="control">
                                         <div className="select">
-                                            <select
-                                                id="pays"
-                                                value={selectedCountry}
-                                                onChange={(e) => setSelectedCountry(e.target.value)}
-                                                required
-                                            >
-                                                <option value="">Sélectionnez un pays</option>
-                                                {countries.map(country => (
-                                                    <option key={country.name} value={country.name}>
-                                                        {country.name}
-                                                    </option>
-                                                ))}
-                                            </select>
+                                        <select
+                                            id="pays"
+                                            value={selectedCountry}
+                                            onChange={handleCountryChange}  
+                                            required
+                                        >
+                                            <option value="">Sélectionnez un pays</option>
+                                            {countries.map(country => (
+                                                <option key={country.name} value={country.name}>
+                                                    {country.name}
+                                                </option>
+                                            ))}
+                                        </select>
                                         </div>
                                     </div>
                                 </div>
@@ -390,7 +495,7 @@ const RegistrationPage = () => {
 
                                 {/* Téléphone */}
                                 <div className="field">
-                                    <label className="label" htmlFor="telephone">Téléphone :</label>
+                                    <label className="label" htmlFor="telephone">Téléphone (optionnel) :</label>
                                     <div className="control">
                                         <input
                                             className={`input ${phoneError ? 'is-danger' : ''}`}
@@ -417,10 +522,13 @@ const RegistrationPage = () => {
                                 {/* Soumettre */}
                                 <div className="field">
                                     <div className="control">
-                                        <Button color="primary" fullwidth>Créer un compte</Button>
+                                        <Button color="primary" fullwidth type="submit" disabled={loading}>Créer un compte</Button>
                                     </div>
                                 </div>
+                                
                             </form>
+
+                            
                         )}
                     </Box>
                 </Container>
