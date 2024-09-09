@@ -1,13 +1,45 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Section, Heading, Box, Button, Tabs } from 'react-bulma-components';
 import { isValidPhoneNumber } from 'libphonenumber-js';
-import Select from 'react-select';
 import LoginForm from '../formulaires/Login';
+import { SingleValue } from 'react-select';
+import AsyncSelect from 'react-select/async';
+
+
+// Fonction pour récupérer les villes en fonction du pays et du terme de recherche
+const fetchCities = async (country: string, searchTerm: string) => {
+    try {
+        const response = await fetch('https://countriesnow.space/api/v0.1/countries/cities', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ country })
+        });
+
+        const data = await response.json();
+        const allCities = data.data || [];
+
+        // Créez des options simples avec une chaîne de caractères pour le label et la valeur
+        const filteredCities = allCities.filter((city: string) =>
+            city.toLowerCase().startsWith(searchTerm.toLowerCase())
+        ).map((city: string) => ({
+            label: city,
+            value: city,
+        }));
+
+        return filteredCities;
+    } catch (error) {
+        console.error("Erreur lors de la récupération des villes:", error);
+        return [];
+    }
+};
+
+type CityOption = {
+    value: string;
+    label: string;
+};
 
 // Composant principal de la page d'inscription
 const RegistrationPage = () => {
-
-    // États pour gérer les valeurs des champs de formulaire
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState('');
     const [password, setPassword] = useState('');
@@ -15,8 +47,7 @@ const RegistrationPage = () => {
     const [passwordError, setPasswordError] = useState('');
     const [activeTab, setActiveTab] = useState<'login' | 'signup'>('login');
     const [countries, setCountries] = useState<{ name: string, dialCode: string, isoCode: string }[]>([]);
-    const [selectedCountry, setSelectedCountry] = useState('');
-    const [cities, setCities] = useState<string[]>([]);
+    const [selectedCountry, setSelectedCountry] = useState(''); 
     const [selectedCity, setSelectedCity] = useState('');
     const [postalCode, setPostalCode] = useState('');
     const [postalCodeError, setPostalCodeError] = useState('');
@@ -25,6 +56,17 @@ const RegistrationPage = () => {
     const [userType, setUserType] = useState('');
     const [countryDialCode, setCountryDialCode] = useState('');
     const [selectedCountryCode, setSelectedCountryCode] = useState('');
+    const [address, setAddress] = useState('');
+    const [name, setName] = useState('');
+    
+    // Fonction loadCityOptions pour AsyncSelect
+    const loadCityOptions = async (inputValue: string) => {
+        if (inputValue.length > 0 && selectedCountry) {
+            return await fetchCities(selectedCountry, inputValue);
+        } else {
+            return [];
+        }
+    };
 
     // Validation de l'email
     const validateEmail = (email: string): boolean => {
@@ -43,20 +85,19 @@ const RegistrationPage = () => {
         setPhoneNumber(phone);
     };
 
-    // Gestion de la soumission du formulaire (inscription)
+    // Soumission du formulaire (inscription)
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         let isValid = true;
-
-        // Validation de l'email
+    
+        // Validation des champs
         if (!validateEmail(email)) {
             setEmailError("Veuillez entrer une adresse email valide.");
             isValid = false;
         } else {
             setEmailError('');
         }
-
-        // Validation des mots de passe
+    
         if (password !== confirmPassword) {
             setPasswordError("Les mots de passe ne correspondent pas.");
             isValid = false;
@@ -66,22 +107,19 @@ const RegistrationPage = () => {
         } else {
             setPasswordError('');
         }
-
-        // Validation du numéro de téléphone (optionnel)
+    
         if (phoneNumber && !isValidPhoneNumber(phoneNumber)) {
             setPhoneError("Veuillez entrer un numéro de téléphone valide.");
             isValid = false;
         } else {
             setPhoneError('');
         }
-
-        // Validation du type d'utilisateur
+    
         if (!userType) {
             console.error("Veuillez sélectionner un type d'utilisateur.");
             isValid = false;
         }
-
-        // Validation du code postal
+    
         if (selectedCountryCode) {
             const isPostalCodeValid = await validatePostalCode(selectedCountryCode, selectedCity, postalCode);
             if (!isPostalCodeValid) {
@@ -94,13 +132,40 @@ const RegistrationPage = () => {
             console.error("Code ISO du pays non défini.");
             isValid = false;
         }
-
+    
+        // Si toutes les validations sont passées
         if (isValid) {
-            // Logique de soumission du formulaire ici
-            console.log("Formulaire soumis avec succès.");
+            const newUser = {
+                type_user: userType,
+                name: name,
+                email: email,
+                password: password,
+                country: selectedCountry,
+                zip: postalCode,
+                city: selectedCity,
+                phone: phoneNumber,
+                address: address,
+            };
+    
+            try {
+                const response = await fetch('/api/users', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newUser),
+                });
+    
+                const result = await response.json();
+                if (response.ok) {
+                    console.log("Utilisateur créé avec succès !");
+                } else {
+                    console.error("Erreur lors de la création de l'utilisateur :", result.error);
+                }
+            } catch (error) {
+                console.error("Erreur lors de la requête :", error);
+            }
         }
     };
-
+    
     // Récupération de la liste des pays via l'API REST Countries
     useEffect(() => {
         const fetchCountries = async () => {
@@ -122,39 +187,7 @@ const RegistrationPage = () => {
         fetchCountries();
     }, []);
 
-    // Récupération des villes en fonction du pays sélectionné via l'API CountriesNow
-    useEffect(() => {
-        const fetchCities = async () => {
-            if (!selectedCountry) return;
-
-            const selectedCountryData = countries.find(country => country.name === selectedCountry);
-            if (!selectedCountryData) {
-                console.error("Erreur: Pays non trouvé dans la liste des pays.");
-                return;
-            }
-
-            setCountryDialCode(selectedCountryData.dialCode); // Mise à jour de l'indicatif du pays
-            setPhoneNumber(selectedCountryData.dialCode); // Préfixer le numéro de téléphone
-
-            setSelectedCountryCode(selectedCountryData.isoCode); // Code ISO pour la validation du code postal
-
-            try {
-                const response = await fetch('https://countriesnow.space/api/v0.1/countries/cities', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ country: selectedCountry })
-                });
-                const data = await response.json();
-                setCities(data.data || []);
-                setSelectedCity(''); // Réinitialiser la ville sélectionnée
-            } catch (error) {
-                console.error("Erreur lors de la récupération des villes:", error);
-            }
-        };
-        fetchCities();
-    }, [selectedCountry, countries]);
-
-    // Fonction pour valider le code postal via l'API Zippopotam.us
+    // Validation du code postal via l'API Zippopotam.us
     const validatePostalCode = async (country: string, city: string, postalCode: string): Promise<boolean> => {
         try {
             const apiUrl = `https://api.zippopotam.us/${country.toLowerCase()}/${postalCode}`;
@@ -177,9 +210,6 @@ const RegistrationPage = () => {
             return false;
         }
     };
-
-    // Transformer la liste des villes en format compatible avec react-select
-    const cityOptions = cities.map(city => ({ value: city, label: city }));
 
     return (
         <>
@@ -226,7 +256,15 @@ const RegistrationPage = () => {
                                 <div className="field">
                                     <label className="label" htmlFor="nom">Nom <span className="has-text-danger">*</span> :</label>
                                     <div className="control">
-                                        <input className="input" type="text" id="nom" name="nom" required />
+                                        <input 
+                                            className="input" 
+                                            type="text" 
+                                            id="nom" 
+                                            name="nom" 
+                                            value={name} 
+                                            onChange={(e) => setName(e.target.value)} 
+                                            required 
+                                        />
                                     </div>
                                 </div>
 
@@ -307,11 +345,13 @@ const RegistrationPage = () => {
                                 <div className="field">
                                     <label className="label" htmlFor="ville">Ville <span className="has-text-danger">*</span> :</label>
                                     <div className="control">
-                                        <Select
-                                            options={cityOptions}
-                                            onChange={(option) => setSelectedCity(option?.value || '')}
-                                            isDisabled={!selectedCountry || cities.length === 0}
+                                        <AsyncSelect
+                                            cacheOptions
+                                            loadOptions={loadCityOptions}
+                                            onChange={(option: SingleValue<CityOption>) => setSelectedCity(option?.value || '')}
+                                            isDisabled={!selectedCountry}
                                             placeholder="Tapez pour rechercher une ville"
+                                            noOptionsMessage={() => "Commencez à taper une ville"}
                                         />
                                     </div>
                                 </div>
@@ -331,6 +371,21 @@ const RegistrationPage = () => {
                                         />
                                     </div>
                                     {postalCodeError && <p className="help is-danger">{postalCodeError}</p>}
+                                </div>
+
+                                {/* Adresse */}
+                                <div className="field">
+                                    <label className="label" htmlFor="adresse">Adresse :</label>
+                                    <div className="control">
+                                        <input
+                                            className="input"
+                                            type="text"
+                                            id="adresse"
+                                            name="adresse"
+                                            value={address}
+                                            onChange={(e) => setAddress(e.target.value)}
+                                        />
+                                    </div>
                                 </div>
 
                                 {/* Téléphone */}
