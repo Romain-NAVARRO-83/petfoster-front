@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import AnimalItemList from '../partials/AnimalItemList';
-import { Heading, Section, Columns, Container } from 'react-bulma-components';
 import { useModal } from '../../hooks/ModalContext';
 import { useAuth } from '../../hooks/AuthContext';
 import { PlusSmall } from 'react-flaticons';
@@ -67,8 +66,8 @@ const MesAnimaux = () => {
         ) : fetchError ? (
           <p>{fetchError}</p>
         ) : (
-          <Container>
-            <Columns className="is-multiline">
+          <div className='container columns is-multiline'>
+            
             <p>
             Problème : il faut récupérer les animaux créés par l'user ainsi que ceux hébérgés par l'user.
             </p>
@@ -82,38 +81,11 @@ const MesAnimaux = () => {
               ) : (
                 <p>Vous n'avez pas encore ajouté d'animaux.</p>
               )}
-            </Columns>
-          </Container>
+           
+          </div>
         )}
 
-        {/* Bloc d'information */}
-        <Section className="info-block">
-          <Heading renderAs="h2">Vous souhaitez affiner votre recherche?</Heading>
-          <Columns className="container">
-            <Columns.Column
-              mobile={{ size: 12 }}
-              tablet={{ size: 12 }}
-              desktop={{ size: 6 }}
-            >
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis
-                facere iure similique cum ab maiores iste quod. Temporibus facilis
-                facere enim ad voluptatum! Nihil recusandae, iure soluta nam cum
-                explicabo.
-              </p>
-            </Columns.Column>
-            <Columns.Column
-              mobile={{ size: 12 }}
-              tablet={{ size: 12 }}
-              desktop={{ size: 6 }}
-              className="has-text-centered"
-            >
-              <Link className="is-primary button" to="/trouver-animal">
-                Voir les animaux
-              </Link>
-            </Columns.Column>
-          </Columns>
-        </Section>
+        
       </main>
     </>
   );

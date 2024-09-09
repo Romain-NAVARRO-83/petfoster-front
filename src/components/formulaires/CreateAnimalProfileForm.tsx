@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 interface FormData {
@@ -14,6 +14,22 @@ interface FormData {
 }
 
 const CreateAnimalProfileForm = () => {
+
+  // CSRF TOKEN
+  const [csrfToken, setCsrfToken] = useState<string | null>(null);
+  useEffect(() => {
+    const fetchCsrfToken = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/csrf-token');
+        setCsrfToken(response.data);
+      } catch (error) {
+        console.error('Erreur lors de la récupération du token CSRF:', error);
+      }
+    };
+
+    fetchCsrfToken();
+  }, []);
+
   const [formData, setFormData] = useState<FormData>({
     name: '',
     species_id: 1, // défaut ?
@@ -37,7 +53,15 @@ const CreateAnimalProfileForm = () => {
     e.preventDefault();
     console.log('formdata :', formData);
     try {
-      const response = await axios.post('http://localhost:3000/api/animals', formData);
+      const response = await axios.post(
+        'http://localhost:3000/api/animals',
+        formData,
+        {
+          headers: {
+            'x-xsrf-token': csrfToken || '',
+          },
+        }
+      );
       console.log('Réponse du serveur:', response.data);
     } catch (error) {
       console.error('Erreur lors de la soumission:', error);
