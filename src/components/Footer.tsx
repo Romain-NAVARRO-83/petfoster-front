@@ -1,5 +1,3 @@
-import { Button } from 'react-bulma-components';
-
 function Footer() {
   return (
     <footer className="footer">

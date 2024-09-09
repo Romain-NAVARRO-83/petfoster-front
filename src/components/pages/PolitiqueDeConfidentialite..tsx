@@ -3,13 +3,6 @@ import { Container, Section, Heading} from 'react-bulma-components';
 const PrivacyPolicy = () => {
   return (
     <div>
-      <header>
-        <Section>
-          <Container>
-            <Heading size={2} className="has-text-centered">Politique de Confidentialité</Heading>
-          </Container>
-        </Section>
-      </header>
 
       <main className="section">
         <Container>
