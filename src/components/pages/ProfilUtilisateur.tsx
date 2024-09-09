@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Heading, Section, Columns, Container, Table } from 'react-bulma-components';
 import { Envelope, Pencil, PlusSmall } from 'react-flaticons';
 import Slider from 'react-slick';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useModal } from '../../hooks/ModalContext';
 import FosterlingProfile from '../partials/FosterlingProfile'; // Profils d'accueil dynamique
@@ -107,7 +107,7 @@ function ProfilUtilisateur() {
   return (
     <main>
       <div>
-        <Heading size={1}>{user?.name}</Heading>
+        <h1 className='title'>{user?.name}</h1>
       </div>
 
       <Section>
@@ -183,12 +183,25 @@ function ProfilUtilisateur() {
           <Section>
             {user && <p>{user.description}</p>}
           </Section>
+{/* Bloc d'info : Connectez-vous pour contacter */}
+{!connectedUser && (
+  <div className='notification is-info is-light has-text-right is-pulled-right'>
+    <p>Connectez-vous à votre compte pour pouvoir contacter {user.name}</p>
+    <Link to="/connexion" className='button is-primary'>Se connecter</Link>
+  </div>
+)}
+
 {/* Bouton "Contacter" - Affiché uniquement si l'utilisateur connecté n'est pas le propriétaire du profil et s'il est connecté */}
-{(!connectedUser || (connectedUser && user && connectedUser.userId !== parseInt(id))) && (
-  <Button color="primary" className="is-pulled-right" onClick={() => openModal('contactUser')}>
+{connectedUser && user && connectedUser.userId !== parseInt(id) && (
+  <Button
+    color="primary"
+    className="is-pulled-right"
+    onClick={() => openModal('contactUser', connectedUser.userId, user.id)}
+  >
     <Envelope /> Contacter
   </Button>
 )}
+
 
 {/* Bouton "Éditer" - Affiché uniquement si l'utilisateur connecté est le propriétaire du profil */}
 {connectedUser && user && connectedUser.userId === parseInt(id) && (

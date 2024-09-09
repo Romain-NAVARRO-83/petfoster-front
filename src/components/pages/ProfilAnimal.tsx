@@ -102,7 +102,7 @@ const AnimalProfile = () => {
       <h2 className="title">Où se trouve {animal?.name} ?</h2>
         <div className="container columns is-vcentered is-fluid">
           <div className="column is-full-mobile is-half-tablet is-half-desktop">
-          <MapComponent animal={animal} />
+          {/* <MapComponent animal={animal} /> */}
         </div>
         <div className="column is-full-mobile is-half-tablet is-half-desktop box">
           <p>

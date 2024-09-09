@@ -4,6 +4,8 @@ import { useGeolocation } from "../../hooks/GeolocationContext";
 import { getDistance } from "geolib";
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
+import { User } from 'src/@interfaces/user';
+import { Animal } from 'src/@interfaces/animal';
 
 // Position par défaut si la géolocalisation n'est pas disponible
 const defaultPosition: LatLngExpression = [43.3365, 1.3396];
@@ -16,8 +18,14 @@ const userIcon = new LeafletIcon({
   popupAnchor: [1, -34], // Position du popup par rapport au marqueur
 });
 
+interface IFitMapToBoundsProps {
+  users: User[];
+  animal: Animal | null;
+  location: { lat: number; lng: number } | null;
+}
+
 // Composant pour ajuster la carte afin qu'elle affiche tous les marqueurs
-function FitMapToBounds({ users, animal, location }) {
+function FitMapToBounds({ users, animal, location }: IFitMapToBoundsProps) {
   const map = useMap(); // Accéder à l'instance de la carte
 
   useEffect(() => {
@@ -52,7 +60,12 @@ function FitMapToBounds({ users, animal, location }) {
   return null;
 }
 
-function MapComponent({ users, animal }) {
+interface MapComponentProps {
+  users: User[];
+  animal: Animal | null;
+}
+
+function MapComponent({ users, animal }: MapComponentProps) {
   const { location } = useGeolocation(); // Récupérer la position de l'utilisateur via le contexte de géolocalisation
 
   // Utiliser la position de l'utilisateur si elle est disponible, sinon la position par défaut
@@ -61,12 +74,12 @@ function MapComponent({ users, animal }) {
 
   return (
     <>
-      {animal && (
+      {animal && location && (
         <h3 className='subtitle'>
           à &nbsp;<strong>
             {(getDistance(
-              { latitude: location?.lat, longitude: location?.lng },
-              { latitude: animal?.creator.latitude, longitude: animal?.creator.longitude }
+              { latitude: location.lat, longitude: location.lng },
+              { latitude: animal.creator.latitude, longitude: animal.creator.longitude }
             ) / 1000).toFixed(2)}
             &nbsp;Km </strong> de votre position
         </h3>
@@ -105,7 +118,7 @@ function MapComponent({ users, animal }) {
         )}
 
         {/* Marqueurs pour tous les utilisateurs */}
-        {users && users.map((user: any) => (
+        {users && users.map((user) => (
           <Marker
             key={user.id}
             position={[parseFloat(user.latitude), parseFloat(user.longitude)]}
@@ -114,8 +127,8 @@ function MapComponent({ users, animal }) {
               {user.name}
               <br />
               <Link to={`/profil/${user.id}`}>Voir le profil</Link>
-              {user.userAnimals && user.userAnimals.map((index: any) => (
-                index.animal.name
+              {user.userAnimals && user.userAnimals.map((index) => (
+                <span key={index.animal.id}>{index.animal.name}</span>
               ))}
             </Popup>
           </Marker>

@@ -7,9 +7,11 @@ interface ModalContextType {
   isActive: boolean;
   openModal: (content: string) => void;
   closeModal: () => void;
+  senderId: number | null;
+  receiverId: number | null;
 }
 
-// Create a Context for the modal
+
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
 
 interface ModalProviderProps {
@@ -18,26 +20,32 @@ interface ModalProviderProps {
 
 export function ModalProvider({ children }: ModalProviderProps) {
   const [modalContent, setModalContent] = useState<string | null>(null);
-  const [isActive, setIsActive] = useState(false); // Default to false
+  const [isActive, setIsActive] = useState(false);
+  const [senderId, setSenderId] = useState<number | null>(null);
+  const [receiverId, setReceiverId] = useState<number | null>(null);
 
-  const openModal = (content: string) => {
+  const openModal = (content: string, senderId?: number, receiverId?: number) => {
     setModalContent(content);
-    setIsActive(true); // Open the modal
+    setSenderId(senderId || null);
+    setReceiverId(receiverId || null); 
+    setIsActive(true); 
   };
 
   const closeModal = () => {
-    setIsActive(false); // Close the modal
-    setModalContent(null); // Clear the content
+    setIsActive(false); 
+    setModalContent(null); 
+    setSenderId(null);
+    setReceiverId(null); 
   };
 
   return (
-    <ModalContext.Provider value={{ isActive, openModal, closeModal, modalContent, setModalContent }}>
+    <ModalContext.Provider value={{ isActive, openModal, closeModal, modalContent, setModalContent,senderId, receiverId  }}>
       {children}
     </ModalContext.Provider>
   );
 }
 
-// Custom hook to use the ModalContext
+
 export function useModal(): ModalContextType {
   const context = useContext(ModalContext);
   if (!context) {

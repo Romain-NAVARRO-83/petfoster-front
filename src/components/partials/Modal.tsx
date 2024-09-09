@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import { Modal, Box } from 'react-bulma-components';
 import { useModal } from '../../hooks/ModalContext';
 import ContactUserForm from '../formulaires/ContactUserForm'; 
@@ -8,7 +8,7 @@ import EditProfileForm from '../formulaires/EditProfileForm';
 import EditAnimalProfileForm from '../formulaires/EditAnimalProfileForm'; 
 
 function MainModal() {
-  const { modalContent, isActive, closeModal } = useModal();
+  const { modalContent, isActive, closeModal, senderId, receiverId } = useModal();
 
   return (
     <Modal show={isActive} onClose={closeModal} closeOnBlur={true}>
@@ -18,7 +18,7 @@ function MainModal() {
           
 
           {modalContent === 'contactUser' && (
-            <ContactUserForm />
+            <ContactUserForm senderId={senderId} receiverId={receiverId}/>
           )}
 
 
