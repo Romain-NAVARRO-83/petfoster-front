@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext } from 'react';
-
 import { jwtDecode } from "jwt-decode";
+
 // Définition de l'interface pour le token décodé
 interface DecodedToken {
   userId: number;
