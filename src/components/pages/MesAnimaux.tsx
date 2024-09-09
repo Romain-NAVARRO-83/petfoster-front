@@ -66,8 +66,9 @@ const MesAnimaux = () => {
         ) : (
           <div className='container columns is-multiline'>
             {/* Liste des animaux créés */}
-            <h2 className='title column is-full'>Animaux créés</h2>
-            <div className='column is-full'>
+            
+            <div className='column is-full is-half-desktop'>
+            <h2 className='title'>Animaux créés</h2>
               {myUser?.createdAnimals && myUser.createdAnimals.length > 0 ? (
                 myUser.createdAnimals.map((oneAnimal) => (
                   <>
@@ -76,13 +77,16 @@ const MesAnimaux = () => {
                     </>
                 ))
               ) : (
-                <p className='is-full'>Vous n'avez pas encore créé d'animaux.</p>
+                <div className='notification is-info is-light '>
+                <p className='is-full has-text-centered'>Vous n'avez pas encore créé d'animaux.</p>
+                </div>
               )}
             </div>
 
             {/* Liste des animaux hébergés */}
-            <h2 className='title column is-full'>Animaux hébergés</h2>
-            <div className='column is-full'>
+           
+            <div className='column is-full is-half-desktop'>
+            <h2 className='title'>Animaux hébergés</h2>
               {myUser?.userAnimals && myUser.userAnimals.length > 0 ? (
                 myUser.userAnimals.map((animal) => (
                   animal.name
@@ -90,7 +94,10 @@ const MesAnimaux = () => {
                   
                 ))
               ) : (
-                <p className='is-full'>Vous n'hébergez aucun animal.</p>
+                <div className='notification is-info is-light '>
+                <p className='is-full has-text-centered'>Vous n'hébergez aucun animal pour le moment.<br/>
+                Vous pouvez <strong>Créer un profil d'accueil</strong></p>
+                </div>
               )}
             </div>
           </div>

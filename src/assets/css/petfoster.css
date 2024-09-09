@@ -219,3 +219,8 @@ footer>div>ul {
 footer {
     border-top: solid 2px var(--green);
 }
+
+.modal-body {
+    max-height: 80vh;
+    overflow-y: auto;
+}
