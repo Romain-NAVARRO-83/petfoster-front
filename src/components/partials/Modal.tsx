@@ -6,6 +6,7 @@ import AddForsterlingRequestForm from '../formulaires/AddFosterlingProfileForm';
 import AddFosterlingProfileForm from'../formulaires/AddFosterlingProfileForm'
 import EditProfileForm from '../formulaires/EditProfileForm'; 
 import EditAnimalProfileForm from '../formulaires/EditAnimalProfileForm'; 
+import CreateAnimalProfileForm from '../formulaires/CreateAnimalProfileForm';
 
 function MainModal() {
   const { modalContent, isActive, closeModal, senderId, receiverId } = useModal();
@@ -36,6 +37,10 @@ function MainModal() {
           {modalContent === 'editAnimalProfile' && (
             <EditAnimalProfileForm />
           )}
+          {modalContent === 'createAnimal' && (
+            <CreateAnimalProfileForm />
+          )}
+
 
         </Box>
       </Modal.Content>

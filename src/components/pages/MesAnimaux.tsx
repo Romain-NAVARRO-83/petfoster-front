@@ -4,6 +4,8 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import AnimalItemList from '../partials/AnimalItemList';
 import { Heading, Section, Columns, Container } from 'react-bulma-components';
+import { useModal } from '../../hooks/ModalContext';
+import { useAuth } from '../../hooks/AuthContext';
 
 const MesAnimaux = () => {
   // État pour stocker les animaux
@@ -11,6 +13,8 @@ const MesAnimaux = () => {
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
+  const { openModal } = useModal();
+  const { user: connectedUser } = useAuth(); 
   // Récupérer les animaux de l'utilisateur
   useEffect(() => {
 
@@ -45,7 +49,7 @@ const MesAnimaux = () => {
 
           <div className="has-text-centered">
 
-            <button className="button is-primary is-pulled-right is-rounded is-large">
+            <button className="button is-primary is-pulled-right" onClick={() => openModal('createAnimal', connectedUser.userId)}>
               Créer le profil de mon animal
             </button>
 
