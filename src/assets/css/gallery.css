@@ -1,13 +1,16 @@
 .mainslider {
   aspect-ratio: 1/0.6;
-  border: solid 1px #ddd;
-  overflow: hidden;
+  /* border: solid 1px #ddd; */
+  /* overflow: hidden; */
+  margin-bottom: 20px;
+  background-color: #f0f0f0 !important
 }
 
 .mainslider img,
 .navslider img {
   object-fit: contain;
   height: 100%;
+  margin: auto;
 }
 
 .slick-list,

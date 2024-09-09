@@ -98,6 +98,10 @@ h6 {
     text-align: center;
 }
 
+h3 {
+    border-bottom: solid 2px var(--yellow)
+}
+
 header {
     position: sticky;
     top: 0;
@@ -146,10 +150,12 @@ footer>div>ul {
     background-color: var(--yellow);
     background: rgb(255, 238, 173);
     background: linear-gradient(150deg, rgba(255, 238, 173, 1) 0%, rgba(255, 173, 96, 1) 100%);
+    padding-bottom: 75px;
 }
 
 #home-map-container>* {
     width: 500px;
+    height: 500px;
     max-width: 100%;
     aspect-ratio: 1/1;
     margin: auto;

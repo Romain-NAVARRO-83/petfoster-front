@@ -16,6 +16,7 @@
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "axios": "^1.7.7",
+    "geolib": "^3.3.4",
     "jwt-decode": "^4.0.0",
     "leaflet": "^1.9.4",
     "libphonenumber-js": "^1.11.7",

@@ -36,12 +36,12 @@ const navSliderSettings: Record<string, any> = {
   return (
     <>
       {/* Main Slider */}
-       <Slider className='mainslider'
+       <Slider className='mainslider card'
                 {...mainSliderSettings}
                 ref={(slider: Slider | null) => setNav1(slider)}
               >
                 {pictures.map((picture) => (
-                <div key={picture.id}>
+                <div key={picture.id} >
                   <img
                         src={`/img/animaux/${picture.URL_picture}`}
                         alt="alt TODO"
@@ -57,7 +57,7 @@ const navSliderSettings: Record<string, any> = {
                 ref={(slider: Slider | null) => setNav2(slider)}
               >
                 {pictures.map((picture) => (
-                <div>
+                <div key={picture.id} className='card'>
                   <img
                         src={`/img/animaux/${picture.URL_picture}`}
                         alt="alt TODO"

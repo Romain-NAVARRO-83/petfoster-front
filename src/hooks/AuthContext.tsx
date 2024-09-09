@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext } from 'react';
-import {jwtDecode} from 'jwt-decode'; // Correct import
+import {jwtDecode} from 'jwt-decode'; 
+// import { useNavigate } from 'react-router-dom';
 
 // Définition de l'interface pour le token décodé
 interface DecodedToken {
@@ -25,10 +26,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<DecodedToken | null>(null);
 
   const login = (token: string) => {
+    // const navigate = useNavigate(); 
     // Décode le token et stocke les informations de l'utilisateur
     const decodedUser = jwtDecode<DecodedToken>(token);
     setToken(token);
     setUser(decodedUser);
+    // navigate('/');
+
     
     // Enregistrer le token dans localStorage
     localStorage.setItem('token', token);
