@@ -13,6 +13,7 @@
     "container:client": "docker exec -it 'petfoster-client' bash"
   },
   "dependencies": {
+    "@types/jwt-decode": "^3.1.0",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "axios": "^1.7.7",
