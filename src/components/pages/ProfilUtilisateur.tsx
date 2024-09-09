@@ -113,7 +113,7 @@ function ProfilUtilisateur() {
       <Section>
 
         <Container>
-{/* Info - Affiché uniquement si l'utilisateur connecté est le propriétaire du profil */}
+{/* Info -  uniquement si l'utilisateur connecté est le propriétaire du profil */}
 {connectedUser && user && connectedUser.userId === parseInt(id) && (
   <p className='notification is-primary has-text-centered'>
     Ceci est votre profil, vous pouvez l'éditer grâce au bouton présent plus bas.
