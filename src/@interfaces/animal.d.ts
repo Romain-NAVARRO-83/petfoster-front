@@ -1,19 +1,20 @@
+import { Pictures } from './pictures';
+import { User } from './user';
+
 export interface Animal {
-  id: string;
+  id: number;
   name: string;
-  race: string;
-  sexe: string;
   date_of_birth: string;
+  sexe: string;
+  race: string;
   short_story: string;
   long_story: string;
   health: string;
-  creator: Creator;
-}
-
-interface Creator {
-  name: string;
-  address: string;
-  city: string;
-  country: string;
-  website: string;
+  species_id: number;
+  creator_id: number;
+  created_at: string;
+  updated_at: any;
+  creator: User;
+  species: string;
+  pictures: Pictures[];
 }

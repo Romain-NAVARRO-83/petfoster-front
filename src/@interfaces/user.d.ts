@@ -1,5 +1,5 @@
 import { Animal } from './animal';
-
+import { Pictures } from './pictures';
 export interface User {
   id: number;
   type_user: string;
@@ -18,4 +18,8 @@ export interface User {
   created_at: string;
   updated_at: string;
   userAnimals: Animal[];
+  pictures: Pictures[];
+  fosterlingProfiles: FosterlingProfile[];
+  fosterlingRequests: any[];
+  createdAnimals: Animal[];
 }

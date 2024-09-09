@@ -19,7 +19,7 @@ const userIcon = new LeafletIcon({
 });
 
 interface IFitMapToBoundsProps {
-  users: User[];
+  users: User[] | null;
   animal: Animal | null;
   location: { lat: number; lng: number } | null;
 }
@@ -61,7 +61,7 @@ function FitMapToBounds({ users, animal, location }: IFitMapToBoundsProps) {
 }
 
 interface MapComponentProps {
-  users: User[];
+  users: User[] | null;
   animal: Animal | null;
 }
 

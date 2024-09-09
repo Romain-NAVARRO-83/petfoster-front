@@ -5,10 +5,11 @@ import AnimalItemList from '../partials/AnimalItemList';
 import { useModal } from '../../hooks/ModalContext';
 import { useAuth } from '../../hooks/AuthContext';
 import { PlusSmall } from 'react-flaticons';
+import { User } from 'src/@interfaces/user';
 
 const MesAnimaux = () => {
   // State pour stocker les animaux (du user)
-  const [myUser, setMyUser] = useState<any[]>([]);
+  const [myUser, setMyUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
@@ -17,15 +18,14 @@ const MesAnimaux = () => {
 
   // Récupérer les animaux de l'utilisateur
   useEffect(() => {
-
     console.log('Connected user:', connectedUser);
     
     if (connectedUser) {
       axios
         .get(`http://localhost:3000/api/users/${connectedUser.userId}`) 
         .then((response) => {
-          console.log('Animals data:', response.data); 
-          setMyUser(response.data);  
+          console.log('User data:', response.data); 
+          setMyUser(response.data);  // Assurez-vous que `response.data` contient bien la structure attendue pour `myUser`
           setLoading(false);            
         })
         .catch((error) => {
@@ -40,12 +40,10 @@ const MesAnimaux = () => {
 
   return (
     <>
-   
       <main>
         <div>
           <h1 className="title">Mes animaux</h1>
         </div>
-
 
         <section className="section">
           <div className="has-text-centered">
@@ -60,32 +58,43 @@ const MesAnimaux = () => {
           </div>
         </section>
 
-
+        {/* Chargement ou message d'erreur */}
         {loading ? (
           <p>Chargement...</p>
         ) : fetchError ? (
           <p>{fetchError}</p>
         ) : (
           <div className='container columns is-multiline'>
-            
-            <p>
-            Problème : il faut récupérer les animaux créés par l'user ainsi que ceux hébérgés par l'user.
-            </p>
-            {/* {JSON.stringify(myUser)} */}
-              {myUser.userAnimals.length > 0 ? (
-                myUser.userAnimals.map((animal: any) => (
-                  <Columns.Column size={12} className="is-fullwidth" key={animal.id}>
-                    <AnimalItemList animal={animal} />
-                  </Columns.Column>
+            {/* Liste des animaux créés */}
+            <h2 className='title column is-full'>Animaux créés</h2>
+            <div className='column is-full'>
+              {myUser?.createdAnimals && myUser.createdAnimals.length > 0 ? (
+                myUser.createdAnimals.map((oneAnimal) => (
+                  <>
+                    {/* {JSON.stringify(oneAnimal)} */}
+                    <AnimalItemList animal={oneAnimal} />
+                    </>
                 ))
               ) : (
-                <p>Vous n'avez pas encore ajouté d'animaux.</p>
+                <p className='is-full'>Vous n'avez pas encore créé d'animaux.</p>
               )}
-           
+            </div>
+
+            {/* Liste des animaux hébergés */}
+            <h2 className='title column is-full'>Animaux hébergés</h2>
+            <div className='column is-full'>
+              {myUser?.userAnimals && myUser.userAnimals.length > 0 ? (
+                myUser.userAnimals.map((animal) => (
+                  animal.name
+                    
+                  
+                ))
+              ) : (
+                <p className='is-full'>Vous n'hébergez aucun animal.</p>
+              )}
+            </div>
           </div>
         )}
-
-        
       </main>
     </>
   );
