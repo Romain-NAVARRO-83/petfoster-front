@@ -1,9 +1,5 @@
 import React, { createContext, useState, useContext } from 'react';
-<<<<<<< HEAD
 import { jwtDecode } from "jwt-decode";
-=======
-import {jwtDecode} from 'jwt-decode'; // Correct import
->>>>>>> 7fd82eda57b66204d4bc6ea24f75a829e43fdf19
 
 // Définition de l'interface pour le token décodé
 interface DecodedToken {
