@@ -9,21 +9,22 @@ import { useAuth } from '../../hooks/AuthContext'; // Importer le contexte d'aut
 
 const AnimalProfile = () => {
   const { openModal } = useModal();
-  const { user: connectedUser } = useAuth(); 
+  const { user: connectedUser } = useAuth();
 
   // Chargement de l'animal
-  const { id } = useParams(); 
+  const { id } = useParams();
   const [animal, setAnimal] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get(`http://localhost:3000/api/animals/${id}`)
-      .then(response => {
+    axios
+      .get(`http://localhost:3000/api/animals/${id}`)
+      .then((response) => {
         setAnimal(response.data);
         setLoading(false);
       })
-      .catch(error => {
+      .catch((error) => {
         setError(error);
         setLoading(false);
       });
@@ -52,31 +53,32 @@ const AnimalProfile = () => {
 
         {/* Info animal */}
         <div className="column columns is-multiline is-full-mobile is-full-tablet is-half-desktop">
-        <div className="column is-full-mobile is-half-tablet is-half-desktop">
-          Espèce : <strong>{animal?.species.name}</strong>
-        </div>
-        <div className="column is-full-mobile is-half-tablet is-half-desktop">
-        Race : <strong>{animal?.race}</strong>
-        </div>
-        <div className="column is-full-mobile is-half-tablet is-half-desktop">
-        Sexe : <strong>{animal?.sexe === "F" ? "Femelle" : "Mâle"}</strong>
-        </div>
-        <div className="column is-full-mobile is-half-tablet is-half-desktop">
-        Age : <strong>{computeAge(animal?.date_of_birth)}</strong>
-        </div>
-        <div className="column is-full">
-          <Link to="#localisation">Localisation</Link>
-        </div>
-        <div className="column is-full">
-          <h2 className='subtitle'>En quelques mots</h2>
-          <p>{animal?.short_story}</p>
-        </div>
+          <div className="column is-full-mobile is-half-tablet is-half-desktop">
+            Espèce : <strong>{animal?.species.name}</strong>
+          </div>
+          <div className="column is-full-mobile is-half-tablet is-half-desktop">
+            Race : <strong>{animal?.race}</strong>
+          </div>
+          <div className="column is-full-mobile is-half-tablet is-half-desktop">
+            Sexe : <strong>{animal?.sexe === 'F' ? 'Femelle' : 'Mâle'}</strong>
+          </div>
+          <div className="column is-full-mobile is-half-tablet is-half-desktop">
+            Age : <strong>{computeAge(animal?.date_of_birth)}</strong>
+          </div>
+          <div className="column is-full">
+            <Link to="#localisation">Localisation</Link>
+          </div>
+          <div className="column is-full">
+            <h2 className="subtitle">En quelques mots</h2>
+            <p>{animal?.short_story}</p>
+          </div>
         </div>
         {/* Edit option for creator */}
         {connectedUser && connectedUser.userId === animal?.creator.id && (
           <div className="notification is-info is-light is-fullwidth column">
             <p>
-              En tant que créateur du profil de cet animal, vous pouvez en éditer le contenu.
+              En tant que créateur du profil de cet animal, vous pouvez en
+              éditer le contenu.
             </p>
             <button
               className="button is-pulled-right is-primary"
@@ -97,44 +99,51 @@ const AnimalProfile = () => {
       </section>
 
       {/* Localisation */}
-      
-      <section id="localisation" className='yellow-line'>
-      <h2 className="title">Où se trouve {animal?.name} ?</h2>
+
+      <section id="localisation" className="yellow-line">
+        <h2 className="title">Où se trouve {animal?.name} ?</h2>
         <div className="container columns is-vcentered is-fluid">
           <div className="column is-full-mobile is-half-tablet is-half-desktop">
-          <MapComponent animal={animal} />
-        </div>
-        <div className="column is-full-mobile is-half-tablet is-half-desktop box">
-          <p>
-            {animal?.creator.name}<br />
-            {animal?.creator.address}<br />
-            {animal?.creator.city}<br />
-            {animal?.creator.country}<br />
-            <Link to={animal?.creator.website}>{animal?.creator.website}</Link><br />
-          </p>
+            {/* <MapComponent animal={animal} /> */}
+          </div>
+          <div className="column is-full-mobile is-half-tablet is-half-desktop box">
+            <p>
+              {animal?.creator.name}
+              <br />
+              {animal?.creator.address}
+              <br />
+              {animal?.creator.city}
+              <br />
+              {animal?.creator.country}
+              <br />
+              <Link to={animal?.creator.website}>
+                {animal?.creator.website}
+              </Link>
+              <br />
+            </p>
 
-          {/* Action Buttons */}
-          <div className="columns is-variable is-4">
-            <div className="column is-full-mobile is-half-tablet">
-              <button
-                className="button is-primary is-fullwidth"
-                onClick={() => openModal('contactUser')}
-              >
-                Contacter association
-              </button>
-            </div>
-            <div className="column is-full-mobile is-half-tablet">
-              <button
-                className="button is-secondary is-fullwidth"
-                onClick={() => openModal('addFosterlingRequest')}
-              >
-                Faire une demande d'adoption <br />(ou d'accueil selon user)
-              </button>
+            {/* Action Buttons */}
+            <div className="columns is-variable is-4">
+              <div className="column is-full-mobile is-half-tablet">
+                <button
+                  className="button is-primary is-fullwidth"
+                  onClick={() => openModal('contactUser')}
+                >
+                  Contacter association
+                </button>
+              </div>
+              <div className="column is-full-mobile is-half-tablet">
+                <button
+                  className="button is-secondary is-fullwidth"
+                  onClick={() => openModal('addFosterlingRequest')}
+                >
+                  Faire une demande d'adoption <br />
+                  (ou d'accueil selon user)
+                </button>
+              </div>
             </div>
           </div>
         </div>
-        </div>
-        
       </section>
     </>
   );
