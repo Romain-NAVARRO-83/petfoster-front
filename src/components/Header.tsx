@@ -35,6 +35,11 @@ function Header() {
   const { user, logout } = useAuth();
 
   return (
+
+      <>
+        {/* Lien "Jump to content" */}
+        <a href="#main-content" className="button is-primary is-sr-only focusable">Aller au contenu</a>
+    
     <header className={scrolled ? 'header scrolled' : 'header'}>
       <nav className="navbar">
         <div className="navbar-brand">
@@ -92,6 +97,7 @@ function Header() {
         </div>
       </nav>
     </header>
+    </>
   );
 }
 
