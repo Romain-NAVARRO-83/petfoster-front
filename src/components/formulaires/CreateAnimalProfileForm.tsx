@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import { useAuth } from '../../hooks/AuthContext';
 interface FormData {
   name: string;
   species_id: number;
@@ -14,7 +14,7 @@ interface FormData {
 }
 
 const CreateAnimalProfileForm = () => {
-
+  const { user: connectedUser } = useAuth(); //récupère les infos dans le jwt token
   // CSRF TOKEN
   const [csrfToken, setCsrfToken] = useState<string | null>(null);
   useEffect(() => {
@@ -39,7 +39,7 @@ const CreateAnimalProfileForm = () => {
     short_story: '',
     long_story: '',
     health: '',
-    creator_id: 1, // à remplcer avec connected user id
+    creator_id: connectedUser?.userId, // à remplcer avec connected user id
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {

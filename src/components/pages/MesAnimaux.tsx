@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import AnimalItemList from '../partials/AnimalItemList';
 import { useModal } from '../../hooks/ModalContext';
 import { useAuth } from '../../hooks/AuthContext';
@@ -15,10 +15,21 @@ const MesAnimaux = () => {
 
   const { openModal } = useModal();
   const { user: connectedUser } = useAuth(); 
+  const navigate = useNavigate();
+  // Si l'utilisateur n'est pas connecté, rediriger vers la page d'accueil'
+  useEffect(() => {
+    
+    if (!connectedUser) {
+      navigate('/'); 
+    }
+  }, [connectedUser, navigate]);
 
   // Récupérer les animaux de l'utilisateur
   useEffect(() => {
     console.log('Connected user:', connectedUser);
+    if(!connectedUser){
+
+    }
     
     if (connectedUser) {
       axios
@@ -47,7 +58,7 @@ const MesAnimaux = () => {
 
         <section className="section">
           <div className="has-text-centered">
-            {connectedUser && (
+            {connectedUser && connectedUser.userType === 'association' && (
               <button
                 className="button is-primary is-pulled-right"
                 onClick={() => openModal('createAnimal')}
@@ -66,27 +77,29 @@ const MesAnimaux = () => {
         ) : (
           <div className='container columns is-multiline'>
             {/* Liste des animaux créés */}
+            { connectedUser?.userType && connectedUser.userType === 'association' && (
+              <div className='column is-full is-half-desktop'>
+              <h2 className='title'>Animaux créés</h2>
+              {/* {JSON.stringify(myUser?.createdAnimals)} */}
+                {myUser?.createdAnimals && myUser.createdAnimals.length > 0 ? (
+                  myUser.createdAnimals.map((oneAnimal) => (
+                    <>
+                      {/* {JSON.stringify(oneAnimal)} */}
+                      -<AnimalItemList animal={oneAnimal} />
+                      </>
+                  ))
+                ) : (
+                  <div className='notification is-info is-light '>
+                  <p className='is-full has-text-centered'>Vous n'avez pas encore créé d'animaux.</p>
+                  </div>
+                )}
+              </div>
+            )}
             
-            <div className='column is-full is-half-desktop'>
-            <h2 className='title'>Animaux créés</h2>
-            {/* {JSON.stringify(myUser?.createdAnimals)} */}
-              {myUser?.createdAnimals && myUser.createdAnimals.length > 0 ? (
-                myUser.createdAnimals.map((oneAnimal) => (
-                  <>
-                    {/* {JSON.stringify(oneAnimal)} */}
-                    -<AnimalItemList animal={oneAnimal} />
-                    </>
-                ))
-              ) : (
-                <div className='notification is-info is-light '>
-                <p className='is-full has-text-centered'>Vous n'avez pas encore créé d'animaux.</p>
-                </div>
-              )}
-            </div>
 
             {/* Liste des animaux hébergés */}
            
-            <div className='column is-full is-half-desktop'>
+            <div className={connectedUser?.userType === 'association' ? 'column is-full is-half-desktop': 'column is-full'}>
             <h2 className='title'>Animaux hébergés</h2>
               {myUser?.userAnimals && myUser.userAnimals.length > 0 ? (
                 myUser.userAnimals.map((animal) => (
