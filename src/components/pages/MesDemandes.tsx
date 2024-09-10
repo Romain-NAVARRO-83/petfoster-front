@@ -3,28 +3,27 @@ import axios from 'axios';
 import { useAuth } from '../../hooks/AuthContext';
 import { User } from 'src/@interfaces/user';
 
+// Composant principal de la page de filtrage des demandes
 const FilterPage = () => {
-  const [myUser, setMyUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [fetchError, setFetchError] = useState<string | null>(null);
-  const { user: connectedUser } = useAuth(); 
-  const [requestUserDetails, setRequestUserDetails] = useState({}); // État pour stocker les détails des utilisateurs liés aux demandes de famille d'accueil
-  const [requestAnimalDetails, setRequestAnimalDetails] = useState({}); // État pour stocker les détails des animaux liés aux demandes de famille d'accueil
+  const [myUser, setMyUser] = useState<User | null>(null); // Stocker les données de l'utilisateur connecté
+  const [loading, setLoading] = useState(true); // État pour afficher le chargement
+  const [fetchError, setFetchError] = useState<string | null>(null); // Stocker les erreurs de récupération de données
+  const { user: connectedUser } = useAuth(); // Récupérer l'utilisateur connecté via le contexte d'authentification
+  const [requestUserDetails, setRequestUserDetails] = useState<Record<number, User>>({}); // Stocker les détails des utilisateurs liés aux demandes
+  const [requestAnimalDetails, setRequestAnimalDetails] = useState<Record<number, Animal>>({}); // Stocker les détails des animaux liés aux demandes
 
-  // État pour gérer la configuration du tri
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
-
-  // Utilisation d'un effet pour récupérer les données de l'utilisateur connecté
+  // Effet pour récupérer les données de l'utilisateur connecté
   useEffect(() => {
     if (connectedUser) {
-      console.log(connectedUser)
+      console.log(connectedUser.userType);
+
       // Requête pour récupérer les données de l'utilisateur connecté
       axios
-        .get(`http://localhost:3000/api/users/${connectedUser.userId}`) 
+        .get(`http://localhost:3000/api/users/${connectedUser.userId}`)
         .then((response) => {
           const userData = response.data;
           setMyUser(userData); // Stocker les données de l'utilisateur
-          setLoading(false);
+          setLoading(false); // Fin du chargement
 
           // Fonction asynchrone pour récupérer les détails des utilisateurs et des animaux liés aux demandes
           const fetchFosterlingDetails = async () => {
@@ -46,13 +45,13 @@ const FilterPage = () => {
 
             // Créer un objet pour stocker les détails des utilisateurs en fonction de leur id
             const userDetailsMap = userDetailsResponses.reduce((acc, userResponse) => {
-              acc[userResponse.data.id] = userResponse.data; // Associer les détails de l'utilisateur par id
+              acc[userResponse.data.id] = userResponse.data;
               return acc;
             }, {});
 
             // Créer un objet pour stocker les détails des animaux en fonction de leur id
             const animalDetailsMap = animalDetailsResponses.reduce((acc, animalResponse) => {
-              acc[animalResponse.data.id] = animalResponse.data; // Associer les détails de l'animal par id
+              acc[animalResponse.data.id] = animalResponse.data;
               return acc;
             }, {});
 
@@ -62,52 +61,29 @@ const FilterPage = () => {
           };
 
           // Lancer la récupération des détails des utilisateurs et des animaux
-          fetchFosterlingDetails(); 
+          fetchFosterlingDetails();
         })
         .catch((error) => {
           console.error('Erreur lors de la récupération des données:', error);
           setFetchError('Erreur lors de la récupération des données.');
-          setLoading(false); 
+          setLoading(false);
         });
     } else {
-      setLoading(false); 
+      setLoading(false);
     }
   }, [connectedUser]);
 
-  // Fonction pour trier les demandes en fonction de la clé sélectionnée
-  const sortedData = React.useMemo(() => {
-    if (!myUser || !myUser.fosterlingRequests) return [];
-
-    let sortableData = [...myUser.fosterlingRequests];
-
-    if (sortConfig !== null && sortConfig.key) {
-      sortableData.sort((a, b) => {
-        if (a[sortConfig.key] < b[sortConfig.key]) {
-          return sortConfig.direction === 'ascending' ? -1 : 1;
-        }
-        if (a[sortConfig.key] > b[sortConfig.key]) {
-          return sortConfig.direction === 'ascending' ? 1 : -1;
-        }
-        return 0;
-      });
-    }
-
-    return sortableData;
-  }, [myUser, sortConfig]);
-
-  // Fonction pour gérer les clics de tri sur les colonnes
-  const requestSort = (key) => {
-    let direction = 'ascending';
-    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
-      direction = 'descending';
-    }
-    setSortConfig({ key, direction });
-  };
-
   // Fonction pour gérer la confirmation de validation
-  const handleConfirm = () => {
+  const handleConfirm = (requestId: number) => {
     if (window.confirm('Êtes-vous sûr de vouloir valider ?')) {
-      // Logique de confirmation ici
+      axios.post(`http://localhost:3000/api/requests/${requestId}/validate`)
+        .then(() => {
+          alert('Demande validée avec succès.');
+        })
+        .catch((error) => {
+          alert('Erreur lors de la validation de la demande.');
+          console.error(error);
+        });
     }
   };
 
@@ -123,9 +99,11 @@ const FilterPage = () => {
       <section className="section">
         <div className='container'>
           <div className='notification is-info is-light'>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi quisquam, commodi, atque dolorum delectus aspernatur perferendis magnam corrupti totam, suscipit ipsa nam impedit corporis accusantium molestias quia obcaecati esse eligendi.
-            </p>
+          {connectedUser.userType === 'association' ? (
+            <p>Cette page liste les demandes d'adopion (ou d'accueil temporaire) concernant les animaux que vous avez enregistré</p>
+          ) : (
+            <p>Cette page liste les demandes d'adoption que vous avez formulées. Si l'une d'elles est validée, vous pourrez le voir dans le tableau.</p>
+          )}
           </div>
         </div>
         <div className="container">
@@ -133,51 +111,47 @@ const FilterPage = () => {
             <thead>
               <tr>
                 <th>Image</th>  
-                <th>
-                  <button className="button is-ghost" onClick={() => requestSort('animal')}>
-                    Nom animal
-                  </button>
-                </th>
-                <th>
-                  <button className="button is-ghost" onClick={() => requestSort('demandeur')}>
-                    Nom demandeur
-                  </button>
-                </th>
-                <th>
-                  <button className="button is-ghost" onClick={() => requestSort('statut')}>
-                    Statut
-                  </button>
-                </th>
-                <th>Valider</th>
+                <th>Nom animal</th>
+                <th>Nom demandeur</th>
+                <th>Statut</th>
+                {connectedUser.userType === 'association' && <th>Valider</th>}
               </tr>
             </thead>
             <tbody>
-              {sortedData.map((item, index) => (
+              {myUser?.fosterlingRequests?.map((item, index) => (
                 <tr key={index}>
                   <td>
                     <figure className="image is-48x48">
-                      <img src={`/img/animaux/${requestAnimalDetails[item.animals_id]?.pictures[0]?.URL_picture}`} alt={requestAnimalDetails[item.animals_id]?.name} width="64"
-            height="64"/>
+                      <img
+                        src={requestAnimalDetails[item.animals_id]?.pictures[0]?.URL_picture || '/img/default.jpg'}
+                        alt={requestAnimalDetails[item.animals_id]?.name || 'Animal'}
+                        width="64"
+                        height="64"
+                      />
                     </figure>
                   </td>
                   <td>
-                    <a href={`/animal/${requestAnimalDetails[item.animals_id]?.id}`}>{requestAnimalDetails[item.animals_id]?.name || 'Chargement...'}</a>
+                    <a href={`/animal/${requestAnimalDetails[item.animals_id]?.id}`}>
+                      {requestAnimalDetails[item.animals_id]?.name || 'Chargement...'}
+                    </a>
                   </td>
                   <td>
                     <a href="#">
-                      {requestUserDetails[item.users_id] ? requestUserDetails[item.users_id].name : 'Chargement...'}
+                      {requestUserDetails[item.users_id]?.name || 'Chargement...'}
                     </a>
                   </td>
                   <td>
                     {item.request_status === 'Pending' && (<span className="tag is-warning">En attente</span>)}
                     {item.request_status === 'Rejected' && (<span className="tag is-danger">Rejetée</span>)}
                     {item.request_status === 'Approved' && (<span className="tag is-success">Validée</span>)}
-                    </td>
-                  <td>
-                    <button className="button is-primary" onClick={handleConfirm}>
-                      Valider
-                    </button>
                   </td>
+                  {connectedUser.userType === 'association' && (
+                    <td>
+                      <button className="button is-primary" onClick={() => handleConfirm(item.id)}>
+                        Valider
+                      </button>
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>

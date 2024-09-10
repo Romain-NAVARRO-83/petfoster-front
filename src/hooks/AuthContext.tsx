@@ -61,6 +61,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     // Sauvegarder le token dans le localStorage pour maintenir la session
     localStorage.setItem('token', token);
+    // console.log("wahtZeToken :" + JSON.stringify(decodedUser))
   };
 
   // Fonction pour gérer la déconnexion de l'utilisateur

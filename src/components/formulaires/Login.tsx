@@ -110,10 +110,21 @@ function LoginForm() {
           <Button color="primary" fullwidth type="submit">Se connecter</Button>
         </div>
       </div>
-      <div className='notification is-info is-light'>
-        <ul>
+      <div className='notification is-info is-light columns'>
+        <ul className='column'>
+          <li>Adoptant</li>
           <li>marie.dubois@example.com</li>
           <li>ashed_password3</li>
+        </ul>
+        <ul className='column'>
+          <li>Famille d'accueil'</li>
+          <li>jean.martin@example.com</li>
+          <li>ashed_password2</li>
+        </ul>
+        <ul className='column'>
+          <li>Association</li>
+          <li>contact@spa-example.com</li>
+          <li>hashed_password5</li>
         </ul>
       </div>
       {/* Message d'erreur de soumission */}
