@@ -39,7 +39,7 @@ const CreateAnimalProfileForm = () => {
     short_story: '',
     long_story: '',
     health: '',
-    creator_id: connectedUser?.userId, // à remplcer avec connected user id
+    creator_id: connectedUser?.userId,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {

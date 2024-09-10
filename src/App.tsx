@@ -15,6 +15,7 @@ import Contact from "./components/pages/Contact";
 import ProfilAnimal from "./components/pages/ProfilAnimal";
 import ProfilUtilisateur from "./components/pages/ProfilUtilisateur";
 import Connexion from "./components/pages/Connexion";
+import { ToastContainer } from "react-toastify";
 
 
 
@@ -44,6 +45,7 @@ function App() {
     </Router>
     
       <Footer />
+      <ToastContainer />
     </>
   )
 }

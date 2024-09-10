@@ -4,7 +4,8 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '../../hooks/AuthContext';
-import { useNavigate } from 'react-router-dom'; // Importer useNavigate pour la redirection
+import { useNavigate } from 'react-router-dom'; 
+import { useToast } from '../../hooks/ToastContext';
 
 function LoginForm() {
   // State pour le login
@@ -15,7 +16,8 @@ function LoginForm() {
   const [submitErrorLogin, setSubmitErrorLogin] = useState<string>('');
 
   const { login } = useAuth();
-  const navigate = useNavigate(); // Utilisation du hook useNavigate pour rediriger
+  const navigate = useNavigate(); 
+  const { showSuccessToast, showErrorToast } = useToast();
 
   // Validation email
   const validateEmailLogin = (email: string): boolean => {
@@ -56,14 +58,14 @@ function LoginForm() {
           // const user = emailLogin; 
           login(token);
 
-          // Connexion réussie, redirection vers la page d'accueil
-          toast.success('Connexion réussie!');
+          showSuccessToast('Connexion réussie!');
           navigate('/'); // Redirection vers la page d'accueil
         } else {
           setSubmitErrorLogin('Erreur de connexion: ' + (response.data.message || 'Erreur inconnue.'));
         }
       } catch (error) {
         setSubmitErrorLogin('Erreur, veuillez réessayer.');
+        showErrorToast('Erreur lors de la connexion, veuillez réessayer.');
       }
     }
   };
@@ -117,7 +119,7 @@ function LoginForm() {
           <li>ashed_password3</li>
         </ul>
         <ul className='column'>
-          <li>Famille d'accueil'</li>
+          <li>Famille d'accueil</li>
           <li>jean.martin@example.com</li>
           <li>ashed_password2</li>
         </ul>

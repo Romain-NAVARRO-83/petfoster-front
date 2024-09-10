@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useToast } from '../../hooks/ToastContext';
+import { useModal } from '../../hooks/ModalContext';
 import axios from 'axios';
 interface ContactUserFormProps {
   senderId: number | null;   
@@ -36,21 +38,27 @@ function ContactUserForm({ senderId, receiverId }: ContactUserFormProps) {
     });
   };
 
-  // Gestion de la soumission du formulaire
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e) => {
+    // console.log(formData);
     e.preventDefault();
-    console.log(formData);
+    
     try {
       await axios.post('http://localhost:3000/api/messages', formData, {
         headers: {
           'x-xsrf-token': csrfToken || '',
         },
       });
+      showSuccessToast('Message envoyé avec succès!');
     } catch (error) {
       console.error('Erreur lors de l\'envoi du message', error);
+      showErrorToast('Erreur lors de l\'envoi du message.');
     }
   };
 
+
+  // Toasts de submit
+  const { showSuccessToast, showErrorToast } = useToast();
+  const { closeModal } = useModal();
   return (
     <form onSubmit={handleSubmit}>
       <h3 className='title'>Envoyer un message</h3>

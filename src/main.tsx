@@ -29,17 +29,20 @@ import { ModalProvider } from "./hooks/ModalContext";
 // GeolocationProvider fournit un contexte pour gérer la géolocalisation (exemple : localisation de l'utilisateur)
 import { GeolocationProvider } from "./hooks/GeolocationContext";
 import { AuthProvider } from './hooks/AuthContext.tsx';
+import { ToastProvider } from './hooks/ToastContext.tsx';
 
 
 // Initialisation de l'application
 
 createRoot(document.getElementById('root')!).render(
 <AuthProvider>
+    <ToastProvider>
     <ModalProvider>  
         <GeolocationProvider>
             <App />
             <MainModal />      
         </GeolocationProvider>
     </ModalProvider>
-    </AuthProvider>
+    </ToastProvider>
+</AuthProvider>
 );
