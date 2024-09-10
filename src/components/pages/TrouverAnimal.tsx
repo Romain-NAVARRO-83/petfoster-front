@@ -6,6 +6,8 @@ const { Field, Label } = Form;
 import AnimalItemList from "../partials/AnimalItemList";
 import MapComponent from '../partials/MapComponent';
 import { useGeolocation } from '../../hooks/GeolocationContext';
+import { User } from 'src/@interfaces/user';
+import { Animal } from 'src/@interfaces/animal';
 
 
 
@@ -58,13 +60,19 @@ const{location} = useGeolocation();
   }, []);
 
   // Fetch users
-  const [allUsers, setAllUsers] = useState<any>(null);
+  const [allUsers, setAllUsers] = useState<User[] | null>(null);
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [fetchUsersError, setFetchUsersError] = useState<string | null>(null);
+  const [foundUsersAnimals, setFoundUsersAnimals] = useState<Animal[] | null>(null)
+  useEffect(() => {
+    setFoundUsersAnimals(allUsers?.flatMap(user => user.userAnimals.map(userAnimal => userAnimal.animal)));
+    
+  }, [allUsers]);
+  
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/api/users?perimeter=200000&latitude=${location?.lat}&longitude=${location?.lng}`) 
+      .get(`http://localhost:3000/api/users?perimeter=500000&latitude=${location?.lat}&longitude=${location?.lng}`) 
       .then((response) => {
         setAllUsers(response.data);  
         setLoadingUsers(false);   
@@ -91,10 +99,10 @@ const{location} = useGeolocation();
       <div>
         <Heading>Trouver un animal</Heading>
       </div>
-
+{JSON.stringify(foundUsersAnimals)}
       <Section className="columns">
         <Columns.Column mobile={{ size: 12 }} tablet={{ size: 12 }} desktop={{ size: 6 }} className="animal-list">
-        {allAnimals && allAnimals
+        {foundUsersAnimals && foundUsersAnimals
   .filter((item: any) => 
     (formData.species === "" || item.species.name === formData.species) &&  // Filter par espece si espece !=""
     (formData.sexe === "" || item.sexe === formData.sexe)  // Filter par sexe si sexe !=""
