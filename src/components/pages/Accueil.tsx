@@ -92,16 +92,22 @@ useEffect(() => {
       <Section>
         <Columns className='container'>
           <Columns.Column>
-            <Heading renderAs='h3'>Associations</Heading>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, quo laudantium velit sit impedit rerum maxime, amet perspiciatis magni, ipsa distinctio quas labore vero fugit facere numquam minus facilis eius?</p>
-          </Columns.Column>
-          <Columns.Column>
+          <Heading renderAs='h3'>Associations</Heading>
+            <p>
+              Les associations de protection animale jouent un rôle essentiel dans le sauvetage, les soins, et la réhabilitation des animaux abandonnés ou maltraités. Grâce à leur dévouement, des milliers d'animaux retrouvent chaque année un foyer aimant.
+            </p>
+            </Columns.Column>
+            <Columns.Column>
             <Heading renderAs='h3'>Familles d'accueil</Heading>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, quo laudantium velit sit impedit rerum maxime, amet perspiciatis magni, ipsa distinctio quas labore vero fugit facere numquam minus facilis eius?</p>
-          </Columns.Column>
-          <Columns.Column>
+            <p>
+              Les familles d'accueil offrent un refuge temporaire aux animaux en attente d'adoption. Leur amour et leur patience permettent aux animaux de se rétablir et de s'épanouir avant de trouver leur foyer définitif.
+            </p>
+            </Columns.Column>
+            <Columns.Column>
             <Heading renderAs='h3'>Adoptants</Heading>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, quo laudantium velit sit impedit rerum maxime, amet perspiciatis magni, ipsa distinctio quas labore vero fugit facere numquam minus facilis eius?</p>
+            <p>
+              Les adoptants sont ceux qui ouvrent leur cœur et leur maison à un animal pour la vie. Leur décision d’adopter fait une différence immense en offrant à un animal une seconde chance et une famille pour toujours.
+            </p>
           </Columns.Column>
         </Columns>
       </Section>
