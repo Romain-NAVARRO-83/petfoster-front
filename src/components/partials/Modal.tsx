@@ -1,7 +1,7 @@
 import React from 'react';
 import { useModal } from '../../hooks/ModalContext';
 import ContactUserForm from '../formulaires/ContactUserForm'; 
-import AddForsterlingRequestForm from '../formulaires/AddFosterlingProfileForm';
+import AddFosterlingRequestForm from '../formulaires/addForsterlingRequestForm';
 import AddFosterlingProfileForm from '../formulaires/AddFosterlingProfileForm';
 import EditProfileForm from '../formulaires/EditProfileForm'; 
 import EditAnimalProfileForm from '../formulaires/EditAnimalProfileForm'; 
@@ -46,7 +46,9 @@ function MainModal() {
 
           {modalContent === 'editUserProfile' && <EditProfileForm />}
 
-          {modalContent === 'addFosterlingRequest' && <AddForsterlingRequestForm />}
+          {modalContent === 'addFosterlingRequest' && (
+            <AddFosterlingRequestForm closeAdoptionModal={closeModal} /> 
+          )}
 
           {modalContent === 'editAnimalProfile' && <EditAnimalProfileForm />}
 
