@@ -134,7 +134,7 @@ const AnimalProfile = () => {
               {connectedUser && (
                 <button
                 className="button is-primary is-fullwidth"
-                onClick={() => openModal('contactUser', connectedUser.userId, id)}
+                onClick={() => openModal('contactUser', connectedUser.userId, id ? parseInt(id) : undefined)}
               >
                 Contacter association
               </button>

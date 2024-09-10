@@ -5,7 +5,8 @@ interface ModalContextType {
   modalContent: string | null;
   setModalContent: (content: string | null) => void;
   isActive: boolean;
-  openModal: (content: string) => void;
+  // openModal: (content: string) => void;
+  openModal: (content: string, userId?: number, id?: number) => void;
   closeModal: () => void;
   senderId: number | null;
   receiverId: number | null;
