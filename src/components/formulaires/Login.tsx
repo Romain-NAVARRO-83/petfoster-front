@@ -13,6 +13,7 @@ function LoginForm() {
   const [emailErrorLogin, setEmailErrorLogin] = useState<string>('');
   const [passwordErrorLogin, setPasswordErrorLogin] = useState<string>('');
   const [submitErrorLogin, setSubmitErrorLogin] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false); // Gérer l'état de soumission
 
   const { login } = useAuth();
   const navigate = useNavigate(); // Utilisation du hook useNavigate pour rediriger
@@ -20,7 +21,7 @@ function LoginForm() {
   // Validation email
   const validateEmailLogin = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+    return emailRegex.test(email.trim());
   };
 
   // Handle de soumission (login)
@@ -39,21 +40,21 @@ function LoginForm() {
     }
 
     // Validation du mot de passe
-    if (passwordLogin.length < 12) {
+    if (passwordLogin.trim().length < 12) {
       setPasswordErrorLogin('Le mot de passe doit contenir au moins 12 caractères.');
       valid = false;
     }
 
     if (valid) {
+      setIsSubmitting(true); // Activer le mode soumission pour désactiver le bouton
       try {
         const response = await axios.post('http://localhost:3000/api/login', {
-          email: emailLogin,
-          password: passwordLogin,
+          email: emailLogin.trim(),
+          password: passwordLogin.trim(),
         });
 
         if (response.status === 200) {
           const token = response.data.token;
-          // const user = emailLogin; 
           login(token);
 
           // Connexion réussie, redirection vers la page d'accueil
@@ -62,8 +63,15 @@ function LoginForm() {
         } else {
           setSubmitErrorLogin('Erreur de connexion: ' + (response.data.message || 'Erreur inconnue.'));
         }
-      } catch (error) {
-        setSubmitErrorLogin('Erreur, veuillez réessayer.');
+      } catch (error: any) {
+        // Gestion des erreurs API avec un message d'erreur plus spécifique
+        if (error.response && error.response.status === 401) {
+          setSubmitErrorLogin('Identifiants incorrects. Veuillez vérifier vos informations.');
+        } else {
+          setSubmitErrorLogin('Erreur, veuillez réessayer.');
+        }
+      } finally {
+        setIsSubmitting(false); // Réactiver le bouton de soumission
       }
     }
   };
@@ -81,10 +89,12 @@ function LoginForm() {
             name="email"
             value={emailLogin}
             onChange={(e) => setEmailLogin(e.target.value)}
+            aria-describedby="emailErrorLogin" // Pour l'accessibilité
             required
+            disabled={isSubmitting} // Désactiver le champ pendant la soumission
           />
         </div>
-        {emailErrorLogin && <p className="help is-danger">{emailErrorLogin}</p>}
+        {emailErrorLogin && <p className="help is-danger" id="emailErrorLogin">{emailErrorLogin}</p>}
       </div>
 
       {/* Champ mot de passe */}
@@ -98,18 +108,24 @@ function LoginForm() {
             name="password"
             value={passwordLogin}
             onChange={(e) => setPasswordLogin(e.target.value)}
+            aria-describedby="passwordErrorLogin" // Pour l'accessibilité
             required
+            disabled={isSubmitting} // Désactiver le champ pendant la soumission
           />
         </div>
-        {passwordErrorLogin && <p className="help is-danger">{passwordErrorLogin}</p>}
+        {passwordErrorLogin && <p className="help is-danger" id="passwordErrorLogin">{passwordErrorLogin}</p>}
       </div>
 
       {/* Bouton de soumission */}
       <div className="field">
         <div className="control">
-          <Button color="primary" fullwidth type="submit">Se connecter</Button>
+          <Button color="primary" fullwidth type="submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Connexion en cours...' : 'Se connecter'}
+          </Button>
         </div>
       </div>
+
+      {/* Identifiants de test */}
       <div className='notification is-info is-light columns'>
         <ul className='column'>
           <li>Adoptant</li>
@@ -117,7 +133,7 @@ function LoginForm() {
           <li>hashed_password3</li>
         </ul>
         <ul className='column'>
-          <li>Famille d'accueil'</li>
+          <li>Famille d'accueil</li>
           <li>jean.martin@example.com</li>
           <li>hashed_password2</li>
         </ul>
@@ -127,6 +143,7 @@ function LoginForm() {
           <li>hashed_password5</li>
         </ul>
       </div>
+
       {/* Message d'erreur de soumission */}
       {submitErrorLogin && <p className="help is-danger">{submitErrorLogin}</p>}
 
