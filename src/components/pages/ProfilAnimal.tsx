@@ -7,30 +7,45 @@ import GalleryComponent from '../partials/GalleryComponent';
 import computeAge from '../../utils/computeAge';
 import { useAuth } from '../../hooks/AuthContext'; // Importer le contexte d'authentification
 import { Animal } from 'src/@interfaces/animal';
+import { User } from 'src/@interfaces/user';
 
 const AnimalProfile = () => {
   const { openModal } = useModal();
   const { user: connectedUser } = useAuth(); 
   
+  console.log('connectedUser:', connectedUser ,); // Pour vérifier le contenu de l'utilisateur connecté
 
   // Typage pour animal
   const { id } = useParams<{ id: string }>(); 
   const [animal, setAnimal] = useState<Animal | null>(null); // Utilisez le typage correct pour l'animal
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null); // Typage de l'erreur
+  const [userData, setUserData] = useState<User | null>(null); 
 
-  useEffect(() => {
-    axios.get(`http://localhost:3000/api/animals/${id}`)
-      .then(response => {
-        setAnimal(response.data);
-        setLoading(false);
-        
-      })
-      .catch(error => {
-        setError(error);
-        setLoading(false);
-      });
-  }, [id]);
+useEffect(() => {
+  const fetchAnimalData = async () => {
+    try {
+      // Récupérer les informations de l'animal
+      const animalResponse = await axios.get(`http://localhost:3000/api/animals/${id}`);
+      setAnimal(animalResponse.data);
+
+      // Récupérer les informations complètes de l'utilisateur connecté
+      if (connectedUser) {
+        const userResponse = await axios.get(`http://localhost:3000/api/users/${connectedUser.userId}`);
+        console.log('User data in ProfilAnimal:', userResponse.data);
+        setUserData(userResponse.data); // Stocke les informations complètes de l'utilisateur connecté
+      }
+
+      setLoading(false);
+    } catch (error: any) {
+      setError(error);
+      setLoading(false);
+    }
+  };
+
+  fetchAnimalData();
+}, [id, connectedUser]); // Ajoute connectedUser comme dépendance
+
 
   if (loading) {
     return <div>Loading...</div>;
@@ -131,29 +146,38 @@ const AnimalProfile = () => {
             <div className="columns is-variable is-4">
               
               <div className="column is-full-mobile is-half-tablet">
-              {connectedUser && (
-                <button
-                className="button is-primary is-fullwidth"
-                onClick={() => openModal('contactUser', connectedUser.userId, id ? parseInt(id) : undefined)}
-              >
-                Contacter association
-              </button>
-              )}
-              {!connectedUser &&(
-                <div className='notification is-info is-light'>
-                  <p>Connectez-vous à votre compte pour contacter l'association</p>
-                </div>
-              )}
+                {connectedUser && (
+                  <button
+                    className="button is-primary is-fullwidth"
+                    onClick={() => openModal('contactUser', connectedUser.userId, id ? parseInt(id) : undefined)}
+                  >
+                    Contacter association
+                  </button>
+                )}
+                {!connectedUser && (
+                  <div className='notification is-info is-light'>
+                    <p>Connectez-vous à votre compte pour contacter l'association</p>
+                  </div>
+                )}
               </div>
+
               <div className="column is-full-mobile is-half-tablet">
+              {userData && (userData.type_user === 'adoptant' || userData.type_user === 'famille d\'accueil') && (
                 <button
                   className="button is-secondary is-fullwidth"
                   onClick={() => openModal('addFosterlingRequest')}
                 >
-                  Faire une demande d'adoption <br />(ou d'accueil selon user)
+                  Faire une demande d'adoption (ou d'accueil)
                 </button>
+              )}
+                {!connectedUser && (
+                  <div className='notification is-info is-light'>
+                    <p>Connectez-vous à votre compte pour faire une demande d'adoption</p>
+                  </div>
+                )}
               </div>
             </div>
+
           </div>
         </div>
       </section>
