@@ -200,7 +200,7 @@ const EditProfileForm = () => {
                 value={formData.codePostal}
                 onChange={handleChange}
                 placeholder="Votre code postal"
-                type='number'
+                type='text'
                 aria-label="Code postal"
 
               />

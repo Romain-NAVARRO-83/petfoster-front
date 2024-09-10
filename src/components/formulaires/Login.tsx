@@ -114,12 +114,12 @@ function LoginForm() {
         <ul className='column'>
           <li>Adoptant</li>
           <li>marie.dubois@example.com</li>
-          <li>ashed_password3</li>
+          <li>hashed_password3</li>
         </ul>
         <ul className='column'>
           <li>Famille d'accueil'</li>
           <li>jean.martin@example.com</li>
-          <li>ashed_password2</li>
+          <li>hashed_password2</li>
         </ul>
         <ul className='column'>
           <li>Association</li>
