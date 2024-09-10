@@ -60,7 +60,7 @@ const RegistrationPage = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [phoneError, setPhoneError] = useState('');
     const [userType, setUserType] = useState('');
-    const [selectedCountryCode, setSelectedCountryCode] = useState(''); // Mise à jour de cette ligne
+    const [selectedCountryCode, setSelectedCountryCode] = useState(''); 
     const [address, setAddress] = useState('');
     const [name, setName] = useState('');
     const [coordinates, setCoordinates] = useState<Coordinates>({ lat: 0, lng: 0 })
@@ -186,9 +186,9 @@ const RegistrationPage = () => {
             }
 
             if (isValid) {
-                setLoading(true); // Démarrer le chargement
+                setLoading(true); 
                 const success = await handleCoordinatesUpdate(); // Appel asynchrone avec await
-                setLoading(false); // Arrêter le chargement
+                setLoading(false); 
         
                 if (!success) {
                     return; // Arrêter si la géolocalisation échoue

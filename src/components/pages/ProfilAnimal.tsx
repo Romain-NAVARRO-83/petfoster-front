@@ -49,7 +49,13 @@ const AnimalProfile = () => {
       <section className="container columns is-multiline">
         {/* Galerie d'images */}
         <div className="column is-full-mobile is-half-tablet is-half-desktop">
-          <GalleryComponent pictures={animal?.pictures} />
+
+          {animal?.pictures && animal.pictures.length > 0 ? (
+          <GalleryComponent pictures={animal.pictures} />
+          ) : (
+            <p>Aucune image disponible pour cet animal.</p>
+          )}
+          
         </div>
 
         {/* Info animal */}
@@ -64,7 +70,7 @@ const AnimalProfile = () => {
             Sexe : <strong>{animal?.sexe === "F" ? "Femelle" : "Mâle"}</strong>
           </div>
           <div className="column is-full-mobile is-half-tablet is-half-desktop">
-            Age : <strong>{computeAge(animal?.date_of_birth)}</strong>
+            Age : <strong>{animal?.date_of_birth ? computeAge(animal.date_of_birth) : "Inconnue"}</strong>
           </div>
           <div className="column is-full">
             <Link to="#localisation">Localisation</Link>
@@ -104,16 +110,21 @@ const AnimalProfile = () => {
         <h2 className="title">Où se trouve {animal?.name} ?</h2>
         <div className="container columns is-vcentered is-fluid">
           <div className="column is-full-mobile is-half-tablet is-half-desktop">
-            <MapComponent animal={animal} />
+          <MapComponent animal={animal} users={animal?.creator ? [animal.creator] : []} />
           </div>
           <div className="column is-full-mobile is-half-tablet is-half-desktop box">
-            <p>
-              {animal?.creator.name}<br />
-              {animal?.creator.address}<br />
-              {animal?.creator.city}<br />
-              {animal?.creator.country}<br />
-              <Link to={animal?.creator.website}>{animal?.creator.website}</Link><br />
-            </p>
+
+          <p>
+            {animal?.creator.name}<br />
+            {animal?.creator.address}<br />
+            {animal?.creator.city}<br />
+            {animal?.creator.country}<br />
+            {animal?.creator.website ? (
+              <Link to={animal.creator.website}>{animal.creator.website}</Link>
+            ) : (
+              <span>Pas de site web disponible</span>
+            )}           
+          </p>
 
             {/* Action Buttons */}
             <div className="columns is-variable is-4">
