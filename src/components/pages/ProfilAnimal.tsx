@@ -165,9 +165,9 @@ useEffect(() => {
               {userData && (userData.type_user === 'adoptant' || userData.type_user === 'famille d\'accueil') && (
                 <button
                   className="button is-secondary is-fullwidth"
-                  onClick={() => openModal('addFosterlingRequest')}
+                  onClick={() => openModal('addFosterlingRequest', connectedUser?.userId, animal?.id)}
                 >
-                  Faire une demande d'adoption (ou d'accueil)
+                  {connectedUser?.userId}Faire une demande d'adoption (ou d'accueil)
                 </button>
               )}
                 {!connectedUser && (

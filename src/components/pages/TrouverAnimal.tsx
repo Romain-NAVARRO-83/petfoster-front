@@ -3,16 +3,16 @@ import axios from 'axios';
 
 import { Heading, Button, Section, Columns, Form } from "react-bulma-components";
 const { Field, Label } = Form;
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import AnimalItemList from "../partials/AnimalItemList";
-import { Link } from 'react-router-dom';
 import MapComponent from '../partials/MapComponent';
+import { useGeolocation } from '../../hooks/GeolocationContext';
 
 
 
 
 function TrouverAnimal() {
-
+const{location} = useGeolocation();
+// console.log(location);
   // State to handle form data
   const [formData, setFormData] = useState({
     species: '',
@@ -64,10 +64,11 @@ function TrouverAnimal() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:3000/api/users') 
+      .get(`http://localhost:3000/api/users?perimeter=200000&latitude=${location?.lat}&longitude=${location?.lng}`) 
       .then((response) => {
         setAllUsers(response.data);  
-        setLoadingUsers(false);       
+        setLoadingUsers(false);   
+        console.log("found user "+ allUsers);    
       })
       .catch(() => {
         setFetchUsersError('Error fetching data');  

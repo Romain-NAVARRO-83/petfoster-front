@@ -8,7 +8,7 @@ import EditAnimalProfileForm from '../formulaires/EditAnimalProfileForm';
 import CreateAnimalProfileForm from '../formulaires/CreateAnimalProfileForm';
 
 function MainModal() {
-  const { modalContent, isActive, closeModal, senderId, receiverId } = useModal();
+  const { modalContent, isActive, closeModal, senderId, receiverId,animalId } = useModal();
 
   return (
     <div className={`modal ${isActive ? 'is-active' : ''}`}>
@@ -47,7 +47,7 @@ function MainModal() {
           {modalContent === 'editUserProfile' && <EditProfileForm />}
 
           {modalContent === 'addFosterlingRequest' && (
-            <AddFosterlingRequestForm closeAdoptionModal={closeModal} /> 
+            <AddFosterlingRequestForm senderId={senderId} animalId={animalId}/>
           )}
 
           {modalContent === 'editAnimalProfile' && <EditAnimalProfileForm />}
