@@ -141,8 +141,6 @@ function LoginForm() {
 
       {/* Message d'erreur de soumission */}
       {submitErrorLogin && <p className="help is-danger">{submitErrorLogin}</p>}
-
-      <ToastContainer />
     </form>
   );
 }
