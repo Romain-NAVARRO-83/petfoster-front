@@ -53,7 +53,7 @@ function LoginForm() {
 
         if (response.status === 200) {
           const token = response.data.token;
-          const user = emailLogin; 
+          // const user = emailLogin; 
           login(token);
 
           // Connexion réussie, redirection vers la page d'accueil
