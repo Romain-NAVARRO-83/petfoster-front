@@ -46,7 +46,7 @@ function LoginForm() {
 
     if (valid) {
       try {
-        const response = await axios.post('http://localhost:3000/api/loginh', {
+        const response = await axios.post('http://localhost:3000/api/login', {
           email: emailLogin,
           password: passwordLogin,
         });
@@ -110,7 +110,12 @@ function LoginForm() {
           <Button color="primary" fullwidth type="submit">Se connecter</Button>
         </div>
       </div>
-
+      <div className='notification is-info is-light'>
+        <ul>
+          <li>marie.dubois@example.com</li>
+          <li>ashed_password3</li>
+        </ul>
+      </div>
       {/* Message d'erreur de soumission */}
       {submitErrorLogin && <p className="help is-danger">{submitErrorLogin}</p>}
 
