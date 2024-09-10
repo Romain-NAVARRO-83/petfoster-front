@@ -5,6 +5,7 @@ import {jwtDecode} from 'jwt-decode';
 interface DecodedToken {
   userId: number;
   userName: string;
+  userType: string;
   iat: number;
   exp: number;
 }
@@ -33,6 +34,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       try {
         // Décoder le token stocké
         const decodedUser = jwtDecode<DecodedToken>(storedToken);
+
+        // Vérifier si userType est bien présent
+        console.log('decodedUser:', decodedUser);
         
         // Vérifier si le token est encore valide (non expiré)
         if (decodedUser.exp * 1000 > Date.now()) {
@@ -55,6 +59,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const login = (token: string) => {
     // Décoder le token fourni lors de la connexion
     const decodedUser = jwtDecode<DecodedToken>(token);
+
+      // Vérifier ici si userType est présent dans le token décodé
+      console.log('decodedUser:', decodedUser);
+
     setToken(token);
     setUser(decodedUser);
 

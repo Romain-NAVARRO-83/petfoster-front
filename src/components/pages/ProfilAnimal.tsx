@@ -12,6 +12,7 @@ const AnimalProfile = () => {
   const { openModal } = useModal();
   const { user: connectedUser } = useAuth(); 
   
+  console.log('connectedUser:', connectedUser ,); // Pour vérifier le contenu de l'utilisateur connecté
 
   // Typage pour animal
   const { id } = useParams<{ id: string }>(); 
@@ -131,29 +132,39 @@ const AnimalProfile = () => {
             <div className="columns is-variable is-4">
               
               <div className="column is-full-mobile is-half-tablet">
-              {connectedUser && (
-                <button
-                className="button is-primary is-fullwidth"
-                onClick={() => openModal('contactUser', connectedUser.userId, id ? parseInt(id) : undefined)}
-              >
-                Contacter association
-              </button>
-              )}
-              {!connectedUser &&(
-                <div className='notification is-info is-light'>
-                  <p>Connectez-vous à votre compte pour contacter l'association</p>
-                </div>
-              )}
+                {connectedUser && (
+                  <button
+                    className="button is-primary is-fullwidth"
+                    onClick={() => openModal('contactUser', connectedUser.userId, id ? parseInt(id) : undefined)}
+                  >
+                    Contacter association
+                  </button>
+                )}
+                {!connectedUser && (
+                  <div className='notification is-info is-light'>
+                    <p>Connectez-vous à votre compte pour contacter l'association</p>
+                  </div>
+                )}
               </div>
+
               <div className="column is-full-mobile is-half-tablet">
-                <button
-                  className="button is-secondary is-fullwidth"
-                  onClick={() => openModal('addFosterlingRequest')}
-                >
-                  Faire une demande d'adoption <br />(ou d'accueil selon user)
-                </button>
+                {/* On affiche le bouton d'adoption uniquement si l'utilisateur est un adoptant ou une famille d'accueil */}
+                {connectedUser && (connectedUser.userType === 'adoptant' || connectedUser.userType === 'famille_accueil') && (
+                  <button
+                    className="button is-secondary is-fullwidth"
+                    onClick={() => openModal('addFosterlingRequest')}
+                  >
+                    Faire une demande d'adoption <br />(ou d'accueil selon user)
+                  </button>
+                )}
+                {!connectedUser && (
+                  <div className='notification is-info is-light'>
+                    <p>Connectez-vous à votre compte pour faire une demande d'adoption</p>
+                  </div>
+                )}
               </div>
             </div>
+
           </div>
         </div>
       </section>
