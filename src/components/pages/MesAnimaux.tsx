@@ -69,11 +69,12 @@ const MesAnimaux = () => {
             
             <div className='column is-full is-half-desktop'>
             <h2 className='title'>Animaux créés</h2>
+            {/* {JSON.stringify(myUser?.createdAnimals)} */}
               {myUser?.createdAnimals && myUser.createdAnimals.length > 0 ? (
                 myUser.createdAnimals.map((oneAnimal) => (
                   <>
                     {/* {JSON.stringify(oneAnimal)} */}
-                    <AnimalItemList animal={oneAnimal} />
+                    -<AnimalItemList animal={oneAnimal} />
                     </>
                 ))
               ) : (

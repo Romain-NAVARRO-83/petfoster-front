@@ -1,6 +1,6 @@
-import React from 'react';
+
 import { Link } from 'react-router-dom';
-import { Box, Columns, Image, Button } from 'react-bulma-components';
+
 import { Pencil, Eye } from 'react-flaticons';
 import { useModal } from '../../hooks/ModalContext';
 import { Animal } from 'src/@interfaces/animal';
@@ -21,10 +21,10 @@ function AnimalItemList({ animal }: AnimalListItemProps) {
   const { openModal } = useModal();
 
   // Vérification si l'objet animal ou animal.creator est indéfini
-  if (!animal || !animal.creator) {
-    // Si animal ou creator est absent, on ne retourne rien (ou on peut afficher un indicateur de chargement)
-    return null; 
-  }
+  // if (!animal || !animal.creator) {
+  //   // Si animal ou creator est absent, on ne retourne rien (ou on peut afficher un indicateur de chargement)
+  //   return null; 
+  // }
 
   return (
     <article className='box'>
@@ -57,7 +57,7 @@ function AnimalItemList({ animal }: AnimalListItemProps) {
         <div className='column is-narrow has-text-centered'>
         
           {/* Bouton d'édition visible uniquement si l'utilisateur connecté est le créateur de l'animal */}
-          {connectedUser && connectedUser.userId === animal.creator.id && (
+          {connectedUser && connectedUser.userId === animal.creator?.id && (
             <button
               className="has-text-success button"
               onClick={() => openModal('editAnimalProfile')} // Ouvre le modal pour modifier le profil de l'animal
