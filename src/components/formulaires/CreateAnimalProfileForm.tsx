@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../hooks/AuthContext';
+import { useToast } from '../../hooks/ToastContext';
+import { useModal } from '../../hooks/ModalContext';
 
 interface FormData {
   name: string;
@@ -15,6 +17,10 @@ interface FormData {
 }
 
 const CreateAnimalProfileForm = () => {
+  const { showSuccessToast, showErrorToast } = useToast();
+  const {closeModal} = useModal();
+
+
   const { user: connectedUser } = useAuth(); // Récupère les infos du token JWT
 
   // Gestion du token CSRF
@@ -71,7 +77,9 @@ const CreateAnimalProfileForm = () => {
     setSuccessMessage(null); // Réinitialise le message de succès
 
     if (!validateForm()) {
+      showErrorToast('Le formulaire n\'est pas validé');
       return; // Arrête si la validation échoue
+      
     }
 
     try {
@@ -85,7 +93,9 @@ const CreateAnimalProfileForm = () => {
         }
       );
       setSuccessMessage('Profil de l\'animal créé avec succès !');
-      console.log('Réponse du serveur:', response.data);
+      showSuccessToast('Profil de l\'animal créé avec succès !');
+      closeModal();
+      // console.log('Réponse du serveur:', response.data);
     } catch (error: any) {
       if (error.response) {
         setErrorMessage(`Erreur API: ${error.response.data.message}`);

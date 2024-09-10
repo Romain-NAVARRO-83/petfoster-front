@@ -51,6 +51,7 @@ function ContactUserForm({ senderId, receiverId }: ContactUserFormProps) {
         },
       });
       showSuccessToast('Message envoyé avec succès!');
+      closeModal();
     } catch (error) {
       console.error('Erreur lors de l\'envoi du message', error);
       showErrorToast('Erreur lors de l\'envoi du message.');
