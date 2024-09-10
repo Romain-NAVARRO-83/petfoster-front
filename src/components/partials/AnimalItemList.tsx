@@ -4,6 +4,8 @@ import { Box, Columns, Image, Button } from 'react-bulma-components';
 import { Pencil, Eye } from 'react-flaticons';
 import { useModal } from '../../hooks/ModalContext';
 import { Animal } from 'src/@interfaces/animal';
+import { useAuth } from '../../hooks/AuthContext'; // Importer le contexte d'authentification
+
 // Utilitaires
 import computeAge from '../../utils/computeAge'
 
@@ -14,6 +16,7 @@ interface AnimalListItemProps {
 }
 
 function AnimalItemList({ animal }: AnimalListItemProps) {
+  const { user: connectedUser } = useAuth(); 
   const { openModal } = useModal();
 
   return (
@@ -42,15 +45,18 @@ function AnimalItemList({ animal }: AnimalListItemProps) {
 
 
         <div className='column is-narrow has-text-centered'>
-        <Link to={`/animal/${animal?.id}`} className='button has-text-info'>
-            <Eye />
-          </Link>
+        
+          {/* Edit option for creator */}
+        {connectedUser && connectedUser.userId === animal?.creator.id && (
           <button
             className="has-text-success button"
             onClick={() => openModal('editAnimalProfile')}
           >
             <Pencil />
-          </button>
+          </button>)}
+          <Link to={`/animal/${animal?.id}`} className='button has-text-info'>
+            <Eye />
+          </Link>
         </div>
       </div>
     </article>
