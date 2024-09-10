@@ -124,38 +124,6 @@ useEffect(() => {
           desktop={{ size: 6 }}
           id="home-map-container"
         >
-          {/* <MapContainer
-            center={defaultPosition}
-            zoom={7}
-            scrollWheelZoom={false}
-            // style={{ height: '80vh', zIndex: 1 }}
-          >
-            <TileLayer
-              url="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
-              attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>'
-            />
-  
-  <Marker position={mapCenter} icon={userIcon}> 
-              <Popup>
-                Votre position
-              </Popup>
-            </Marker>
-
-
-           
-{allUsers && allUsers.map((user: any) => (
-  <Marker 
-    key={user.id} 
-    position={[parseFloat(user.latitude), parseFloat(user.longitude)]} 
-  > 
-    <Popup>
-      {user.name}
-      <br />
-      <Link to={`/profil/${user.id}`}>Voir le profil</Link>
-    </Popup>
-  </Marker>
-))}
-          </MapContainer> */}
           <MapComponent users={allUsers}/>
         </Columns.Column>
         <Columns.Column

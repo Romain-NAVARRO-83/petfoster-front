@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../hooks/AuthContext';
+
 interface FormData {
   name: string;
   species_id: number;
@@ -10,13 +11,17 @@ interface FormData {
   short_story: string;
   long_story: string;
   health: string;
-  creator_id: number;
+  creator_id: number | null;
 }
 
 const CreateAnimalProfileForm = () => {
-  const { user: connectedUser } = useAuth(); //récupère les infos dans le jwt token
-  // CSRF TOKEN
+  const { user: connectedUser } = useAuth(); // Récupère les infos du token JWT
+
+  // Gestion du token CSRF
   const [csrfToken, setCsrfToken] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null); // Pour afficher un message de succès
+  const [errorMessage, setErrorMessage] = useState<string | null>(null); // Pour afficher un message d'erreur
+
   useEffect(() => {
     const fetchCsrfToken = async () => {
       try {
@@ -26,13 +31,13 @@ const CreateAnimalProfileForm = () => {
         console.error('Erreur lors de la récupération du token CSRF:', error);
       }
     };
-
     fetchCsrfToken();
   }, []);
 
+  // Initialise les données du formulaire
   const [formData, setFormData] = useState<FormData>({
     name: '',
-    species_id: 1, // défaut ?
+    species_id: 1, // Valeur par défaut pour 'Chat'
     sexe: '',
     date_of_birth: '',
     race: '',
@@ -42,6 +47,7 @@ const CreateAnimalProfileForm = () => {
     creator_id: connectedUser?.userId,
   });
 
+  // Gestion du changement dans les champs
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
@@ -49,9 +55,25 @@ const CreateAnimalProfileForm = () => {
     });
   };
 
+  // Validation des champs obligatoires
+  const validateForm = () => {
+    if (!formData.name || !formData.sexe || !formData.date_of_birth || formData.creator_id === null) {
+      setErrorMessage('Tous les champs obligatoires doivent être remplis.');
+      return false;
+    }
+    return true;
+  };
+
+  // Soumission du formulaire
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('formdata :', formData);
+    setErrorMessage(null); // Réinitialise les erreurs
+    setSuccessMessage(null); // Réinitialise le message de succès
+
+    if (!validateForm()) {
+      return; // Arrête si la validation échoue
+    }
+
     try {
       const response = await axios.post(
         'http://localhost:3000/api/animals',
@@ -62,14 +84,39 @@ const CreateAnimalProfileForm = () => {
           },
         }
       );
+      setSuccessMessage('Profil de l\'animal créé avec succès !');
       console.log('Réponse du serveur:', response.data);
-    } catch (error) {
+    } catch (error: any) {
+      if (error.response) {
+        setErrorMessage(`Erreur API: ${error.response.data.message}`);
+      } else {
+        setErrorMessage('Erreur lors de la soumission, veuillez réessayer.');
+      }
       console.error('Erreur lors de la soumission:', error);
     }
   };
 
+  // Redirection ou gestion si l'utilisateur n'est pas connecté
+  useEffect(() => {
+    if (!connectedUser) {
+      setErrorMessage('Vous devez être connecté pour créer un profil.');
+    }
+  }, [connectedUser]);
+
   return (
     <form className="columns is-multiline" onSubmit={handleSubmit}>
+      {/* Affichage des messages de succès ou d'erreur */}
+      {errorMessage && (
+        <div className="notification is-danger">
+          {errorMessage}
+        </div>
+      )}
+      {successMessage && (
+        <div className="notification is-success">
+          {successMessage}
+        </div>
+      )}
+
       <div className="field column is-full">
         <label className="label" htmlFor="name">Nom</label>
         <div className="control">
@@ -198,7 +245,7 @@ const CreateAnimalProfileForm = () => {
         </div>
       </div>
 
-      <input type="hidden" id="creator_id" name="creator_id" value={formData.creator_id} />
+      <input type="hidden" id="creator_id" name="creator_id" value={formData.creator_id || ''} />
 
       <div className="field column is-full">
         <div className="control">
