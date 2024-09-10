@@ -24,6 +24,7 @@ const AnimalProfile = () => {
       .then(response => {
         setAnimal(response.data);
         setLoading(false);
+        
       })
       .catch(error => {
         setError(error);
@@ -52,10 +53,10 @@ const AnimalProfile = () => {
 
           {animal?.pictures && animal.pictures.length > 0 ? (
           <GalleryComponent pictures={animal.pictures} />
+          
           ) : (
             <p>Aucune image disponible pour cet animal.</p>
           )}
-          
         </div>
 
         {/* Info animal */}

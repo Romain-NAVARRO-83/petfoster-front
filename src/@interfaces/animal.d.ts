@@ -1,5 +1,6 @@
 import { Pictures } from './pictures';
 import { User } from './user';
+import { Species } from './species';
 
 export interface Animal {
   id: number;
@@ -15,6 +16,6 @@ export interface Animal {
   created_at: string;
   updated_at: any;
   creator: User;
-  species: string;
+  species: Species;
   pictures: Pictures[];
 }
