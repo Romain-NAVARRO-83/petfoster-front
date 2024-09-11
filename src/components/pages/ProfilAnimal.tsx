@@ -10,7 +10,7 @@ import { Animal } from 'src/@interfaces/animal';
 import { User } from 'src/@interfaces/user';
 
 const AnimalProfile = () => {
-  const { openModal } = useModal();
+  const { openModal,animalId } = useModal();
   const { user: connectedUser } = useAuth(); 
   
   console.log('connectedUser:', connectedUser ,); // Pour vérifier le contenu de l'utilisateur connecté
@@ -22,29 +22,29 @@ const AnimalProfile = () => {
   const [error, setError] = useState<Error | null>(null); // Typage de l'erreur
   const [userData, setUserData] = useState<User | null>(null); 
 
-useEffect(() => {
-  const fetchAnimalData = async () => {
-    try {
-      // Récupérer les informations de l'animal
-      const animalResponse = await axios.get(`http://localhost:3000/api/animals/${id}`);
-      setAnimal(animalResponse.data);
-
-      // Récupérer les informations complètes de l'utilisateur connecté
-      if (connectedUser) {
-        const userResponse = await axios.get(`http://localhost:3000/api/users/${connectedUser.userId}`);
-        console.log('User data in ProfilAnimal:', userResponse.data);
-        setUserData(userResponse.data); // Stocke les informations complètes de l'utilisateur connecté
+  useEffect(() => {
+    const fetchAnimalData = async () => {
+      try {
+        // Récupérer les informations de l'animal
+        const animalResponse = await axios.get(`http://localhost:3000/api/animals/${id}`);
+        setAnimal(animalResponse.data);
+  
+        if (connectedUser) {
+          const userResponse = await axios.get(`http://localhost:3000/api/users/${connectedUser.userId}`);
+          setUserData(userResponse.data);
+        }
+  
+        setLoading(false);
+      } catch (error: any) {
+        setError(error);
+        setLoading(false);
       }
-
-      setLoading(false);
-    } catch (error: any) {
-      setError(error);
-      setLoading(false);
+    };
+  
+    if (id) {
+      fetchAnimalData();
     }
-  };
-
-  fetchAnimalData();
-}, [id, connectedUser]); // Ajoute connectedUser comme dépendance
+  }, [id, connectedUser]);
 
 
   if (loading) {
@@ -163,11 +163,12 @@ useEffect(() => {
 
               <div className="column is-full-mobile is-half-tablet">
               {userData && (userData.type_user === 'adoptant' || userData.type_user === 'famille d\'accueil') && (
-                <button
-                  className="button is-secondary is-fullwidth"
-                  onClick={() => openModal('addFosterlingRequest', connectedUser?.userId, animal?.id)}
-                >
-                  {connectedUser?.userId}Faire une demande d'adoption (ou d'accueil)
+               <button
+               className="button is-secondary is-fullwidth"
+               onClick={() => openModal('addFosterlingRequest', connectedUser?.userId, undefined, animal?.id)}
+             >
+                  {console.log(animal.id)}
+                  {animal?.id}Faire une demande d'adoption (ou d'accueil)
                 </button>
               )}
                 {!connectedUser && (
