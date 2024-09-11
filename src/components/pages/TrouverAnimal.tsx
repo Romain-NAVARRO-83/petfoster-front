@@ -20,7 +20,7 @@ const{location} = useGeolocation();
     species: '',
     age: '',
     sexe: '',
-    search_area: 300, // Default search area value
+    search_area: 30, // Default search area value
   });
 
   // Handle form input changes
@@ -103,6 +103,9 @@ const{location} = useGeolocation();
       <Section className="columns">
         <Columns.Column mobile={{ size: 12 }} tablet={{ size: 12 }} desktop={{ size: 6 }} className="animal-list">
         <h2 className='subtitle'>{foundUsersAnimals?.length} animaux trouvés dans un périmètre de {formData.search_area} Km</h2>
+        {foundUsersAnimals?.length === 0 && (
+          <p className='notification is-info is-light'>Essayez d'agrandir le périmètre de recherche.</p>
+        )}
         {foundUsersAnimals && foundUsersAnimals
   .filter((item: any) => 
     (formData.species === "" || item.species.name === formData.species) &&  // Filter par espece si espece !=""
