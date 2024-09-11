@@ -3,6 +3,7 @@ import { Container, Section, Heading, Box, Button, Tabs } from 'react-bulma-comp
 import LoginForm from '../formulaires/Login';
 import { SingleValue } from 'react-select';
 import AsyncSelect from 'react-select/async';
+import { useToast } from '../../hooks/ToastContext';
 
 
 type Coordinates = {
@@ -46,6 +47,7 @@ const fetchCities = async (country: string, searchTerm: string) => {
 
 
 const RegistrationPage = () => {
+    const { showSuccessToast, showErrorToast } = useToast();
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState('');
     const [password, setPassword] = useState('');
@@ -60,7 +62,7 @@ const RegistrationPage = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [phoneError, setPhoneError] = useState('');
     const [userType, setUserType] = useState('');
-    const [selectedCountryCode, setSelectedCountryCode] = useState(''); // Mise à jour de cette ligne
+    const [selectedCountryCode, setSelectedCountryCode] = useState(''); 
     const [address, setAddress] = useState('');
     const [name, setName] = useState('');
     const [coordinates, setCoordinates] = useState<Coordinates>({ lat: 0, lng: 0 })
@@ -137,6 +139,7 @@ const RegistrationPage = () => {
 
     // Soumission du formulaire (inscription)
     const handleSubmit = async (event: React.FormEvent) => {
+        
         event.preventDefault();
         let isValid = true;
 
@@ -186,9 +189,9 @@ const RegistrationPage = () => {
             }
 
             if (isValid) {
-                setLoading(true); // Démarrer le chargement
+                setLoading(true); 
                 const success = await handleCoordinatesUpdate(); // Appel asynchrone avec await
-                setLoading(false); // Arrêter le chargement
+                setLoading(false); 
         
                 if (!success) {
                     return; // Arrêter si la géolocalisation échoue
@@ -223,6 +226,7 @@ const RegistrationPage = () => {
         
                     const result = await response.json();
                     console.log("Utilisateur créé avec succès :", result);
+                    showSuccessToast('Votre compte à bien été créé ! Vous pouvez maintenant vous connecter');
                 } catch (error) {
                     console.error("Erreur lors de la requête :", error);
                     alert("Une erreur est survenue lors de l'inscription. Veuillez réessayer.");

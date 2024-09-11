@@ -1,113 +1,88 @@
-import React, { useState } from 'react';
-import { Form, Button } from 'react-bulma-components';
+import { useState, useEffect } from 'react';
+import { useToast } from '../../hooks/ToastContext';
+import { useModal } from '../../hooks/ModalContext';
+import axios from 'axios';
 
-const { Field, Label, Textarea } = Form;
-
-interface FosterlingRequestFormProps {
-  closeAdoptionModal: () => void; // Fonction pour fermer la modal
+interface AddFosterlingRequestFormProps {
+  senderId: number | null;    // ID de l'expéditeur
+  animalId: number | null;    // ID de l'animal
 }
 
-const FosterlingRequestForm: React.FC<FosterlingRequestFormProps> = ({ closeAdoptionModal }) => {
+function AddFosterlingRequestForm({ senderId, animalId }: AddFosterlingRequestFormProps) {
+  console.log('animalId:', animalId);
+  // Récupérer le token CSRF pour la requête sécurisée
+  const [csrfToken, setCsrfToken] = useState<string | null>(null);
+  
+  useEffect(() => {
+    const fetchCsrfToken = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/csrf-token');
+        setCsrfToken(response.data);
+      } catch (error) {
+        console.error('Erreur lors de la récupération du token CSRF:', error);
+      }
+    };
+
+    fetchCsrfToken();
+  }, []);
+
   const [formData, setFormData] = useState({
-    justification: '',
+    content_request: '',
+    users_id: senderId || null,    // Utiliser senderId passé en prop
+    animals_id: animalId || null,    // Utiliser animalId passé en prop
   });
 
-  const [error, setError] = useState<string | null>(null); // Pour gérer les erreurs de validation
-  const [isSubmitting, setIsSubmitting] = useState(false); // Pour indiquer si la soumission est en cours
-  const [successMessage, setSuccessMessage] = useState<string | null>(null); // Pour afficher un message de succès
-
-  // Gestion du changement dans le textarea
+  // Gestion des changements dans le champ texte
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: value, 
     });
   };
 
-  // Validation de la justification
-  const validateForm = () => {
-    if (formData.justification.length < 0) {
-      setError('La justification doit contenir au moins 0 caractères.');
-      return false;
-    }
-    return true;
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  // Soumission du formulaire
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null); // Réinitialiser l'erreur au début
-
-    if (!validateForm()) {
-      return; // Si la validation échoue, arrêter ici
-    }
-
-    setIsSubmitting(true); // Indiquer que la soumission est en cours
-
+    
     try {
-      // Simuler l'envoi des données à une API (remplacez cela par une requête réelle)
-      console.log(formData);
-
-      // Si la soumission est un succès
-      setSuccessMessage('Votre demande a été envoyée avec succès.');
-      setTimeout(() => {
-        closeAdoptionModal(); // Fermer la modal après un petit délai
-      }, 2000); // Fermer après 2 secondes pour laisser le temps de lire le message
-    } 
-    catch (error) {
-      setError("Une erreur s'est produite lors de l'envoi de la demande.");
-      console.error('Erreur lors de la soumission du formulaire', error);
-    } finally {
-      setIsSubmitting(false); // Réinitialiser l'état de soumission
+      await axios.post('http://localhost:3000/api/requests', formData, {
+        headers: {
+          'x-xsrf-token': csrfToken || '', // Inclure le token CSRF dans les headers
+        },
+      });
+      showSuccessToast('Message envoyé avec succès!');
+      closeModal(); // Fermer la modal après succès
+    } catch (error) {
+      console.error('Erreur lors de l\'envoi du message', error);
+      showErrorToast('Erreur lors de l\'envoi du message.');
+      console.log(formData)
     }
   };
+
+  // Toasts de submit
+  const { showSuccessToast, showErrorToast } = useToast();
+  const { closeModal } = useModal();
 
   return (
-
     <form onSubmit={handleSubmit}>
-
-      <Field>
-
-        <Label htmlFor="justification">Justification</Label>
-
-        <div className="control">
-
-          <Textarea
-
-            className="textarea"
-            id="justification"
-            name="justification"
-            aria-label="Justification pour adopter un animal"
-            placeholder="Pourquoi souhaitez-vous adopter cet animal ?"
-            required
-            value={formData.justification}
-            onChange={handleChange}
-            disabled={isSubmitting} // Désactiver le champ si en cours de soumission
-
-          />
-
-        </div>
-
-      </Field>
-
-      {error && <p className="help is-danger">{error}</p>} {/* Message d'erreur si validation échoue */}
-
-      {successMessage && <p className="help is-success">{successMessage}</p>} {/* Message de succès */}
-
-      <Field>
-
-        <div className="control">
-          <Button color="primary" type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Envoi en cours...' : 'Valider la demande'} {/* Changement de texte pendant l'envoi */}
-          </Button>
-        </div>
-
-      </Field>
-
+      <h3 className='title'>Demander à accueillir l'animal</h3>
+      <p>Demandeur : {senderId}</p>
+      <p>Animal : {animalId}</p>
+      <textarea
+        name="content_request"
+        id="content_request"
+        value={formData.content_request}
+        onChange={handleChange}
+        placeholder="Tapez votre message"
+        className='textarea'
+      />
+      {/* Champs cachés pour l'expéditeur et le destinataire */}
+      <input type="hidden" value={senderId || ''} name="users_id" id="users_id"/>
+      <input type="hidden" value={animalId || ''} name="animals_id" id="animals_id"/>
+      <button type="submit" className='button is-primary is-fullwidth'>Envoyer le message</button>
     </form>
-
   );
+}
 
-};
-
-export default FosterlingRequestForm;
+export default AddFosterlingRequestForm;

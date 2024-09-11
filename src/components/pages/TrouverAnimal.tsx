@@ -3,22 +3,24 @@ import axios from 'axios';
 
 import { Heading, Button, Section, Columns, Form } from "react-bulma-components";
 const { Field, Label } = Form;
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import AnimalItemList from "../partials/AnimalItemList";
-import { Link } from 'react-router-dom';
 import MapComponent from '../partials/MapComponent';
+import { useGeolocation } from '../../hooks/GeolocationContext';
+import { User } from 'src/@interfaces/user';
+import { Animal } from 'src/@interfaces/animal';
 
 
 
 
 function TrouverAnimal() {
-
+const{location} = useGeolocation();
+// console.log(location);
   // State to handle form data
   const [formData, setFormData] = useState({
     species: '',
     age: '',
     sexe: '',
-    search_area: '10', // Default search area value
+    search_area: 30, // Default search area value
   });
 
   // Handle form input changes
@@ -36,44 +38,51 @@ function TrouverAnimal() {
   }
 
   // Fetch animals
-  const [allAnimals, setAllAnimals] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [fetchError, setFetchError] = useState<string | null>(null);
-  const [allSpecies, setAllSpecies] = useState<string[] | []>([])
+  // const [allAnimals, setAllAnimals] = useState<any>(null);
+  // const [loading, setLoading] = useState(true);
+  // const [fetchError, setFetchError] = useState<string | null>(null);
+  // const [allSpecies, setAllSpecies] = useState<string[] | []>([])
 
-  useEffect(() => {
-    axios
-      .get('http://localhost:3000/api/animals') 
-      .then((response) => {
-        setAllAnimals(response.data);  
-        setLoading(false);   
-        console.log(allAnimals);
-        // Extract the unique species using a Set
-        setAllSpecies( Array.from(new Set(allAnimals.map(newanimal => animal.species.name)))   )
-      })
-      .catch(() => {
-        setFetchError('Error fetching data');  
-        setLoading(false);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get('http://localhost:3000/api/animals') 
+  //     .then((response) => {
+  //       setAllAnimals(response.data);  
+  //       setLoading(false);   
+  //       console.log(allAnimals);
+  //       // Extract the unique species using a Set
+  //       setAllSpecies( Array.from(new Set(allAnimals.map(newanimal => animal.species.name)))   )
+  //     })
+  //     .catch(() => {
+  //       setFetchError('Error fetching data');  
+  //       setLoading(false);
+  //     });
+  // }, []);
 
   // Fetch users
-  const [allUsers, setAllUsers] = useState<any>(null);
+  const [allUsers, setAllUsers] = useState<User[] | null>(null);
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [fetchUsersError, setFetchUsersError] = useState<string | null>(null);
+  const [foundUsersAnimals, setFoundUsersAnimals] = useState<Animal[] | null>(null)
+  useEffect(() => {
+    setFoundUsersAnimals(allUsers?.flatMap(user => user.userAnimals.map(userAnimal => userAnimal.animal)));
+    
+  }, [allUsers]);
+  
 
   useEffect(() => {
     axios
-      .get('http://localhost:3000/api/users') 
+      .get(`http://localhost:3000/api/users?perimeter=${formData.search_area}000&latitude=${location?.lat}&longitude=${location?.lng}`) 
       .then((response) => {
         setAllUsers(response.data);  
-        setLoadingUsers(false);       
+        setLoadingUsers(false);   
+        console.log("found user "+ allUsers);    
       })
       .catch(() => {
         setFetchUsersError('Error fetching data');  
         setLoadingUsers(false);
       });
-  }, []);
+  }, [formData]);
 
 
 
@@ -90,10 +99,14 @@ function TrouverAnimal() {
       <div>
         <Heading>Trouver un animal</Heading>
       </div>
-
+{/*JSON.stringify(foundUsersAnimals)*/}
       <Section className="columns">
         <Columns.Column mobile={{ size: 12 }} tablet={{ size: 12 }} desktop={{ size: 6 }} className="animal-list">
-        {allAnimals && allAnimals
+        <h2 className='subtitle'>{foundUsersAnimals?.length} animaux trouvés dans un périmètre de {formData.search_area} Km</h2>
+        {foundUsersAnimals?.length === 0 && (
+          <p className='notification is-info is-light'>Essayez d'agrandir le périmètre de recherche.</p>
+        )}
+        {foundUsersAnimals && foundUsersAnimals
   .filter((item: any) => 
     (formData.species === "" || item.species.name === formData.species) &&  // Filter par espece si espece !=""
     (formData.sexe === "" || item.sexe === formData.sexe)  // Filter par sexe si sexe !=""
@@ -178,8 +191,8 @@ function TrouverAnimal() {
                   name="search_area"
                   value={formData.search_area}
                   onChange={handleChange}
-                  min="10"
-                  max="200"
+                  min="30"
+                  max="1000"
                 />
                 <p>Périmètre : {formData.search_area} Km</p>
               </Field>

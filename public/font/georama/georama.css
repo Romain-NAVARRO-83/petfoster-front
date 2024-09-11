@@ -1,0 +1,235 @@
+@font-face {
+    font-family: 'Georama Condensed';
+    src: url('GeoramaCondensed-Black.woff2') format('woff2'),
+        url('GeoramaCondensed-Black.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Georama Condensed';
+    src: url('GeoramaCondensed-BlackItalic.woff2') format('woff2'),
+        url('GeoramaCondensed-BlackItalic.woff') format('woff');
+    font-weight: 900;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Georama Condensed';
+    src: url('GeoramaCondensed-Bold.woff2') format('woff2'),
+        url('GeoramaCondensed-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Georama Condensed';
+    src: url('GeoramaCondensed-BoldItalic.woff2') format('woff2'),
+        url('GeoramaCondensed-BoldItalic.woff') format('woff');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Georama Condensed';
+    src: url('GeoramaCondensed-ExtraBold.woff2') format('woff2'),
+        url('GeoramaCondensed-ExtraBold.woff') format('woff');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Georama Condensed';
+    src: url('GeoramaCondensed-ExtraBoldItalic.woff2') format('woff2'),
+        url('GeoramaCondensed-ExtraBoldItalic.woff') format('woff');
+    font-weight: 800;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Georama Condensed';
+    src: url('GeoramaCondensed-SemiBold.woff2') format('woff2'),
+        url('GeoramaCondensed-SemiBold.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Georama Condensed';
+    src: url('GeoramaCondensed-SemiBoldItalic.woff2') format('woff2'),
+        url('GeoramaCondensed-SemiBoldItalic.woff') format('woff');
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Georama Condensed';
+    src: url('GeoramaCondensed-Light.woff2') format('woff2'),
+        url('GeoramaCondensed-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Georama Condensed';
+    src: url('GeoramaCondensed-LightItalic.woff2') format('woff2'),
+        url('GeoramaCondensed-LightItalic.woff') format('woff');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Georama Condensed';
+    src: url('GeoramaCondensed-Medium.woff2') format('woff2'),
+        url('GeoramaCondensed-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Georama Condensed';
+    src: url('GeoramaCondensed-MediumItalic.woff2') format('woff2'),
+        url('GeoramaCondensed-MediumItalic.woff') format('woff');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Georama Condensed';
+    src: url('GeoramaCondensed-Regular.woff2') format('woff2'),
+        url('GeoramaCondensed-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Georama Condensed';
+    src: url('GeoramaCondensed-Italic.woff2') format('woff2'),
+        url('GeoramaCondensed-Italic.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Georama Condensed';
+    src: url('GeoramaCondensed-ExtraLight.woff2') format('woff2'),
+        url('GeoramaCondensed-ExtraLight.woff') format('woff');
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Georama Condensed';
+    src: url('GeoramaCondensed-ExtraLightItalic.woff2') format('woff2'),
+        url('GeoramaCondensed-ExtraLightItalic.woff') format('woff');
+    font-weight: 200;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Georama Condensed';
+    src: url('GeoramaCondensed-Thin.woff2') format('woff2'),
+        url('GeoramaCondensed-Thin.woff') format('woff');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Georama Condensed';
+    src: url('GeoramaCondensed-ThinItalic.woff2') format('woff2'),
+        url('GeoramaCondensed-ThinItalic.woff') format('woff');
+    font-weight: 100;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Georama Expanded';
+    src: url('GeoramaExpanded-Black.woff2') format('woff2'),
+        url('GeoramaExpanded-Black.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Georama Expanded';
+    src: url('GeoramaExpanded-BlackItalic.woff2') format('woff2'),
+        url('GeoramaExpanded-BlackItalic.woff') format('woff');
+    font-weight: 900;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Georama Expanded';
+    src: url('GeoramaExpanded-Bold.woff2') format('woff2'),
+        url('GeoramaExpanded-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Georama Expanded';
+    src: url('GeoramaExpanded-BoldItalic.woff2') format('woff2'),
+        url('GeoramaExpanded-BoldItalic.woff') format('woff');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
+
+@font-face {
+    font-family: 'Georama ExtraCondensed';
+    src: url('GeoramaExtraCondensed-Black.woff2') format('woff2'),
+        url('GeoramaExtraCondensed-Black.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Georama ExtraCondensed';
+    src: url('GeoramaExtraCondensed-BlackItalic.woff2') format('woff2'),
+        url('GeoramaExtraCondensed-BlackItalic.woff') format('woff');
+    font-weight: 900;
+    font-style: italic;
+    font-display: swap;
+}
+
+
+@font-face {
+    font-family: 'Georama';
+    src: url('Georama-Black.woff2') format('woff2'),
+        url('Georama-Black.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Georama';
+    src: url('Georama-BlackItalic.woff2') format('woff2'),
+        url('Georama-BlackItalic.woff') format('woff');
+    font-weight: 900;
+    font-style: italic;
+    font-display: swap;
+}

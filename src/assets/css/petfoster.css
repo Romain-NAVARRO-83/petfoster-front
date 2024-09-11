@@ -12,6 +12,11 @@
     height: 100px;
     margin-bottom: -50px
 } */
+
+body {
+  font-family: 'Georama', Arial, sans-serif;
+}
+
 .navbar-brand a img:first-child {
   margin: 10px 20px -30px 20px;
   vertical-align: top;
@@ -120,7 +125,8 @@ header.scrolled nav {
   -moz-box-shadow: 0px 0px 26px 10px rgba(0, 0, 0, 0.2);
 }
 
-header.scrolled nav .navbar-item {
+header.scrolled nav .navbar-item,
+header.scrolled .navbar-item a {
   color: #000;
   transition: all ease-out 0.5s;
 }
@@ -280,4 +286,9 @@ footer > div > ul {
 
 footer {
   border-top: solid 2px var(--green);
+}
+
+.modal-body {
+  max-height: 80vh;
+  overflow-y: auto;
 }

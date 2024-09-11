@@ -6,29 +6,49 @@ import MapComponent from '../partials/MapComponent';
 import GalleryComponent from '../partials/GalleryComponent';
 import computeAge from '../../utils/computeAge';
 import { useAuth } from '../../hooks/AuthContext'; // Importer le contexte d'authentification
+import { Animal } from 'src/@interfaces/animal';
+import { User } from 'src/@interfaces/user';
 
 const AnimalProfile = () => {
-  const { openModal } = useModal();
+  const { openModal, animalId } = useModal();
   const { user: connectedUser } = useAuth();
 
-  // Chargement de l'animal
-  const { id } = useParams();
-  const [animal, setAnimal] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  console.log('connectedUser:', connectedUser); // Pour vérifier le contenu de l'utilisateur connecté
+
+  // Typage pour animal
+  const { id } = useParams<{ id: string }>();
+  const [animal, setAnimal] = useState<Animal | null>(null); // Utilisez le typage correct pour l'animal
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<Error | null>(null); // Typage de l'erreur
+  const [userData, setUserData] = useState<User | null>(null);
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/api/animals/${id}`)
-      .then((response) => {
-        setAnimal(response.data);
+    const fetchAnimalData = async () => {
+      try {
+        // Récupérer les informations de l'animal
+        const animalResponse = await axios.get(
+          `http://localhost:3000/api/animals/${id}`
+        );
+        setAnimal(animalResponse.data);
+
+        if (connectedUser) {
+          const userResponse = await axios.get(
+            `http://localhost:3000/api/users/${connectedUser.userId}`
+          );
+          setUserData(userResponse.data);
+        }
+
         setLoading(false);
-      })
-      .catch((error) => {
+      } catch (error: any) {
         setError(error);
         setLoading(false);
-      });
-  }, [id]);
+      }
+    };
+
+    if (id) {
+      fetchAnimalData();
+    }
+  }, [id, connectedUser]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -48,7 +68,11 @@ const AnimalProfile = () => {
       <section className="container columns is-multiline">
         {/* Galerie d'images */}
         <div className="column is-full-mobile is-half-tablet is-half-desktop">
-          <GalleryComponent pictures={animal?.pictures} />
+          {animal?.pictures && animal.pictures.length > 0 ? (
+            <GalleryComponent pictures={animal.pictures} />
+          ) : (
+            <p>Aucune image disponible pour cet animal.</p>
+          )}
         </div>
 
         {/* Info animal */}
@@ -63,7 +87,12 @@ const AnimalProfile = () => {
             Sexe : <strong>{animal?.sexe === 'F' ? 'Femelle' : 'Mâle'}</strong>
           </div>
           <div className="column is-full-mobile is-half-tablet is-half-desktop">
-            Age : <strong>{computeAge(animal?.date_of_birth)}</strong>
+            Age :{' '}
+            <strong>
+              {animal?.date_of_birth
+                ? computeAge(animal.date_of_birth)
+                : 'Inconnue'}
+            </strong>
           </div>
           <div className="column is-full">
             <Link to="#localisation">Localisation</Link>
@@ -73,6 +102,7 @@ const AnimalProfile = () => {
             <p>{animal?.short_story}</p>
           </div>
         </div>
+
         {/* Edit option for creator */}
         {connectedUser && connectedUser.userId === animal?.creator.id && (
           <div className="notification is-info is-light is-fullwidth column">
@@ -99,12 +129,14 @@ const AnimalProfile = () => {
       </section>
 
       {/* Localisation */}
-
       <section id="localisation" className="yellow-line">
         <h2 className="title">Où se trouve {animal?.name} ?</h2>
         <div className="container columns is-vcentered is-fluid">
           <div className="column is-full-mobile is-half-tablet is-half-desktop">
-            {/* <MapComponent animal={animal} /> */}
+            <MapComponent
+              animal={animal}
+              users={animal?.creator ? [animal.creator] : []}
+            />
           </div>
           <div className="column is-full-mobile is-half-tablet is-half-desktop box">
             <p>
@@ -116,30 +148,68 @@ const AnimalProfile = () => {
               <br />
               {animal?.creator.country}
               <br />
-              <Link to={animal?.creator.website}>
-                {animal?.creator.website}
-              </Link>
-              <br />
+              {animal?.creator.website ? (
+                <Link to={animal.creator.website}>
+                  {animal.creator.website}
+                </Link>
+              ) : (
+                <span>Pas de site web disponible</span>
+              )}
             </p>
 
             {/* Action Buttons */}
             <div className="columns is-variable is-4">
               <div className="column is-full-mobile is-half-tablet">
-                <button
-                  className="button is-primary is-fullwidth"
-                  onClick={() => openModal('contactUser')}
-                >
-                  Contacter association
-                </button>
+                {connectedUser && (
+                  <button
+                    className="button is-primary is-fullwidth"
+                    onClick={() =>
+                      openModal(
+                        'contactUser',
+                        connectedUser.userId,
+                        id ? parseInt(id) : undefined
+                      )
+                    }
+                  >
+                    Contacter association
+                  </button>
+                )}
+                {!connectedUser && (
+                  <div className="notification is-info is-light">
+                    <p>
+                      Connectez-vous à votre compte pour contacter l'association
+                    </p>
+                  </div>
+                )}
               </div>
+
               <div className="column is-full-mobile is-half-tablet">
-                <button
-                  className="button is-secondary is-fullwidth"
-                  onClick={() => openModal('addFosterlingRequest')}
-                >
-                  Faire une demande d'adoption <br />
-                  (ou d'accueil selon user)
-                </button>
+                {userData &&
+                  (userData.type_user === 'adoptant' ||
+                    userData.type_user === "famille d'accueil") && (
+                    <button
+                      className="button is-secondary is-fullwidth"
+                      onClick={() =>
+                        openModal(
+                          'addFosterlingRequest',
+                          connectedUser?.userId,
+                          undefined,
+                          animal?.id
+                        )
+                      }
+                    >
+                      {console.log(animal.id)}
+                      {animal?.id}Faire une demande d'adoption (ou d'accueil)
+                    </button>
+                  )}
+                {!connectedUser && (
+                  <div className="notification is-info is-light">
+                    <p>
+                      Connectez-vous à votre compte pour faire une demande
+                      d'adoption
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           </div>

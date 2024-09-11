@@ -5,10 +5,12 @@ interface ModalContextType {
   modalContent: string | null;
   setModalContent: (content: string | null) => void;
   isActive: boolean;
-  openModal: (content: string) => void;
+  // openModal: (content: string) => void;
+  openModal: (content: string, userId?: number, id?: number) => void;
   closeModal: () => void;
   senderId: number | null;
   receiverId: number | null;
+  animalId: number | null;
 }
 
 
@@ -23,12 +25,14 @@ export function ModalProvider({ children }: ModalProviderProps) {
   const [isActive, setIsActive] = useState(false);
   const [senderId, setSenderId] = useState<number | null>(null);
   const [receiverId, setReceiverId] = useState<number | null>(null);
+  const [animalId, setAnimalId] = useState<number | null>(null);
 
-  const openModal = (content: string, senderId?: number, receiverId?: number) => {
+  const openModal = (content: string, senderId?: number, receiverId?: number, id?: number) => {
     setModalContent(content);
     setSenderId(senderId || null);
-    setReceiverId(receiverId || null); 
-    setIsActive(true); 
+    setReceiverId(receiverId || null);
+    setAnimalId(id || null);  // Utilisez l'argument `id`
+    setIsActive(true);
   };
 
   const closeModal = () => {
@@ -39,7 +43,7 @@ export function ModalProvider({ children }: ModalProviderProps) {
   };
 
   return (
-    <ModalContext.Provider value={{ isActive, openModal, closeModal, modalContent, setModalContent,senderId, receiverId  }}>
+    <ModalContext.Provider value={{ isActive, openModal, closeModal, modalContent, setModalContent,senderId, receiverId, animalId  }}>
       {children}
     </ModalContext.Provider>
   );

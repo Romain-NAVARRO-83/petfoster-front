@@ -1,164 +1,165 @@
-// j'ai changé la fonction filtre par un tri alphabétique par click
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useAuth } from '../../hooks/AuthContext';
+import { User } from 'src/@interfaces/user';
 
-import React, { useState } from 'react';
-import { Heading, Section, Notification } from 'react-bulma-components';
-
+// Composant principal de la page de filtrage des demandes
 const FilterPage = () => {
+  const [myUser, setMyUser] = useState<User | null>(null); // Stocker les données de l'utilisateur connecté
+  const [loading, setLoading] = useState(true); // État pour afficher le chargement
+  const [fetchError, setFetchError] = useState<string | null>(null); // Stocker les erreurs de récupération de données
+  const { user: connectedUser } = useAuth(); // Récupérer l'utilisateur connecté via le contexte d'authentification
+  const [requestUserDetails, setRequestUserDetails] = useState<Record<number, User>>({}); // Stocker les détails des utilisateurs liés aux demandes
+  const [requestAnimalDetails, setRequestAnimalDetails] = useState<Record<number, Animal>>({}); // Stocker les détails des animaux liés aux demandes
 
-  // État pour gérer les données et l'ordre de tri
-  const [data, setData] = useState([
+  // Effet pour récupérer les données de l'utilisateur connecté
+  useEffect(() => {
+    if (connectedUser) {
+      console.log(connectedUser.userType);
 
-    { animal: 'Chat', demandeur: 'Alice', statut: 'En attente' },
-    { animal: 'Chien', demandeur: 'Bob', statut: 'Approuvé' },
+      // Requête pour récupérer les données de l'utilisateur connecté
+      axios
+        .get(`http://localhost:3000/api/users/${connectedUser.userId}`)
+        .then((response) => {
+          const userData = response.data;
+          setMyUser(userData); // Stocker les données de l'utilisateur
+          setLoading(false); // Fin du chargement
 
-  ]);
+          // Fonction asynchrone pour récupérer les détails des utilisateurs et des animaux liés aux demandes
+          const fetchFosterlingDetails = async () => {
+            const userRequests = userData.fosterlingRequests || [];
 
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
+            // Promesses pour récupérer les détails des utilisateurs liés aux demandes
+            const userDetailsPromises = userRequests.map((request) =>
+              axios.get(`http://localhost:3000/api/users/${request.users_id}`)
+            );
 
-  const sortedData = React.useMemo(() => {
+            // Promesses pour récupérer les détails des animaux liés aux demandes
+            const animalDetailsPromises = userRequests.map((request) =>
+              axios.get(`http://localhost:3000/api/animals/${request.animals_id}`)
+            );
 
-    let sortableData = [...data];
+            // Attendre que toutes les requêtes soient terminées
+            const userDetailsResponses = await Promise.all(userDetailsPromises);
+            const animalDetailsResponses = await Promise.all(animalDetailsPromises);
 
-    if (sortConfig !== null) {
+            // Créer un objet pour stocker les détails des utilisateurs en fonction de leur id
+            const userDetailsMap = userDetailsResponses.reduce((acc, userResponse) => {
+              acc[userResponse.data.id] = userResponse.data;
+              return acc;
+            }, {});
 
-      sortableData.sort((a, b) => {
+            // Créer un objet pour stocker les détails des animaux en fonction de leur id
+            const animalDetailsMap = animalDetailsResponses.reduce((acc, animalResponse) => {
+              acc[animalResponse.data.id] = animalResponse.data;
+              return acc;
+            }, {});
 
-        if (a[sortConfig.key] < b[sortConfig.key]) {
-          return sortConfig.direction === 'ascending' ? -1 : 1;
-        }
+            // Mettre à jour l'état avec les détails récupérés
+            setRequestUserDetails(userDetailsMap);
+            setRequestAnimalDetails(animalDetailsMap);
+          };
 
-        if (a[sortConfig.key] > b[sortConfig.key]) {
-          return sortConfig.direction === 'ascending' ? 1 : -1;
-        }
-
-        return 0;
-      });
-
+          // Lancer la récupération des détails des utilisateurs et des animaux
+          fetchFosterlingDetails();
+        })
+        .catch((error) => {
+          console.error('Erreur lors de la récupération des données:', error);
+          setFetchError('Erreur lors de la récupération des données.');
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
     }
+  }, [connectedUser]);
 
-    return sortableData;
-
-  }, [data, sortConfig]);
-
-  const requestSort = (key) => {
-
-    let direction = 'ascending';
-
-    if (
-      sortConfig.key === key &&
-      sortConfig.direction === 'ascending'
-    )
-
-    {
-      direction = 'descending';
-    }
-
-    setSortConfig({ key, direction });
-
-  };
-
-  const handleConfirm = () => {
-
+  // Fonction pour gérer la confirmation de validation
+  const handleConfirm = (requestId: number) => {
     if (window.confirm('Êtes-vous sûr de vouloir valider ?')) {
+      axios.post(`http://localhost:3000/api/requests/${requestId}/validate`)
+        .then(() => {
+          alert('Demande validée avec succès.');
+        })
+        .catch((error) => {
+          alert('Erreur lors de la validation de la demande.');
+          console.error(error);
+        });
     }
-
   };
+
+  // Affichage du chargement ou des erreurs
+  if (loading) return <p>Chargement...</p>;
+  if (fetchError) return <p>{fetchError}</p>;
 
   return (
     <>
-<div>
-  <Heading>Mes demandes</Heading>
-</div>
-<Section>
-  < Notification color={'info'} light={true}>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi quisquam, commodi, atque dolorum delectus aspernatur perferendis magnam corrupti totam, suscipit ipsa nam impedit corporis accusantium molestias quia obcaecati esse eligendi.</p>
-   </ Notification >
-</Section>
-    <section className="section">
-
-      <div className="container">
-
-        <table className="table is-fullwidth">
-
-          <thead>
-
-            <tr>
-
-              <th></th>  
-
-              <th>
-
-                <button className="button is-ghost" onClick={() => requestSort('animal')}>
-                  Nom animal
-                </button>
-
-              </th>
-
-              <th>
-
-                <button className="button is-ghost" onClick={() => requestSort('demandeur')}>
-                  Nom demandeur
-                </button>
-
-              </th>
-
-              <th>
-
-                <button className="button is-ghost" onClick={() => requestSort('statut')}>
-                  Statut
-                </button>
-
-              </th>
-
-              <th>Valider</th>
-
-            </tr>
-
-          </thead>
-
-          <tbody>
-
-            {sortedData.map((item, index) => (
-
-              <tr key={index}>
-
-                <td>
-                  <figure className="image is-48x48">
-                    <img src="avatar_placeholder.png" alt="Avatar" />
-                  </figure>
-                </td>
-
-                <td>
-                  <a href="#">{item.animal}</a>
-                </td>
-
-                <td>
-                  <a href="#">{item.demandeur}</a>
-                </td>
-
-                <td>{item.statut}</td>
-
-                <td>
-                  <button className="button is-primary" onClick={handleConfirm}>
-                    Valider
-                  </button>
-                </td>
-
-              </tr>
-
-            ))}
-
-          </tbody>
-
-        </table>
-
+      <div>
+        <h1 className='title'>Mes demandes</h1>
       </div>
-
-    </section>
+      <section className="section">
+        <div className='container'>
+          <div className='notification is-info is-light'>
+          {connectedUser.userType === 'association' ? (
+            <p>Cette page liste les demandes d'adopion (ou d'accueil temporaire) concernant les animaux que vous avez enregistré</p>
+          ) : (
+            <p>Cette page liste les demandes d'adoption que vous avez formulées. Si l'une d'elles est validée, vous pourrez le voir dans le tableau.</p>
+          )}
+          </div>
+        </div>
+        <div className="container">
+          <table className="table is-fullwidth">
+            <thead>
+              <tr>
+                <th>Image</th>  
+                <th>Nom animal</th>
+                <th>Nom demandeur</th>
+                <th>Statut</th>
+                {connectedUser.userType === 'association' && <th>Valider</th>}
+              </tr>
+            </thead>
+            <tbody>
+              {myUser?.fosterlingRequests?.map((item, index) => (
+                <tr key={index}>
+                  <td>
+                    <figure className="image is-48x48">
+                      <img
+                        src={requestAnimalDetails[item.animals_id]?.pictures[0]?.URL_picture || '/img/default.jpg'}
+                        alt={requestAnimalDetails[item.animals_id]?.name || 'Animal'}
+                        width="64"
+                        height="64"
+                      />
+                    </figure>
+                  </td>
+                  <td>
+                    <a href={`/animal/${requestAnimalDetails[item.animals_id]?.id}`}>
+                      {requestAnimalDetails[item.animals_id]?.name || 'Chargement...'}
+                    </a>
+                  </td>
+                  <td>
+                    <a href="#">
+                      {requestUserDetails[item.users_id]?.name || 'Chargement...'}
+                    </a>
+                  </td>
+                  <td>
+                    {item.request_status === 'Pending' && (<span className="tag is-warning">En attente</span>)}
+                    {item.request_status === 'Rejected' && (<span className="tag is-danger">Rejetée</span>)}
+                    {item.request_status === 'Approved' && (<span className="tag is-success">Validée</span>)}
+                  </td>
+                  {connectedUser.userType === 'association' && (
+                    <td>
+                      <button className="button is-primary" onClick={() => handleConfirm(item.id)}>
+                        Valider
+                      </button>
+                    </td>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
     </>
   );
-
 };
 
 export default FilterPage;
-

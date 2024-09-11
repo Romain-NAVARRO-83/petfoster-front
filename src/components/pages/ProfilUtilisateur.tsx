@@ -9,6 +9,12 @@ import FosterlingProfile from '../partials/FosterlingProfile'; // Profils d'accu
 import { useAuth } from '../../hooks/AuthContext'; // Importer le contexte d'authentification
 import { Animal } from 'src/@interfaces/animal';
 
+
+interface Image {
+  url: string;
+  thumbnail: string;
+}
+
 // Définir le type User
 interface User {
   id: number;
@@ -28,6 +34,7 @@ interface User {
   created_at: string; // Peut-être utiliser `Date` si vous préférez
   updated_at: string | null;
   userAnimals: Animal[]; 
+  images?: Image[]; // Ajoute la propriété `images` dans l'interface `User`
 }
 
 // Définir le type pour les profils d'accueil
@@ -114,7 +121,7 @@ function ProfilUtilisateur() {
 
         <Container>
 {/* Info -  uniquement si l'utilisateur connecté est le propriétaire du profil */}
-{connectedUser && user && connectedUser.userId === parseInt(id) && (
+{connectedUser && user && id && connectedUser.userId === parseInt(id) && (
   <p className='notification is-primary has-text-centered'>
     Ceci est votre profil, vous pouvez l'éditer grâce au bouton présent plus bas.
   </p>
@@ -186,33 +193,30 @@ function ProfilUtilisateur() {
 {/* Bloc d'info : Connectez-vous pour contacter */}
 {!connectedUser && (
   <div className='notification is-info is-light has-text-right is-pulled-right'>
-    <p>Connectez-vous à votre compte pour pouvoir contacter {user.name}</p>
+    <p>Connectez-vous à votre compte pour pouvoir contacter {user?.name}</p>
     <Link to="/connexion" className='button is-primary'>Se connecter</Link>
   </div>
 )}
 
 {/* Bouton "Contacter" - Affiché uniquement si l'utilisateur connecté n'est pas le propriétaire du profil et s'il est connecté */}
-{connectedUser && user && connectedUser.userId !== parseInt(id) && (
+{user && connectedUser && (
   <Button
     color="primary"
     className="is-pulled-right"
     onClick={() => openModal('contactUser', connectedUser.userId, user.id)}
   >
-    <Envelope /> Contacter
+    Contacter
   </Button>
 )}
 
 
 {/* Bouton "Éditer" - Affiché uniquement si l'utilisateur connecté est le propriétaire du profil */}
-{connectedUser && user && connectedUser.userId === parseInt(id) && (
+{connectedUser && user && id !== undefined && connectedUser.userId === parseInt(id) && (
   <Button color="primary" className="is-pulled-right" onClick={() => openModal('editUserProfile')}>
     <Pencil /> Éditer
   </Button>
 )}
-
-
-
-        </Container>
+      </Container>
 
       </Section>
 
@@ -225,10 +229,10 @@ function ProfilUtilisateur() {
           </h2>
 
 {/* Bouton "Ajouter" - Affiché uniquement si l'utilisateur connecté est le propriétaire du profil */}
-{connectedUser && user && connectedUser.userId === parseInt(id) && (
+{connectedUser && user && id !== undefined && connectedUser.userId === parseInt(id) && (
   <Button color="primary" className="is-pulled-right" onClick={() => openModal('addFosterlingProfile')}>
-  <PlusSmall /> Ajouter
-</Button>
+    <PlusSmall /> Ajouter
+  </Button>
 )}
           
 

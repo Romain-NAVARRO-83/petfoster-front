@@ -19,7 +19,7 @@ const userIcon = new LeafletIcon({
 });
 
 interface IFitMapToBoundsProps {
-  users: User[];
+  users: User[] | null;
   animal: Animal | null;
   location: { lat: number; lng: number } | null;
 }
@@ -61,7 +61,7 @@ function FitMapToBounds({ users, animal, location }: IFitMapToBoundsProps) {
 }
 
 interface MapComponentProps {
-  users: User[];
+  users: User[] | null;
   animal: Animal | null;
 }
 
@@ -127,6 +127,7 @@ function MapComponent({ users, animal }: MapComponentProps) {
               {user.name}
               <br />
               <Link to={`/profil/${user.id}`}>Voir le profil</Link>
+              {/* {JSON.stringify(user)} */}
               {user.userAnimals && user.userAnimals.map((index) => (
                 <span key={index.animal.id}>{index.animal.name}</span>
               ))}

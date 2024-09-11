@@ -1,32 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import AnimalItemList from '../partials/AnimalItemList';
-import { Heading, Section, Columns, Container } from 'react-bulma-components';
 import { useModal } from '../../hooks/ModalContext';
 import { useAuth } from '../../hooks/AuthContext';
 import { PlusSmall } from 'react-flaticons';
+import { User } from 'src/@interfaces/user';
 
 const MesAnimaux = () => {
   // State pour stocker les animaux (du user)
-  const [myUser, setMyUser] = useState<any[]>([]);
+  const [myUser, setMyUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
   const { openModal } = useModal();
   const { user: connectedUser } = useAuth(); 
+  const navigate = useNavigate();
+  // Si l'utilisateur n'est pas connecté, rediriger vers la page d'accueil'
+  useEffect(() => {
+    
+    if (!connectedUser) {
+      navigate('/'); 
+    }
+  }, [connectedUser, navigate]);
 
   // Récupérer les animaux de l'utilisateur
   useEffect(() => {
-
     console.log('Connected user:', connectedUser);
+    if(!connectedUser){
+
+    }
     
     if (connectedUser) {
       axios
         .get(`http://localhost:3000/api/users/${connectedUser.userId}`) 
         .then((response) => {
-          console.log('Animals data:', response.data); 
-          setMyUser(response.data);  
+          console.log('User data:', response.data); 
+          setMyUser(response.data);  // Assurez-vous que `response.data` contient bien la structure attendue pour `myUser`
           setLoading(false);            
         })
         .catch((error) => {
@@ -41,16 +51,14 @@ const MesAnimaux = () => {
 
   return (
     <>
-   
       <main>
         <div>
           <h1 className="title">Mes animaux</h1>
         </div>
 
-
         <section className="section">
           <div className="has-text-centered">
-            {connectedUser && (
+            {connectedUser && connectedUser.userType === 'association' && (
               <button
                 className="button is-primary is-pulled-right"
                 onClick={() => openModal('createAnimal')}
@@ -61,59 +69,53 @@ const MesAnimaux = () => {
           </div>
         </section>
 
-
+        {/* Chargement ou message d'erreur */}
         {loading ? (
           <p>Chargement...</p>
         ) : fetchError ? (
           <p>{fetchError}</p>
         ) : (
-          <Container>
-            <Columns className="is-multiline">
-            <p>
-            Problème : il faut récupérer les animaux créés par l'user ainsi que ceux hébérgés par l'user.
-            </p>
-            {/* {JSON.stringify(myUser)} */}
-              {myUser.userAnimals.length > 0 ? (
-                myUser.userAnimals.map((animal: any) => (
-                  <Columns.Column size={12} className="is-fullwidth" key={animal.id}>
-                    <AnimalItemList animal={animal} />
-                  </Columns.Column>
+          <div className='container columns is-multiline'>
+            {/* Liste des animaux créés */}
+            { connectedUser?.userType && connectedUser.userType === 'association' && (
+              <div className='column is-full is-half-desktop'>
+              <h2 className='title'>Animaux créés</h2>
+              {/* {JSON.stringify(myUser?.createdAnimals)} */}
+                {myUser?.createdAnimals && myUser.createdAnimals.length > 0 ? (
+                  myUser.createdAnimals.map((oneAnimal) => (
+                    <>
+                      {/* {JSON.stringify(oneAnimal)} */}
+                      -<AnimalItemList animal={oneAnimal} />
+                      </>
+                  ))
+                ) : (
+                  <div className='notification is-info is-light '>
+                  <p className='is-full has-text-centered'>Vous n'avez pas encore créé d'animaux.</p>
+                  </div>
+                )}
+              </div>
+            )}
+            
+
+            {/* Liste des animaux hébergés */}
+           
+            <div className={connectedUser?.userType === 'association' ? 'column is-full is-half-desktop': 'column is-full'}>
+            <h2 className='title'>Animaux hébergés</h2>
+              {myUser?.userAnimals && myUser.userAnimals.length > 0 ? (
+                myUser.userAnimals.map((animal) => (
+                  animal.name
+                    
+                  
                 ))
               ) : (
-                <p>Vous n'avez pas encore ajouté d'animaux.</p>
+                <div className='notification is-info is-light '>
+                <p className='is-full has-text-centered'>Vous n'hébergez aucun animal pour le moment.<br/>
+                Vous pouvez <strong>Créer un profil d'accueil</strong></p>
+                </div>
               )}
-            </Columns>
-          </Container>
+            </div>
+          </div>
         )}
-
-        {/* Bloc d'information */}
-        <Section className="info-block">
-          <Heading renderAs="h2">Vous souhaitez affiner votre recherche?</Heading>
-          <Columns className="container">
-            <Columns.Column
-              mobile={{ size: 12 }}
-              tablet={{ size: 12 }}
-              desktop={{ size: 6 }}
-            >
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis
-                facere iure similique cum ab maiores iste quod. Temporibus facilis
-                facere enim ad voluptatum! Nihil recusandae, iure soluta nam cum
-                explicabo.
-              </p>
-            </Columns.Column>
-            <Columns.Column
-              mobile={{ size: 12 }}
-              tablet={{ size: 12 }}
-              desktop={{ size: 6 }}
-              className="has-text-centered"
-            >
-              <Link className="is-primary button" to="/trouver-animal">
-                Voir les animaux
-              </Link>
-            </Columns.Column>
-          </Columns>
-        </Section>
       </main>
     </>
   );
