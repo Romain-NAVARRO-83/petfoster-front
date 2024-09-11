@@ -7,22 +7,25 @@ import { Tooltip } from 'react-tooltip';
 // Définir le type des props pour le profil d'accueil
 interface FosterlingProfileProps {
   profile: {
-    species: string;
-    age: string;
-    gender: string;
-    perimeter: string;
+    species_id: string | number;
+    age: string | number;
+    sexe: string;
+    search_area: string | number;
+    quantity:number
   };
 }
 
-const FosterlingProfile: React.FC<FosterlingProfileProps> = ({ profile }) => {
+function FosterlingProfile({ profile }: FosterlingProfileProps) {
   const { openModal } = useModal();
-
+  console.log(profile);
+  
   return (
     <tr>
-      <td>{profile.species}</td>
+      <td>{profile.species_id}</td>
       <td>{profile.age}</td>
-      <td>{profile.gender}</td>
-      <td>{profile.perimeter}</td>
+      <td>{profile.sexe}</td>
+      <td>{profile.quantity}</td>
+      <td>{profile.search_area} Km</td>
       <td className='has-text-right'>
         <Button
           color="primary"
@@ -48,6 +51,6 @@ const FosterlingProfile: React.FC<FosterlingProfileProps> = ({ profile }) => {
       </td>
     </tr>
   );
-};
+}
 
 export default FosterlingProfile;

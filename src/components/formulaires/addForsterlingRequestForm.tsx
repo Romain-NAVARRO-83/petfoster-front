@@ -28,8 +28,9 @@ function AddFosterlingRequestForm({ senderId, animalId }: AddFosterlingRequestFo
 
   const [formData, setFormData] = useState({
     content_request: '',
-    users_id: senderId || null,    // Utiliser senderId passé en prop
-    animals_id: animalId || null,    // Utiliser animalId passé en prop
+    users_id: senderId || null,
+    animals_id: animalId || null,    
+    request_status: "pending"
   });
 
   // Gestion des changements dans le champ texte

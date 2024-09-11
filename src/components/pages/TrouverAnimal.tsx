@@ -15,15 +15,14 @@ import { Animal } from 'src/@interfaces/animal';
 function TrouverAnimal() {
 const{location} = useGeolocation();
 // console.log(location);
-  // State to handle form data
   const [formData, setFormData] = useState({
     species: '',
     age: '',
     sexe: '',
-    search_area: 30, // Default search area value
+    search_area: 30, 
   });
 
-  // Handle form input changes
+  
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
@@ -36,28 +35,6 @@ const{location} = useGeolocation();
     console.log(formData);
     // formData.species != "" && setAllAnimals
   }
-
-  // Fetch animals
-  // const [allAnimals, setAllAnimals] = useState<any>(null);
-  // const [loading, setLoading] = useState(true);
-  // const [fetchError, setFetchError] = useState<string | null>(null);
-  // const [allSpecies, setAllSpecies] = useState<string[] | []>([])
-
-  // useEffect(() => {
-  //   axios
-  //     .get('http://localhost:3000/api/animals') 
-  //     .then((response) => {
-  //       setAllAnimals(response.data);  
-  //       setLoading(false);   
-  //       console.log(allAnimals);
-  //       // Extract the unique species using a Set
-  //       setAllSpecies( Array.from(new Set(allAnimals.map(newanimal => animal.species.name)))   )
-  //     })
-  //     .catch(() => {
-  //       setFetchError('Error fetching data');  
-  //       setLoading(false);
-  //     });
-  // }, []);
 
   // Fetch users
   const [allUsers, setAllUsers] = useState<User[] | null>(null);
@@ -90,7 +67,7 @@ const{location} = useGeolocation();
   const [filterOpen, setFilterOpen] = useState<boolean>(false);
   // Handler du toggle des filtres
   const handleFilterOpen = () => {
-    setFilterOpen(!filterOpen);  // Toggle the clicked state
+    setFilterOpen(!filterOpen);  
   };
 
   return (
@@ -108,8 +85,8 @@ const{location} = useGeolocation();
         )}
         {foundUsersAnimals && foundUsersAnimals
   .filter((item: any) => 
-    (formData.species === "" || item.species.name === formData.species) &&  // Filter par espece si espece !=""
-    (formData.sexe === "" || item.sexe === formData.sexe)  // Filter par sexe si sexe !=""
+    (formData.species === "" || item.species.name === formData.species) &&  
+    (formData.sexe === "" || item.sexe === formData.sexe)
   )
   .map((item: any) => (
     <AnimalItemList animal={item} key={item.id} />

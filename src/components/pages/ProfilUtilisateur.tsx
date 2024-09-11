@@ -91,7 +91,7 @@ function ProfilUtilisateur() {
         // setFosterlingProfiles(fosterlingResponse.data);
       } catch (error) {
         if (typeof error === 'object' && error !== null && 'message' in error) {
-          setError(error as Error); // Type assertion pour s'assurer qu'il s'agit d'une instance Error
+          setError(error as Error); 
         } else {
           setError(new Error("An unknown error occurred"));
         }
@@ -230,13 +230,13 @@ function ProfilUtilisateur() {
 
 {/* Bouton "Ajouter" - Affiché uniquement si l'utilisateur connecté est le propriétaire du profil */}
 {connectedUser && user && id !== undefined && connectedUser.userId === parseInt(id) && (
-  <Button color="primary" className="is-pulled-right" onClick={() => openModal('addFosterlingProfile')}>
+  <Button color="primary" className="is-pulled-right" onClick={() => openModal('addFosterlingProfile', connectedUser.userId )}>
     <PlusSmall /> Ajouter
   </Button>
 )}
-          
+          {/* {JSON.stringify(user)} */}
 
-          <Table className="is-fullwidth has-text-centered card">
+          <table className=" table is-fullwidth has-text-centered card">
 
             <thead>
 
@@ -244,6 +244,7 @@ function ProfilUtilisateur() {
                 <th className="has-text-centered">Espèce</th>
                 <th className="has-text-centered">Âge</th>
                 <th className="has-text-centered">Sexe</th>
+                <th className="has-text-centered">Quantité</th>
                 <th className="has-text-centered">Périmètre</th>
                 <th className="has-text-right">Contrôle</th>
               </tr>
@@ -252,13 +253,13 @@ function ProfilUtilisateur() {
 
             <tbody>
 
-              {/* {fosterlingProfiles.map((profile) => (
+              {user?.fosterlingProfiles.map((profile) => (
                 <FosterlingProfile key={profile.id} profile={profile} />
-              ))} */}
+              ))}
 
             </tbody>
 
-          </Table>
+          </table>
           <h2 className='title'>Animaux</h2>
 
         </Container>

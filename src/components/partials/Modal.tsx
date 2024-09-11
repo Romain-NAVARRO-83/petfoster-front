@@ -42,7 +42,7 @@ function MainModal() {
             <ContactUserForm senderId={senderId} receiverId={receiverId} />
           )}
 
-          {modalContent === 'addFosterlingProfile' && <AddFosterlingProfileForm />}
+          {modalContent === 'addFosterlingProfile' && <AddFosterlingProfileForm userId={senderId}/>}
 
           {modalContent === 'editUserProfile' && <EditProfileForm />}
 
