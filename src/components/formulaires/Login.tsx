@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '../../hooks/AuthContext';
 import { useNavigate } from 'react-router-dom'; 
 import { useToast } from '../../hooks/ToastContext';
+import { useEffect } from 'react';
 
 function LoginForm() {
   // State pour le login
@@ -15,10 +16,23 @@ function LoginForm() {
   const [passwordErrorLogin, setPasswordErrorLogin] = useState<string>('');
   const [submitErrorLogin, setSubmitErrorLogin] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false); // Gérer l'état de soumission
+  const [csrfToken, setCsrfToken] = useState<string | null>(null);
 
   const { login } = useAuth();
   const navigate = useNavigate(); 
   const { showSuccessToast, showErrorToast } = useToast();
+
+  useEffect(() => {
+    const fetchCsrfToken = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/csrf-token');
+        setCsrfToken(response.data);
+      } catch (error) {
+        console.error('Erreur lors de la récupération du token CSRF:', error);
+      }
+    };
+    fetchCsrfToken();
+  }, []);
 
   // Validation email
   const validateEmailLogin = (email: string): boolean => {
@@ -51,9 +65,16 @@ function LoginForm() {
       setIsSubmitting(true); // Activer le mode soumission pour désactiver le bouton
       try {
         const response = await axios.post('http://localhost:3000/api/login', {
+
           email: emailLogin.trim(),
           password: passwordLogin.trim(),
-        });
+        },
+        /*{
+          headers: {
+            'x-xsrf-token': csrfToken || '',
+          },
+        }*/
+      ); 
 
         if (response.status === 200) {
           const token = response.data.token;
