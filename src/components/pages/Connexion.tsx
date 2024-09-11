@@ -4,6 +4,7 @@ import LoginForm from '../formulaires/Login';
 import { SingleValue } from 'react-select';
 import AsyncSelect from 'react-select/async';
 import { useToast } from '../../hooks/ToastContext';
+import axios from 'axios';
 
 
 type Coordinates = {
@@ -47,6 +48,19 @@ const fetchCities = async (country: string, searchTerm: string) => {
 
 
 const RegistrationPage = () => {
+    const [csrfToken, setCsrfToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCsrfToken = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/csrf-token');
+        setCsrfToken(response.data);
+      } catch (error) {
+        console.error('Erreur lors de la récupération du token CSRF:', error);
+      }
+    };
+    fetchCsrfToken();
+  }, []);
     const { showSuccessToast, showErrorToast } = useToast();
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState('');
@@ -192,6 +206,7 @@ const RegistrationPage = () => {
                 setLoading(true); 
                 const success = await handleCoordinatesUpdate(); // Appel asynchrone avec await
                 setLoading(false); 
+                console.log(csrfToken);
         
                 if (!success) {
                     return; // Arrêter si la géolocalisation échoue
@@ -216,7 +231,10 @@ const RegistrationPage = () => {
                 try {
                     const response = await fetch('http://localhost:3000/api/users', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: { 
+                            'Content-Type': 'application/json',
+                        'x-xsrf-token': csrfToken || ''
+                    },
                         body: JSON.stringify(newUser),
                     });
         
@@ -235,44 +253,44 @@ const RegistrationPage = () => {
         }
 
      // Si toutes les validations sont passées
-     if (isValid) {
-        const newUser = {
-            type_user: userType,
-            name: name,
-            email: email,
-            password: password,
-            country: selectedCountry,
-            zip: postalCode,
-            city: selectedCity,
-            phone: phoneNumber,
-            address: address,
-            longitude: coordinates.lng,
-            latitude: coordinates.lat,
-        };
+    //  if (isValid) {
+    //     const newUser = {
+    //         type_user: userType,
+    //         name: name,
+    //         email: email,
+    //         password: password,
+    //         country: selectedCountry,
+    //         zip: postalCode,
+    //         city: selectedCity,
+    //         phone: phoneNumber,
+    //         address: address,
+    //         longitude: coordinates.lng,
+    //         latitude: coordinates.lat,
+    //     };
 
-        console.log("Données envoyées au serveur : ", newUser);
+    //     console.log("Données envoyées au serveur : ", newUser);
 
-        try {
-            const response = await fetch('http://localhost:3000/api/users', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newUser),
-            });
+    //     try {
+    //         const response = await fetch('http://localhost:3000/api/users', {
+    //             method: 'POST',
+    //             headers: { 'Content-Type': 'application/json' },
+    //             body: JSON.stringify(newUser),
+    //         });
 
-            if (!response.ok) {
-                // Ajoutez un log de la réponse pour voir plus de détails
-                const errorData = await response.json();
-                console.error("Erreur lors de la requête : ", errorData);
-                throw new Error(`Erreur lors de la requête : ${response.status}`);
-            }
+    //         if (!response.ok) {
+    //             // Ajoutez un log de la réponse pour voir plus de détails
+    //             const errorData = await response.json();
+    //             console.error("Erreur lors de la requête : ", errorData);
+    //             throw new Error(`Erreur lors de la requête : ${response.status}`);
+    //         }
 
-            const result = await response.json();
-            console.log("Utilisateur créé avec succès :", result);
-        } catch (error) {
-            console.error("Erreur lors de la requête :", error);
-            alert("Une erreur est survenue lors de l'inscription. Veuillez réessayer.");
-        }
-    }
+    //         const result = await response.json();
+    //         console.log("Utilisateur créé avec succès :", result);
+    //     } catch (error) {
+    //         console.error("Erreur lors de la requête :", error);
+    //         alert("Une erreur est survenue lors de l'inscription. Veuillez réessayer.");
+    //     }
+    // }
 };
 
     // Récupération de la liste des pays via l'API REST Countries
