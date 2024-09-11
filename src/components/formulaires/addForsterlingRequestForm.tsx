@@ -9,6 +9,7 @@ interface AddFosterlingRequestFormProps {
 }
 
 function AddFosterlingRequestForm({ senderId, animalId }: AddFosterlingRequestFormProps) {
+  console.log('animalId:', animalId);
   // Récupérer le token CSRF pour la requête sécurisée
   const [csrfToken, setCsrfToken] = useState<string | null>(null);
   
@@ -26,9 +27,9 @@ function AddFosterlingRequestForm({ senderId, animalId }: AddFosterlingRequestFo
   }, []);
 
   const [formData, setFormData] = useState({
-    content: '',
-    sender_id: senderId || null,    // Utiliser senderId passé en prop
-    animal_id: animalId || null,    // Utiliser animalId passé en prop
+    content_request: '',
+    users_id: senderId || null,    // Utiliser senderId passé en prop
+    animals_id: animalId || null,    // Utiliser animalId passé en prop
   });
 
   // Gestion des changements dans le champ texte
@@ -45,7 +46,7 @@ function AddFosterlingRequestForm({ senderId, animalId }: AddFosterlingRequestFo
     e.preventDefault();
     
     try {
-      await axios.post('http://localhost:3000/api/messages', formData, {
+      await axios.post('http://localhost:3000/api/requests', formData, {
         headers: {
           'x-xsrf-token': csrfToken || '', // Inclure le token CSRF dans les headers
         },
@@ -55,6 +56,7 @@ function AddFosterlingRequestForm({ senderId, animalId }: AddFosterlingRequestFo
     } catch (error) {
       console.error('Erreur lors de l\'envoi du message', error);
       showErrorToast('Erreur lors de l\'envoi du message.');
+      console.log(formData)
     }
   };
 
@@ -68,16 +70,16 @@ function AddFosterlingRequestForm({ senderId, animalId }: AddFosterlingRequestFo
       <p>Demandeur : {senderId}</p>
       <p>Animal : {animalId}</p>
       <textarea
-        name="content"
-        id="content"
-        value={formData.content}
+        name="content_request"
+        id="content_request"
+        value={formData.content_request}
         onChange={handleChange}
         placeholder="Tapez votre message"
         className='textarea'
       />
       {/* Champs cachés pour l'expéditeur et le destinataire */}
-      <input type="hidden" value={senderId || ''} name="sender_id" id="sender_id"/>
-      <input type="hidden" value={animalId || ''} name="animal_id" id="animal_id"/>
+      <input type="hidden" value={senderId || ''} name="users_id" id="users_id"/>
+      <input type="hidden" value={animalId || ''} name="animals_id" id="animals_id"/>
       <button type="submit" className='button is-primary is-fullwidth'>Envoyer le message</button>
     </form>
   );

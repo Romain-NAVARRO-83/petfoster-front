@@ -27,11 +27,12 @@ export function ModalProvider({ children }: ModalProviderProps) {
   const [receiverId, setReceiverId] = useState<number | null>(null);
   const [animalId, setAnimalId] = useState<number | null>(null);
 
-  const openModal = (content: string, senderId?: number, receiverId?: number) => {
+  const openModal = (content: string, senderId?: number, receiverId?: number, id?: number) => {
     setModalContent(content);
     setSenderId(senderId || null);
-    setReceiverId(receiverId || null); 
-    setIsActive(true); 
+    setReceiverId(receiverId || null);
+    setAnimalId(id || null);  // Utilisez l'argument `id`
+    setIsActive(true);
   };
 
   const closeModal = () => {

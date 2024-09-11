@@ -69,11 +69,11 @@ function LoginForm() {
           email: emailLogin.trim(),
           password: passwordLogin.trim(),
         },
-        /*{
+        {
           headers: {
             'x-xsrf-token': csrfToken || '',
           },
-        }*/
+        }
       ); 
 
         if (response.status === 200) {
