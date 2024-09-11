@@ -72,7 +72,7 @@ const{location} = useGeolocation();
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/api/users?perimeter=300000&latitude=${location?.lat}&longitude=${location?.lng}`) 
+      .get(`http://localhost:3000/api/users?perimeter=1000000&latitude=${location?.lat}&longitude=${location?.lng}`) 
       .then((response) => {
         setAllUsers(response.data);  
         setLoadingUsers(false);   

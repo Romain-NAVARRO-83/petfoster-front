@@ -12,6 +12,13 @@
     height: 100px;
     margin-bottom: -50px
 } */
+
+
+body {
+    font-family: 'Georama', Arial, sans-serif;
+  }
+
+
 .navbar-brand a img:first-child {
     margin: 10px 20px -30px 20px;
     vertical-align: top;
