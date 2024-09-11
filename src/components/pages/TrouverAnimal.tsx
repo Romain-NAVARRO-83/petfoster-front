@@ -38,26 +38,26 @@ const{location} = useGeolocation();
   }
 
   // Fetch animals
-  const [allAnimals, setAllAnimals] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [fetchError, setFetchError] = useState<string | null>(null);
-  const [allSpecies, setAllSpecies] = useState<string[] | []>([])
+  // const [allAnimals, setAllAnimals] = useState<any>(null);
+  // const [loading, setLoading] = useState(true);
+  // const [fetchError, setFetchError] = useState<string | null>(null);
+  // const [allSpecies, setAllSpecies] = useState<string[] | []>([])
 
-  useEffect(() => {
-    axios
-      .get('http://localhost:3000/api/animals') 
-      .then((response) => {
-        setAllAnimals(response.data);  
-        setLoading(false);   
-        console.log(allAnimals);
-        // Extract the unique species using a Set
-        setAllSpecies( Array.from(new Set(allAnimals.map(newanimal => animal.species.name)))   )
-      })
-      .catch(() => {
-        setFetchError('Error fetching data');  
-        setLoading(false);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get('http://localhost:3000/api/animals') 
+  //     .then((response) => {
+  //       setAllAnimals(response.data);  
+  //       setLoading(false);   
+  //       console.log(allAnimals);
+  //       // Extract the unique species using a Set
+  //       setAllSpecies( Array.from(new Set(allAnimals.map(newanimal => animal.species.name)))   )
+  //     })
+  //     .catch(() => {
+  //       setFetchError('Error fetching data');  
+  //       setLoading(false);
+  //     });
+  // }, []);
 
   // Fetch users
   const [allUsers, setAllUsers] = useState<User[] | null>(null);
@@ -72,7 +72,7 @@ const{location} = useGeolocation();
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/api/users?perimeter=500000&latitude=${location?.lat}&longitude=${location?.lng}`) 
+      .get(`http://localhost:3000/api/users?perimeter=300000&latitude=${location?.lat}&longitude=${location?.lng}`) 
       .then((response) => {
         setAllUsers(response.data);  
         setLoadingUsers(false);   
@@ -99,9 +99,10 @@ const{location} = useGeolocation();
       <div>
         <Heading>Trouver un animal</Heading>
       </div>
-{JSON.stringify(foundUsersAnimals)}
+{/*JSON.stringify(foundUsersAnimals)*/}
       <Section className="columns">
         <Columns.Column mobile={{ size: 12 }} tablet={{ size: 12 }} desktop={{ size: 6 }} className="animal-list">
+        <h2 className='subtitle'>{foundUsersAnimals?.length} animaux trouvés dans un périmètre de XXX Km</h2>
         {foundUsersAnimals && foundUsersAnimals
   .filter((item: any) => 
     (formData.species === "" || item.species.name === formData.species) &&  // Filter par espece si espece !=""
