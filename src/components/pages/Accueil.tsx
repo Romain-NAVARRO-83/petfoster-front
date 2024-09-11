@@ -11,12 +11,8 @@ import AnimalItemList from '../partials/AnimalItemList';
 import MapComponent from '../partials/MapComponent';
 import { Link } from 'react-router-dom';
 import { useGeolocation } from "../../hooks/GeolocationContext";
-import { getDistance } from 'geolib'; // Assurez-vous d'importer cette fonction
 
 const defaultPosition: LatLngExpression = [43.3365, 1.3396];
-
-// Rayon de recherche en mètres pour la carte
-const searchRadius = 600000;
 
 // Icône personnalisée pour la position de l'utilisateur
 const userIcon = new Icon({
@@ -70,30 +66,8 @@ function Accueil() {
       });
   }, []);
 
-  // Filtrer les animaux et utilisateurs en fonction de la distance par rapport à la position de l'utilisateur
-  useEffect(() => {
-    if (location && allAnimals && allUsers) {
-      const filteredAnimals = allAnimals.filter((animal: any) => {
-        const distance = getDistance(
-          { latitude: location.lat, longitude: location.lng },
-          { latitude: animal.creator.latitude, longitude: animal.creator.longitude }
-        );
-        return distance <= searchRadius; // Garde les animaux dans le rayon
-      });
-
-      const filteredUsers = allUsers.filter((user: any) => {
-        const distance = getDistance(
-          { latitude: location.lat, longitude: location.lng },
-          { latitude: parseFloat(user.latitude), longitude: parseFloat(user.longitude) }
-        );
-        return distance <= searchRadius; // Garde les utilisateurs dans le rayon
-      });
-
-      setAllAnimals(filteredAnimals);
-      setAllUsers(filteredUsers);
-    }
-  }, [location, allAnimals, allUsers]);
-
+  // Suppression du filtrage par distance dans Accueil.tsx (donc on affiche tout)
+  
   return (
     <main>
       <Columns id="splash-screen" vCentered className="has-text-centered">
@@ -155,7 +129,7 @@ function Accueil() {
             desktop={{ size: 6 }}
             id="home-map-container"
           >
-            <MapComponent users={allUsers} animal={null} searchRadius={searchRadius} />
+            <MapComponent users={allUsers} animal={null} searchRadius={null} /> {/* Pas de cercle dans cette page */}
           </Columns.Column>
           <Columns.Column
             mobile={{ size: 12 }}

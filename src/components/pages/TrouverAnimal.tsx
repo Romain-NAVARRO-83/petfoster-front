@@ -123,7 +123,10 @@ const{location} = useGeolocation();
           desktop={{ size: 6 }}
           
         >
-          <MapComponent users={allUsers} />
+          <MapComponent 
+            users={allUsers} 
+            searchRadius={formData.search_area * 1000} // Convertir en mètres
+          />
         </Columns.Column>
       </Section>
 
