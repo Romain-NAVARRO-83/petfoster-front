@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { LatLngExpression, Icon } from 'leaflet';
 import {
   Heading,
@@ -11,13 +10,15 @@ import {
 import AnimalItemList from '../partials/AnimalItemList';
 import MapComponent from '../partials/MapComponent';
 import { Link } from 'react-router-dom';
-
 import { useGeolocation } from "../../hooks/GeolocationContext";
-
+import { getDistance } from 'geolib'; // Assurez-vous d'importer cette fonction
 
 const defaultPosition: LatLngExpression = [43.3365, 1.3396];
 
-// Icône personnalisée pour l'utilisateur
+// Rayon de recherche en mètres pour la carte
+const searchRadius = 600000;
+
+// Icône personnalisée pour la position de l'utilisateur
 const userIcon = new Icon({
   iconUrl: '/img/vector/your-position-marker.svg', 
   iconSize: [25, 41],  
@@ -30,42 +31,68 @@ function Accueil() {
   
   // Utiliser la position de l'utilisateur (ou celle par défaut)
   const mapCenter: LatLngExpression = location ? [location.lat, location.lng] : defaultPosition;
+
   // GESTION DU FETCH des animaux
   const [allAnimals, setAllAnimals] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
+  // GESTION DU FETCH des utilisateurs
+  const [allUsers, setAllUsers] = useState<any>(null);
+  const [loadingUsers, setLoadingUsers] = useState(true);
+  const [fetchUsersError, setFetchUsersError] = useState<string | null>(null);
+
+  // Fetch des animaux
   useEffect(() => {
     axios
       .get('http://localhost:3000/api/animals') 
       .then((response) => {
-        setAllAnimals(response.data);  
+        setAllAnimals(response.data);
         setLoading(false);       
       })
       .catch(() => {
-        setFetchError('Error fetching data');  
+        setFetchError('Erreur lors de la récupération des données');
         setLoading(false);
       });
   }, []);
 
-  //   GESTION DU FETCH des utilisateurs
-const [allUsers, setAllUsers] = useState<any>(null);
-const [loadingUsers, setLoadingUsers] = useState(true);
-const [fetchUsersError, setFetchUsersError] = useState<string | null>(null);
+  // Fetch des utilisateurs
+  useEffect(() => {
+    axios
+      .get('http://localhost:3000/api/users') 
+      .then((response) => {
+        setAllUsers(response.data);  
+        setLoadingUsers(false);       
+      })
+      .catch(() => {
+        setFetchUsersError('Erreur lors de la récupération des données');
+        setLoadingUsers(false);
+      });
+  }, []);
 
-useEffect(() => {
+  // Filtrer les animaux et utilisateurs en fonction de la distance par rapport à la position de l'utilisateur
+  useEffect(() => {
+    if (location && allAnimals && allUsers) {
+      const filteredAnimals = allAnimals.filter((animal: any) => {
+        const distance = getDistance(
+          { latitude: location.lat, longitude: location.lng },
+          { latitude: animal.creator.latitude, longitude: animal.creator.longitude }
+        );
+        return distance <= searchRadius; // Garde les animaux dans le rayon
+      });
 
-  axios
-    .get('http://localhost:3000/api/users') 
-    .then((response) => {
-      setAllUsers(response.data);  
-      setLoadingUsers(false);       
-    })
-    .catch(() => {
-        setFetchUsersError('Error fetching data');  
-      setLoadingUsers(false);
-    });
-}, []); 
+      const filteredUsers = allUsers.filter((user: any) => {
+        const distance = getDistance(
+          { latitude: location.lat, longitude: location.lng },
+          { latitude: parseFloat(user.latitude), longitude: parseFloat(user.longitude) }
+        );
+        return distance <= searchRadius; // Garde les utilisateurs dans le rayon
+      });
+
+      setAllAnimals(filteredAnimals);
+      setAllUsers(filteredUsers);
+    }
+  }, [location, allAnimals, allUsers]);
 
   return (
     <main>
@@ -89,55 +116,60 @@ useEffect(() => {
           </Link>
         </Columns.Column>
       </Columns>
+
       <Section>
         <Columns className='container'>
           <Columns.Column>
-          <Heading renderAs='h3'>Associations</Heading>
-            <p>
-              Les associations de protection animale jouent un rôle essentiel dans le sauvetage, les soins, et la réhabilitation des animaux abandonnés ou maltraités. Grâce à leur dévouement, des milliers d'animaux retrouvent chaque année un foyer aimant.
-            </p>
-            </Columns.Column>
-            <Columns.Column>
             <Heading renderAs='h3'>Familles d'accueil</Heading>
             <p>
-              Les familles d'accueil offrent un refuge temporaire aux animaux en attente d'adoption. Leur amour et leur patience permettent aux animaux de se rétablir et de s'épanouir avant de trouver leur foyer définitif.
+              Les familles d'accueil offrent un refuge temporaire aux animaux en attente d'adoption.
             </p>
-            </Columns.Column>
-            <Columns.Column>
+          </Columns.Column>
+
+          <Columns.Column>
+            <Heading renderAs='h3'>Associations</Heading>
+            <p>
+              Les associations jouent un rôle crucial dans la protection animale.
+            </p>
+          </Columns.Column>
+
+          <Columns.Column>
             <Heading renderAs='h3'>Adoptants</Heading>
             <p>
-              Les adoptants sont ceux qui ouvrent leur cœur et leur maison à un animal pour la vie. Leur décision d’adopter fait une différence immense en offrant à un animal une seconde chance et une famille pour toujours.
+              Les adoptants ouvrent leur foyer à des animaux pour la vie.
             </p>
           </Columns.Column>
         </Columns>
       </Section>
+
       <Section className='yellow-line'>
-      <Container className="info-block">
-        <Heading renderAs="h2">
-          {allAnimals?.length} animaux et {allUsers?.length} associations dans votre secteur
-        </Heading>
-      </Container>
-      <Columns className='container '>
-        <Columns.Column
-          mobile={{ size: 12 }}
-          tablet={{ size: 12 }}
-          desktop={{ size: 6 }}
-          id="home-map-container"
-        >
-          <MapComponent users={allUsers}/>
-        </Columns.Column>
-        <Columns.Column
-          mobile={{ size: 12 }}
-          tablet={{ size: 12 }}
-          desktop={{ size: 6 }}
-          className="animal-list"
-        >
-           {allAnimals && allAnimals.map((item: any) => (
-          <AnimalItemList animal={item} key={item.id}/>
-        ))}
-        </Columns.Column>
-      </Columns>
+        <Container className="info-block">
+          <Heading renderAs="h2">
+            {allAnimals?.length} animaux et {allUsers?.length} associations dans votre secteur
+          </Heading>
+        </Container>
+        <Columns className='container'>
+          <Columns.Column
+            mobile={{ size: 12 }}
+            tablet={{ size: 12 }}
+            desktop={{ size: 6 }}
+            id="home-map-container"
+          >
+            <MapComponent users={allUsers} animal={null} searchRadius={searchRadius} />
+          </Columns.Column>
+          <Columns.Column
+            mobile={{ size: 12 }}
+            tablet={{ size: 12 }}
+            desktop={{ size: 6 }}
+            className="animal-list"
+          >
+            {allAnimals && allAnimals.map((item: any) => (
+              <AnimalItemList animal={item} key={item.id} />
+            ))}
+          </Columns.Column>
+        </Columns>
       </Section>
+
       <Section className="info-block">
         <Heading renderAs="h2">Vous souhaitez affiner votre recherche?</Heading>
         <Columns className="container">
@@ -147,7 +179,7 @@ useEffect(() => {
             desktop={{ size: 6 }}
           >
             <p>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Debitis
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis
               facere iure similique cum ab maiores iste quod. Temporibus facilis
               facere enim ad voluptatum! Nihil recusandae, iure soluta nam cum
               explicabo.
@@ -173,3 +205,4 @@ useEffect(() => {
 }
 
 export default Accueil;
+
