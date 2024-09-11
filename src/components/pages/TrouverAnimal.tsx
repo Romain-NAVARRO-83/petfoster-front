@@ -101,11 +101,13 @@ const{location} = useGeolocation();
           
         >
           <MapComponent 
-            users={allUsers} 
-            searchRadius={formData.search_area * 1000} // Convertir en mètres
+            users={allUsers}
+            // searchRadius={formData.search_area * 1000} // Convertir en mètres
+            filters = {formData}
           />
         </Columns.Column>
       </Section>
+      {/* {console.log(formData)} */}
 
       <Section id="animal-filter" className={filterOpen ? "open" : ""}>
         <Button onClick={handleFilterOpen} className='is-ghost is-fullwidth'>
@@ -114,7 +116,7 @@ const{location} = useGeolocation();
         </Heading>
         </Button>
         
-        <form>
+        <form >
           <Columns className="container">
             <Columns.Column>
               <Field>
@@ -177,9 +179,9 @@ const{location} = useGeolocation();
                 <p>Périmètre : {formData.search_area} Km</p>
               </Field>
             </Columns.Column>
-            <Columns.Column narrow>
+            {/* <Columns.Column narrow>
             <Button type="submit" color="primary" onClick={handleAnimalFIlterSubmit}>Ok</Button>
-            </Columns.Column>
+            </Columns.Column> */}
           </Columns>
           
         </form>

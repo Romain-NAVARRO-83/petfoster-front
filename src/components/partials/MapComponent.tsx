@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Circle } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { LatLngExpression, Icon as LeafletIcon, LatLngBounds } from 'leaflet';
 import { useGeolocation } from "../../hooks/GeolocationContext";
 import { getDistance } from "geolib";
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 import { User } from 'src/@interfaces/user';
 import { Animal } from 'src/@interfaces/animal';
 
@@ -24,29 +24,64 @@ interface IFitMapToBoundsProps {
   location: { lat: number; lng: number } | null;
 }
 
+// Composant pour ajuster la carte afin qu'elle affiche tous les marqueurs
+function FitMapToBounds({ users, animal, location }: IFitMapToBoundsProps) {
+  const map = useMap(); // Accéder à l'instance de la carte
+
+  useEffect(() => {
+    const bounds = new LatLngBounds([]);
+
+    if (location) {
+      bounds.extend([location.lat, location.lng]);
+    }
+
+    if (animal) {
+      bounds.extend([animal.creator.latitude, animal.creator.longitude]);
+    }
+
+    if (users && users.length > 0) {
+      users.forEach((user) => {
+        if (user.latitude && user.longitude) {
+          bounds.extend([parseFloat(user.latitude), parseFloat(user.longitude)]);
+        }
+      });
+    }
+
+    if (bounds.isValid()) {
+      map.fitBounds(bounds);
+    }
+  }, [map, users, animal, location]);
+
+  return null;
+}
+
+interface IFilters {
+  species: string;
+  age: string;
+  sexe: string;
+  search_area: number;
+}
+
 interface MapComponentProps {
   users: User[] | null;
   animal: Animal | null;
-  searchRadius: number | null;
+  filters: IFilters | null; 
 }
 
-function MapComponent({ users, animal, searchRadius }: MapComponentProps) {
-  const { location } = useGeolocation(); // Récupérer la position de l'utilisateur via le contexte de géolocalisation
-
-  // Utiliser la position de l'utilisateur si elle est disponible, sinon la position par défaut
+function MapComponent({ users, animal, filters }: MapComponentProps) {
+  const { location } = useGeolocation();
   const mapCenter: LatLngExpression = location ? [location.lat, location.lng] : defaultPosition;
   const animalPosition: LatLngExpression = animal ? [animal.creator.latitude, animal.creator.longitude] : defaultPosition;
 
-  // État pour stocker le zoom initial et la position
-  const [zoomLevel, setZoomLevel] = useState<number>(7);  // Niveau de zoom initial modéré
-  const [center, setCenter] = useState<LatLngExpression>(mapCenter);  // Position initiale
 
-  useEffect(() => {
-    // Ajuster le centre si la position de l'utilisateur est disponible
-    if (location) {
-      setCenter([location.lat, location.lng]);
-    }
-  }, [location]);
+  const sexeFilter = filters?.sexe ?? "";
+
+
+  const filteredUsers = sexeFilter !== ""
+    ? users?.filter(user =>
+        user.userAnimals?.some(animal => animal.animal.sexe === sexeFilter)
+      )
+    : users; 
 
   return (
     <>
@@ -62,9 +97,9 @@ function MapComponent({ users, animal, searchRadius }: MapComponentProps) {
       )}
 
       <MapContainer
-        center={center}  // Utilisation de l'état "center" pour la position
-        zoom={zoomLevel} // Utilisation de l'état "zoomLevel" pour le zoom initial
-        scrollWheelZoom={true} // Autoriser le zoom avec la molette
+        center={mapCenter}  // Centrer la carte sur la position de l'utilisateur (ou position par défaut)
+        zoom={13} // Zoom par défaut
+        scrollWheelZoom={false} // Désactiver le zoom avec la molette
         style={{ height: '500px', zIndex: 1 }}
         className='card'
       >
@@ -82,15 +117,6 @@ function MapComponent({ users, animal, searchRadius }: MapComponentProps) {
           </Popup>
         </Marker>
 
-        {/* Périmètre autour de la position de l'utilisateur */}
-        {location && searchRadius && !isNaN(searchRadius) && (
-          <Circle
-            center={mapCenter}
-            radius={searchRadius} // Utilisation de searchRadius pour définir le rayon
-            color="blue"
-          />
-        )}
-
         {/* Marqueur pour l'animal sélectionné */}
         {animal && (
           <Marker position={animalPosition} icon={userIcon}>
@@ -102,8 +128,8 @@ function MapComponent({ users, animal, searchRadius }: MapComponentProps) {
           </Marker>
         )}
 
-        {/* Marqueurs pour tous les utilisateurs */}
-        {users && users.map((user) => (
+        {/* Marqueurs pour les utilisateurs filtrés */}
+        {filteredUsers && filteredUsers.map((user) => (
           <Marker
             key={user.id}
             position={[parseFloat(user.latitude), parseFloat(user.longitude)]}
@@ -112,12 +138,16 @@ function MapComponent({ users, animal, searchRadius }: MapComponentProps) {
               {user.name}
               <br />
               <Link to={`/profil/${user.id}`}>Voir le profil</Link>
+              {/* Liste des animaux du user */}
               {user.userAnimals && user.userAnimals.map((index) => (
                 <span key={index.animal.id}>{index.animal.name}</span>
               ))}
             </Popup>
           </Marker>
         ))}
+
+        {/* Composant pour ajuster la vue de la carte afin d'inclure tous les marqueurs */}
+        <FitMapToBounds users={filteredUsers} animal={animal} location={location} />
       </MapContainer>
     </>
   );
