@@ -20,7 +20,7 @@ const{location} = useGeolocation();
     species: '',
     age: '',
     sexe: '',
-    search_area: '10', // Default search area value
+    search_area: 300, // Default search area value
   });
 
   // Handle form input changes
@@ -72,7 +72,7 @@ const{location} = useGeolocation();
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/api/users?perimeter=300000&latitude=${location?.lat}&longitude=${location?.lng}`) 
+      .get(`http://localhost:3000/api/users?perimeter=${formData.search_area}000&latitude=${location?.lat}&longitude=${location?.lng}`) 
       .then((response) => {
         setAllUsers(response.data);  
         setLoadingUsers(false);   
@@ -82,7 +82,7 @@ const{location} = useGeolocation();
         setFetchUsersError('Error fetching data');  
         setLoadingUsers(false);
       });
-  }, []);
+  }, [formData]);
 
 
 
@@ -102,7 +102,7 @@ const{location} = useGeolocation();
 {/*JSON.stringify(foundUsersAnimals)*/}
       <Section className="columns">
         <Columns.Column mobile={{ size: 12 }} tablet={{ size: 12 }} desktop={{ size: 6 }} className="animal-list">
-        <h2 className='subtitle'>{foundUsersAnimals?.length} animaux trouvés dans un périmètre de XXX Km</h2>
+        <h2 className='subtitle'>{foundUsersAnimals?.length} animaux trouvés dans un périmètre de {formData.search_area} Km</h2>
         {foundUsersAnimals && foundUsersAnimals
   .filter((item: any) => 
     (formData.species === "" || item.species.name === formData.species) &&  // Filter par espece si espece !=""
@@ -188,8 +188,8 @@ const{location} = useGeolocation();
                   name="search_area"
                   value={formData.search_area}
                   onChange={handleChange}
-                  min="10"
-                  max="200"
+                  min="30"
+                  max="1000"
                 />
                 <p>Périmètre : {formData.search_area} Km</p>
               </Field>
