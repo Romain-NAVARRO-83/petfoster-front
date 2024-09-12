@@ -13,7 +13,7 @@ const MesAnimaux = () => {
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
-  const { openModal } = useModal();
+  const { openModal, isActive, closeModal } = useModal();
   const { user: connectedUser } = useAuth(); 
   const navigate = useNavigate();
   // Si l'utilisateur n'est pas connecté, rediriger vers la page d'accueil'
@@ -47,7 +47,7 @@ const MesAnimaux = () => {
     } else {
       setLoading(false); 
     }
-  }, [connectedUser]);  
+  }, [connectedUser, isActive]);  
 
   return (
     <>
