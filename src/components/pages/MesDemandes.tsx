@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../hooks/AuthContext';
-import { User } from 'src/@interfaces/user'; // Assurez-vous que 'Animal' est importé correctement
-import { Animal } from 'src/@interfaces/animal';
+import { User } from '../../@interfaces/user'; 
+import { Animal } from '../../@interfaces/animal';
+import { useNavigate } from 'react-router-dom';
 
 // Composant principal de la page de filtrage des demandes
 const FilterPage = () => {
+  const navigate = useNavigate();
   const [myUser, setMyUser] = useState<User | null>(null); // Stocker les données de l'utilisateur connecté
   const [loading, setLoading] = useState(true); // État pour afficher le chargement
   const [fetchError, setFetchError] = useState<string | null>(null); // Stocker les erreurs de récupération de données
@@ -71,8 +73,9 @@ const FilterPage = () => {
         });
     } else {
       setLoading(false);
+      navigate('/'); 
     }
-  }, [connectedUser]);
+  }, [connectedUser, navigate]);
 
   // Fonction pour gérer la confirmation de validation
   const handleConfirm = (requestId: number) => {

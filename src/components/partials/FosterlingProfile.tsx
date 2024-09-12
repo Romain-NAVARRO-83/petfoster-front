@@ -36,18 +36,18 @@ function FosterlingProfile({ profile, deleteFunction }: FosterlingProfileProps) 
       <td>{profile.quantity}</td>
       <td>{profile.search_area} Km</td>
       <td className='has-text-right'>
-        <Button
-          color="primary"
+        <button
+        className='button is-small is-ghost has-text-success'
           onClick={() => openModal('updateFosterlingProfile')}
-          size="small"
           data-tooltip-id="edit-tooltip"
           data-tooltip-content="Modifier le profil"
+          aria-label='modifier le profil'
         >
           <Pencil size={15} />
-        </Button>
+        </button>
 
         <button
-          className='small is-danger'
+          className='button is-small is-ghost has-text-danger'
           data-tooltip-id="delete-tooltip"
           data-tooltip-content="Supprimer"
           aria-label='Supprimer'
