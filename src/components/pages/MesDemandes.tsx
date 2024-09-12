@@ -15,6 +15,8 @@ const FilterPage = () => {
   const [requestUserDetails, setRequestUserDetails] = useState<Record<number, User>>({}); // Stocker les détails des utilisateurs liés aux demandes
   const [requestAnimalDetails, setRequestAnimalDetails] = useState<Record<number, Animal>>({}); // Stocker les détails des animaux liés aux demandes
 
+  const [allFosterlingRequests, setAllFosterlingRequests] = useState(null);
+
   // Effet pour récupérer les données de l'utilisateur connecté
   useEffect(() => {
     if (connectedUser) {
@@ -76,6 +78,18 @@ const FilterPage = () => {
       navigate('/'); 
     }
   }, [connectedUser, navigate]);
+  useEffect(()=>{
+    async function getAllRequests(){
+      try{
+        const response = await axios.get('http://localhost:3000/api/requests');
+        console.log(response.data);
+        setAllFosterlingRequests(response.data)
+      }catch(e){
+
+      }
+    }
+    getAllRequests();
+  },[])
 
   // Fonction pour gérer la confirmation de validation
   const handleConfirm = (requestId: number) => {
@@ -123,7 +137,16 @@ const FilterPage = () => {
             </thead>
             <tbody>
               {/* Liste des demandes pour les users de type association */}
-              {myUser?.type_user === "association" && (<p>Asso</p>)}
+              {myUser?.type_user === "association" && allFosterlingRequests?.map((request)=>(
+                <tr key={request.id}>
+                  <td>image</td>
+                  {/* <td>{request.}</td> */}
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              ))}
+              
               {/* Liste des demandes pour les users non association */}
               {myUser?.fosterlingRequests?.map((item: any, index: number) => (
                 <tr key={index}>
