@@ -79,13 +79,13 @@ const MesAnimaux = () => {
             {/* Liste des animaux créés */}
             { connectedUser?.userType && connectedUser.userType === 'association' && (
               <div className='column is-full is-half-desktop'>
-              <h2 className='title'>Animaux créés</h2>
+              <h2 className='title'>Animaux créés {myUser?.createdAnimals && myUser.createdAnimals.length > 0 && (<span className='is-size-6	'>({myUser.createdAnimals.length })</span>)}</h2>
               {/* {JSON.stringify(myUser?.createdAnimals)} */}
                 {myUser?.createdAnimals && myUser.createdAnimals.length > 0 ? (
                   myUser.createdAnimals.map((oneAnimal) => (
                     <>
                       {/* {JSON.stringify(oneAnimal)} */}
-                      -<AnimalItemList animal={oneAnimal} />
+                      <AnimalItemList animal={oneAnimal} />
                       </>
                   ))
                 ) : (
@@ -100,10 +100,13 @@ const MesAnimaux = () => {
             {/* Liste des animaux hébergés */}
            
             <div className={connectedUser?.userType === 'association' ? 'column is-full is-half-desktop': 'column is-full'}>
-            <h2 className='title'>Animaux hébergés</h2>
+            <h2 className='title'>Animaux hébergés {myUser?.userAnimals && myUser.userAnimals.length > 0 && (
+              <span className='is-size-6	'>({myUser.userAnimals.length })</span>
+            )}</h2>
               {myUser?.userAnimals && myUser.userAnimals.length > 0 ? (
-                myUser.userAnimals.map((animal) => (
-                  animal.name
+                myUser.userAnimals.map((sejour) => (
+                  <AnimalItemList animal={sejour.animal} />
+                      
                     
                   
                 ))
