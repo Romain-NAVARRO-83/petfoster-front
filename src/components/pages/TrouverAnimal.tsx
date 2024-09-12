@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
 import { Heading, Button, Section, Columns, Form } from "react-bulma-components";
 const { Field, Label } = Form;
 import AnimalItemList from "../partials/AnimalItemList";
@@ -30,7 +29,7 @@ const{location} = useGeolocation();
       [name]: value,
     });
   };
-  const handleAnimalFIlterSubmit =(e)=>{
+  const handleAnimalFIlterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(formData);
     // formData.species != "" && setAllAnimals
@@ -41,11 +40,14 @@ const{location} = useGeolocation();
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [fetchUsersError, setFetchUsersError] = useState<string | null>(null);
   const [foundUsersAnimals, setFoundUsersAnimals] = useState<Animal[] | null>(null)
+
   useEffect(() => {
-    setFoundUsersAnimals(allUsers?.flatMap(user => user.userAnimals.map(userAnimal => userAnimal.animal)));
-    
+    if (allUsers) {
+      setFoundUsersAnimals(
+        allUsers.flatMap(user => user.userAnimals?.map(userAnimal => userAnimal.animal) || [])
+      );
+    }
   }, [allUsers]);
-  
 
   useEffect(() => {
     axios

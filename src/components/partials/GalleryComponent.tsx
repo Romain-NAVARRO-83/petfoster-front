@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Slider from 'react-slick';
 import '../../assets/css/gallery.css'
 interface IGalleryComponentProps {

@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../hooks/AuthContext';
-import { User } from 'src/@interfaces/user';
+import { User } from 'src/@interfaces/user'; // Assurez-vous que 'Animal' est importé correctement
+import { Animal } from 'src/@interfaces/animal';
 
 // Composant principal de la page de filtrage des demandes
 const FilterPage = () => {
@@ -30,12 +31,12 @@ const FilterPage = () => {
             const userRequests = userData.fosterlingRequests || [];
 
             // Promesses pour récupérer les détails des utilisateurs liés aux demandes
-            const userDetailsPromises = userRequests.map((request) =>
+            const userDetailsPromises = userRequests.map((request: any) =>
               axios.get(`http://localhost:3000/api/users/${request.users_id}`)
             );
 
             // Promesses pour récupérer les détails des animaux liés aux demandes
-            const animalDetailsPromises = userRequests.map((request) =>
+            const animalDetailsPromises = userRequests.map((request: any) =>
               axios.get(`http://localhost:3000/api/animals/${request.animals_id}`)
             );
 
@@ -44,13 +45,13 @@ const FilterPage = () => {
             const animalDetailsResponses = await Promise.all(animalDetailsPromises);
 
             // Créer un objet pour stocker les détails des utilisateurs en fonction de leur id
-            const userDetailsMap = userDetailsResponses.reduce((acc, userResponse) => {
+            const userDetailsMap = userDetailsResponses.reduce((acc: Record<number, User>, userResponse) => {
               acc[userResponse.data.id] = userResponse.data;
               return acc;
             }, {});
 
             // Créer un objet pour stocker les détails des animaux en fonction de leur id
-            const animalDetailsMap = animalDetailsResponses.reduce((acc, animalResponse) => {
+            const animalDetailsMap = animalDetailsResponses.reduce((acc: Record<number, Animal>, animalResponse) => {
               acc[animalResponse.data.id] = animalResponse.data;
               return acc;
             }, {});
@@ -99,8 +100,8 @@ const FilterPage = () => {
       <section className="section">
         <div className='container'>
           <div className='notification is-info is-light'>
-          {connectedUser.userType === 'association' ? (
-            <p>Cette page liste les demandes d'adopion (ou d'accueil temporaire) concernant les animaux que vous avez enregistré</p>
+          {connectedUser && connectedUser.userType === 'association' ? (
+            <p>Cette page liste les demandes d'adopion (ou d'accueil temporaire) concernant les animaux que vous avez enregistrés.</p>
           ) : (
             <p>Cette page liste les demandes d'adoption que vous avez formulées. Si l'une d'elles est validée, vous pourrez le voir dans le tableau.</p>
           )}
@@ -114,11 +115,11 @@ const FilterPage = () => {
                 <th>Nom animal</th>
                 <th>Nom demandeur</th>
                 <th>Statut</th>
-                {connectedUser.userType === 'association' && <th>Valider</th>}
+                {connectedUser && connectedUser.userType === 'association' && <th>Valider</th>}
               </tr>
             </thead>
             <tbody>
-              {myUser?.fosterlingRequests?.map((item, index) => (
+              {myUser?.fosterlingRequests?.map((item: any, index: number) => (
                 <tr key={index}>
                   <td>
                     <figure className="image is-48x48">
@@ -145,7 +146,7 @@ const FilterPage = () => {
                     {item.request_status === 'Rejected' && (<span className="tag is-danger">Rejetée</span>)}
                     {item.request_status === 'Approved' && (<span className="tag is-success">Validée</span>)}
                   </td>
-                  {connectedUser.userType === 'association' && (
+                  {connectedUser && connectedUser.userType === 'association' && (
                     <td>
                       <button className="button is-primary" onClick={() => handleConfirm(item.id)}>
                         Valider
@@ -163,3 +164,4 @@ const FilterPage = () => {
 };
 
 export default FilterPage;
+

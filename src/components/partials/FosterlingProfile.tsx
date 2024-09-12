@@ -1,4 +1,3 @@
-import React from 'react';
 import { useModal } from '../../hooks/ModalContext';
 import { Button } from "react-bulma-components";
 import { Trash, Pencil } from "react-flaticons";

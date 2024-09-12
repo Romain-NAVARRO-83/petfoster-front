@@ -1,12 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { LatLngExpression, Icon } from 'leaflet';
-import {
-  Heading,
-  Container,
-  Columns,
-  Section,
-} from 'react-bulma-components';
+import {Heading,Container,Columns,Section,} from 'react-bulma-components';
 import AnimalItemList from '../partials/AnimalItemList';
 import MapComponent from '../partials/MapComponent';
 import { Link } from 'react-router-dom';

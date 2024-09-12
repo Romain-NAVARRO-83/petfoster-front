@@ -40,8 +40,7 @@ function ContactUserForm({ senderId, receiverId }: ContactUserFormProps) {
     });
   };
 
-  const handleSubmit = async (e) => {
-    // console.log(formData);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     try {
@@ -58,10 +57,10 @@ function ContactUserForm({ senderId, receiverId }: ContactUserFormProps) {
     }
   };
 
-
   // Toasts de submit
   const { showSuccessToast, showErrorToast } = useToast();
   const { closeModal } = useModal();
+  
   return (
     <form onSubmit={handleSubmit}>
       <h3 className='title'>Envoyer un message</h3>
@@ -83,4 +82,5 @@ function ContactUserForm({ senderId, receiverId }: ContactUserFormProps) {
 }
 
 export default ContactUserForm;
+
 

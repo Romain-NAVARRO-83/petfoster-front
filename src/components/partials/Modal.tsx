@@ -1,4 +1,3 @@
-import React from 'react';
 import { useModal } from '../../hooks/ModalContext';
 import ContactUserForm from '../formulaires/ContactUserForm'; 
 import AddFosterlingRequestForm from '../formulaires/addForsterlingRequestForm';

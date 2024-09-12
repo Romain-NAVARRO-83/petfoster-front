@@ -50,7 +50,7 @@ const CreateAnimalProfileForm = () => {
     short_story: '',
     long_story: '',
     health: '',
-    creator_id: connectedUser?.userId,
+    creator_id: connectedUser?.userId || null,
   });
 
   // Gestion du changement dans les champs
@@ -83,7 +83,7 @@ const CreateAnimalProfileForm = () => {
     }
 
     try {
-      const response = await axios.post(
+      await axios.post(
         'http://localhost:3000/api/animals',
         formData,
         {

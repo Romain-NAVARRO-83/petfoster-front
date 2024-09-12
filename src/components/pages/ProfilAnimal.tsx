@@ -10,7 +10,7 @@ import { Animal } from 'src/@interfaces/animal';
 import { User } from 'src/@interfaces/user';
 
 const AnimalProfile = () => {
-  const { openModal,animalId } = useModal();
+  const { openModal } = useModal();
   const { user: connectedUser } = useAuth(); 
   
   console.log('connectedUser:', connectedUser ,); // Pour vérifier le contenu de l'utilisateur connecté
@@ -165,9 +165,8 @@ const AnimalProfile = () => {
               {userData && (userData.type_user === 'adoptant' || userData.type_user === 'famille d\'accueil') && (
                <button
                className="button is-secondary is-fullwidth"
-               onClick={() => openModal('addFosterlingRequest', connectedUser?.userId, undefined, animal?.id)}
+               onClick={() => openModal('addFosterlingRequest', connectedUser?.userId, animal?.id)}
              >
-                  {console.log(animal.id)}
                   {animal?.id}Faire une demande d'adoption (ou d'accueil)
                 </button>
               )}

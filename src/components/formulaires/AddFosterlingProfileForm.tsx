@@ -17,7 +17,7 @@ const AddFosterlingProfileForm = ({ userId }: IAddFosterlingProfileFormProps) =>
     users_id: userId,
   });
  // Toasts de submit
- const { showSuccessToast, showErrorToast } = useToast();
+ const { showSuccessToast } = useToast();
  const { closeModal } = useModal();
   const [csrfToken, setCsrfToken] = useState<string | null>(null);
 
@@ -34,7 +34,6 @@ const AddFosterlingProfileForm = ({ userId }: IAddFosterlingProfileFormProps) =>
   }, []);
 
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
@@ -60,19 +59,17 @@ const AddFosterlingProfileForm = ({ userId }: IAddFosterlingProfileFormProps) =>
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
-    setSuccess(false);
 
     if (!validateForm()) return;
 
     setIsSubmitting(true);
     try {
-      const response = await axios.post('http://localhost:3000/api/profiles', formData, {
+      await axios.post('http://localhost:3000/api/profiles', formData, {
         headers: {
           'Content-Type': 'application/json',
           'x-xsrf-token': csrfToken || '',
         },
       });
-      setSuccess(true);
       showSuccessToast('Votre profil d\'accueil à été créé !');
       closeModal(); // Fermer la modal après succès
     } catch (error) {
