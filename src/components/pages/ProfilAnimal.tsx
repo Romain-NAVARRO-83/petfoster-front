@@ -184,14 +184,15 @@ const AnimalProfile = () => {
               </div>
 
               <div className="column is-full-mobile is-half-tablet">
-              {userData && (userData.type_user === 'adoptant' || userData.type_user === 'famille d\'accueil') && (
-               <button
-               className="button is-secondary is-fullwidth"
-               onClick={() => openModal('addFosterlingRequest', connectedUser?.userId, animal?.id)}
-             >
-                  {animal?.id}Faire une demande d'adoption (ou d'accueil)
-                </button>
-              )}
+              {userData && (userData.type_user === 'adoptant' || userData.type_user === 'famille d\'accueil') && animal?.id && (
+    <button
+    className="button is-secondary is-fullwidth"
+    onClick={() => openModal('addFosterlingRequest', connectedUser?.userId, null, animal?.id)}
+  >
+    Faire une demande d'adoption (ou d'accueil)
+  </button>
+  
+  )}
                 {!connectedUser && (
                   <div className="notification is-info is-light">
                     <p>

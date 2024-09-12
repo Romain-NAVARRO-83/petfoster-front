@@ -45,9 +45,7 @@ function MainModal() {
 
           {modalContent === 'editUserProfile' && <EditProfileForm />}
 
-          {modalContent === 'addFosterlingRequest' && (
-            <AddFosterlingRequestForm senderId={senderId} animalId={animalId}/>
-          )}
+          {modalContent === 'addFosterlingRequest' && (<AddFosterlingRequestForm senderId={senderId} animalId={animalId} />)}
 
           {modalContent === 'editAnimalProfile' && <EditAnimalProfileForm />}
 
