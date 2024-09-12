@@ -16,36 +16,39 @@ const AnimalProfile = () => {
   console.log('connectedUser:', connectedUser ,); // Pour vérifier le contenu de l'utilisateur connecté
 
   // Typage pour animal
-  const { id } = useParams<{ id: string }>(); 
+  const { id } = useParams<{ id: string }>();
   const [animal, setAnimal] = useState<Animal | null>(null); // Utilisez le typage correct pour l'animal
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null); // Typage de l'erreur
-  const [userData, setUserData] = useState<User | null>(null); 
+  const [userData, setUserData] = useState<User | null>(null);
 
   useEffect(() => {
     const fetchAnimalData = async () => {
       try {
         // Récupérer les informations de l'animal
-        const animalResponse = await axios.get(`http://localhost:3000/api/animals/${id}`);
+        const animalResponse = await axios.get(
+          `http://localhost:3000/api/animals/${id}`
+        );
         setAnimal(animalResponse.data);
-  
+
         if (connectedUser) {
-          const userResponse = await axios.get(`http://localhost:3000/api/users/${connectedUser.userId}`);
+          const userResponse = await axios.get(
+            `http://localhost:3000/api/users/${connectedUser.userId}`
+          );
           setUserData(userResponse.data);
         }
-  
+
         setLoading(false);
       } catch (error: any) {
         setError(error);
         setLoading(false);
       }
     };
-  
+
     if (id) {
       fetchAnimalData();
     }
   }, [id, connectedUser]);
-
 
   if (loading) {
     return <div>Loading...</div>;
@@ -65,10 +68,8 @@ const AnimalProfile = () => {
       <section className="container columns is-multiline">
         {/* Galerie d'images */}
         <div className="column is-full-mobile is-half-tablet is-half-desktop">
-
           {animal?.pictures && animal.pictures.length > 0 ? (
-          <GalleryComponent pictures={animal.pictures} />
-          
+            <GalleryComponent pictures={animal.pictures} />
           ) : (
             <p>Aucune image disponible pour cet animal.</p>
           )}
@@ -83,16 +84,21 @@ const AnimalProfile = () => {
             Race : <strong>{animal?.race}</strong>
           </div>
           <div className="column is-full-mobile is-half-tablet is-half-desktop">
-            Sexe : <strong>{animal?.sexe === "F" ? "Femelle" : "Mâle"}</strong>
+            Sexe : <strong>{animal?.sexe === 'F' ? 'Femelle' : 'Mâle'}</strong>
           </div>
           <div className="column is-full-mobile is-half-tablet is-half-desktop">
-            Age : <strong>{animal?.date_of_birth ? computeAge(animal.date_of_birth) : "Inconnue"}</strong>
+            Age :{' '}
+            <strong>
+              {animal?.date_of_birth
+                ? computeAge(animal.date_of_birth)
+                : 'Inconnue'}
+            </strong>
           </div>
           <div className="column is-full">
             <Link to="#localisation">Localisation</Link>
           </div>
           <div className="column is-full">
-            <h2 className='subtitle'>En quelques mots</h2>
+            <h2 className="subtitle">En quelques mots</h2>
             <p>{animal?.short_story}</p>
           </div>
         </div>
@@ -101,7 +107,8 @@ const AnimalProfile = () => {
         {connectedUser && connectedUser.userId === animal?.creator.id && (
           <div className="notification is-info is-light is-fullwidth column">
             <p>
-              En tant que créateur du profil de cet animal, vous pouvez en éditer le contenu.
+              En tant que créateur du profil de cet animal, vous pouvez en
+              éditer le contenu.
             </p>
             <button
               className="button is-pulled-right is-primary"
@@ -122,41 +129,56 @@ const AnimalProfile = () => {
       </section>
 
       {/* Localisation */}
-      <section id="localisation" className='yellow-line'>
+      <section id="localisation" className="yellow-line">
         <h2 className="title">Où se trouve {animal?.name} ?</h2>
         <div className="container columns is-vcentered is-fluid">
           <div className="column is-full-mobile is-half-tablet is-half-desktop">
-          <MapComponent animal={animal} users={animal?.creator ? [animal.creator] : []} />
+            <MapComponent
+              animal={animal}
+              users={animal?.creator ? [animal.creator] : []}
+            />
           </div>
           <div className="column is-full-mobile is-half-tablet is-half-desktop box">
-
-          <p>
-            {animal?.creator.name}<br />
-            {animal?.creator.address}<br />
-            {animal?.creator.city}<br />
-            {animal?.creator.country}<br />
-            {animal?.creator.website ? (
-              <Link to={animal.creator.website}>{animal.creator.website}</Link>
-            ) : (
-              <span>Pas de site web disponible</span>
-            )}           
-          </p>
+            <p>
+              {animal?.creator.name}
+              <br />
+              {animal?.creator.address}
+              <br />
+              {animal?.creator.city}
+              <br />
+              {animal?.creator.country}
+              <br />
+              {animal?.creator.website ? (
+                <Link to={animal.creator.website}>
+                  {animal.creator.website}
+                </Link>
+              ) : (
+                <span>Pas de site web disponible</span>
+              )}
+            </p>
 
             {/* Action Buttons */}
             <div className="columns is-variable is-4">
-              
               <div className="column is-full-mobile is-half-tablet">
                 {connectedUser && (
                   <button
                     className="button is-primary is-fullwidth"
-                    onClick={() => openModal('contactUser', connectedUser.userId, id ? parseInt(id) : undefined)}
+                    onClick={() =>
+                      openModal(
+                        'contactUser',
+                        connectedUser.userId,
+                        id ? parseInt(id) : undefined
+                      )
+                    }
                   >
                     Contacter association
                   </button>
                 )}
                 {!connectedUser && (
-                  <div className='notification is-info is-light'>
-                    <p>Connectez-vous à votre compte pour contacter l'association</p>
+                  <div className="notification is-info is-light">
+                    <p>
+                      Connectez-vous à votre compte pour contacter l'association
+                    </p>
                   </div>
                 )}
               </div>
@@ -171,13 +193,15 @@ const AnimalProfile = () => {
                 </button>
               )}
                 {!connectedUser && (
-                  <div className='notification is-info is-light'>
-                    <p>Connectez-vous à votre compte pour faire une demande d'adoption</p>
+                  <div className="notification is-info is-light">
+                    <p>
+                      Connectez-vous à votre compte pour faire une demande
+                      d'adoption
+                    </p>
                   </div>
                 )}
               </div>
             </div>
-
           </div>
         </div>
       </section>
