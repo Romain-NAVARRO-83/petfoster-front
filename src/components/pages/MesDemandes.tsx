@@ -113,7 +113,7 @@ const FilterPage = () => {
               <tr>
                 <th>Image</th>  
                 <th>Nom animal</th>
-                <th>Nom demandeur</th>
+                {connectedUser && connectedUser.userType === 'association' &&  <th>Nom demandeur</th>}
                 <th>Statut</th>
                 {connectedUser && connectedUser.userType === 'association' && <th>Valider</th>}
               </tr>
@@ -136,11 +136,11 @@ const FilterPage = () => {
                       {requestAnimalDetails[item.animals_id]?.name || 'Chargement...'}
                     </a>
                   </td>
-                  <td>
+                  {connectedUser && connectedUser.userType === 'association' &&<td>
                     <a href="#">
                       {requestUserDetails[item.users_id]?.name || 'Chargement...'}
                     </a>
-                  </td>
+                  </td>}
                   <td>
                     {item.request_status === 'Pending' && (<span className="tag is-warning">En attente</span>)}
                     {item.request_status === 'Rejected' && (<span className="tag is-danger">Rejetée</span>)}

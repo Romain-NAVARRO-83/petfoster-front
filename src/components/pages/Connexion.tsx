@@ -160,8 +160,8 @@ const RegistrationPage = () => {
                             {/* Type d'utilisateur */}
                             <div className="field">
                                 <label className="label">Type d'utilisateur <span className="has-text-danger">*</span></label>
-                                <div className="control">
-                                    <label className="radio">
+                                <div className="control columns is-multiline">
+                                    <label className="radio column is-one-third-desktop">
                                         <input
                                             type="radio"
                                             name="type_user"
@@ -171,7 +171,7 @@ const RegistrationPage = () => {
                                         />
                                         Adoptant
                                     </label>
-                                    <label className="radio">
+                                    <label className="radio column is-one-third-desktop">
                                         <input
                                             type="radio"
                                             name="type_user"
@@ -181,7 +181,7 @@ const RegistrationPage = () => {
                                         />
                                         Famille
                                     </label>
-                                    <label className="radio">
+                                    <label className="radio column is-one-third-desktop">
                                         <input
                                             type="radio"
                                             name="type_user"
@@ -279,7 +279,7 @@ const RegistrationPage = () => {
                                         type="number"
                                         placeholder="Code postal"
                                         value={zip}
-                                        onChange={handlezipChange} // Appel de la fonction pour récupérer les villes
+                                        onChange={handlezipChange}
                                         required
                                     />
                                 </div>
@@ -333,7 +333,7 @@ const RegistrationPage = () => {
                             {/* Soumettre */}
                             <div className="field">
                                 <div className="control">
-                                    <button className={`button is-primary ${loading ? 'is-loading' : ''}`} type="submit">
+                                    <button className={`button is-primary is-fullwidth ${loading ? 'is-loading' : ''}`} type="submit">
                                         S'inscrire
                                     </button>
                                 </div>
