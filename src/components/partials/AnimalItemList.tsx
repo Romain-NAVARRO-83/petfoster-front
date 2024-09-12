@@ -49,7 +49,13 @@ function AnimalItemList({ animal }: AnimalListItemProps) {
             {/* Calcul et affichage de l'âge de l'animal */}
             <div className='column'>Age: {computeAge(animal.date_of_birth)}</div>
             {/* Sexe de l'animal */}
-            <div className='column'>Sexe: {animal.sexe}</div>
+            <div className='column'>
+            {animal.sexe === "F" ? (
+    <img src="/img/vector/femelle.svg" width="25" height="25" alt="Female" />
+  ) : (
+    <img src="/img/vector/male.svg" width="25" height="25" alt="Male" />
+  )}
+            </div>
           </div>
         </div>
 
