@@ -232,3 +232,35 @@ footer {
     max-height: 80vh;
     overflow-y: auto;
 }
+
+/* georama*/
+
+@font-face {
+    font-family: 'GeoramaRoman';
+    src: url('/font/GeoramaRoman-ExtraCondensedThin.woff2') format('woff2');
+    font-weight: 200; /* Light */
+  }
+  
+  @font-face {
+    font-family: 'GeoramaRoman';
+    src: url('/font/GeoramaRoman-ExtraCondensedRegular.woff2') format('woff2');
+    font-weight: 400; /* Regular */
+  }
+  
+  @font-face {
+    font-family: 'GeoramaRoman';
+    src: url('/font/GeoramaRoman-ExtraCondensedBold.woff2') format('woff2');
+    font-weight: 700; /* Bold */
+  }
+
+
+  h1 {
+    font-family: 'GeoramaRoman', sans-serif;
+    font-weight: 700; /* Bold */
+  }
+  
+  p {
+    font-family: 'GeoramaRoman', sans-serif;
+    font-weight: 400; /* Regular */
+  }
+  

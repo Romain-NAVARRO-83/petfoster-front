@@ -8,6 +8,7 @@ import { useModal } from '../../hooks/ModalContext';
 import FosterlingProfile from '../partials/FosterlingProfile'; // Profils d'accueil dynamique
 import { useAuth } from '../../hooks/AuthContext'; // Importer le contexte d'authentification
 import { Animal } from 'src/@interfaces/animal';
+import { useToast } from '../../hooks/ToastContext';
 
 interface Image {
   url: string;
@@ -48,7 +49,21 @@ interface FosterlingProfileType {
 }
 
 function ProfilUtilisateur() {
-  const { openModal } = useModal();
+  const { showSuccessToast, showErrorToast } = useToast();
+
+    const [csrfToken, setCsrfToken] = useState<string | null>(null);
+    useEffect(() => {
+      const fetchCsrfToken = async () => {
+          try {
+              const response = await axios.get('http://localhost:3000/api/csrf-token',{});
+              setCsrfToken(response.data);
+          } catch (error) {
+              console.error('Erreur lors de la récupération du token CSRF:', error);
+          }
+      };
+      fetchCsrfToken();
+  }, []);
+  const { openModal, closeModal } = useModal();
   const { id } = useParams<{ id: string }>(); // Récupérer l'ID de l'utilisateur à partir de l'URL
   const [user, setUser] = useState<User | null>(null); // Stocker les données de l'utilisateur
   const [loading, setLoading] = useState(true); // État de chargement
@@ -97,7 +112,7 @@ function ProfilUtilisateur() {
     };
 
     fetchUserData();
-  }, [id]);
+  }, [id, closeModal]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -106,6 +121,21 @@ function ProfilUtilisateur() {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
+
+  async function deleteProfile(profileId:number){
+    try{
+      const deleteResponse = await axios.delete(`http://localhost:3000/api/profiles/${profileId}`,{
+       headers:{
+         'x-xsrf-token': csrfToken || ''
+       }
+      }) ;
+      console.log(deleteResponse);
+      console.log("youpi");
+    }catch(e){
+  // Toast
+    }
+  }
+
 
   return (
     <main>
@@ -216,7 +246,7 @@ function ProfilUtilisateur() {
             </thead>
             <tbody>
               {user?.fosterlingProfiles?.map((profile: FosterlingProfileType) => (
-                <FosterlingProfile key={profile.id} profile={profile} />
+                <FosterlingProfile key={profile.id} profile={profile} deleteFunction={deleteProfile}/>
               ))}
             </tbody>
           </table>
@@ -227,4 +257,3 @@ function ProfilUtilisateur() {
 }
 
 export default ProfilUtilisateur;
-

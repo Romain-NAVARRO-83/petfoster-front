@@ -2,6 +2,7 @@ import { useModal } from '../../hooks/ModalContext';
 import { Button } from "react-bulma-components";
 import { Trash, Pencil } from "react-flaticons";
 import { Tooltip } from 'react-tooltip';
+import { useEffect, useState } from 'react';
 
 // Définir le type des props pour le profil d'accueil
 interface FosterlingProfileProps {
@@ -10,13 +11,21 @@ interface FosterlingProfileProps {
     age: string | number;
     sexe: string;
     search_area: string | number;
-    quantity:number
+    quantity:number;
+    id:number;
   };
+  deleteFunction: (id: number) => Promise<void>; 
+
 }
 
-function FosterlingProfile({ profile }: FosterlingProfileProps) {
+
+function FosterlingProfile({ profile, deleteFunction }: FosterlingProfileProps) {
   const { openModal } = useModal();
   console.log(profile);
+
+
+ 
+
   
   return (
     <tr>
@@ -36,14 +45,15 @@ function FosterlingProfile({ profile }: FosterlingProfileProps) {
           <Pencil size={15} />
         </Button>
 
-        <Button
-          color="danger"
-          size="small"
+        <button
+          className='small is-danger'
           data-tooltip-id="delete-tooltip"
           data-tooltip-content="Supprimer"
+          aria-label='Supprimer'
+          onClick={() => deleteFunction(profile.id)} 
         >
           <Trash size={15} />
-        </Button>
+        </button>
         
         <Tooltip id="edit-tooltip" />
         <Tooltip id="delete-tooltip" />
