@@ -101,18 +101,19 @@ function ProfilUtilisateur() {
         setUser(userResponse.data);
         console.log(userResponse.data);
       } catch (error) {
-        if (typeof error === 'object' && error !== null && 'message' in error) {
-          setError(error as Error); 
-        } else {
-          setError(new Error("An unknown error occurred"));
-        }
+        // if (typeof error === 'object' && error !== null && 'message' in error) {
+        //   setError(error as Error); 
+        // } else {
+        //   setError(new Error("An unknown error occurred"));
+        // }
+        showErrorToast("Erreur réseau")
       } finally {
         setLoading(false);
       }
     };
 
     fetchUserData();
-  }, [id, closeModal]);
+  }, [id, closeModal, deleteProfile]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -143,15 +144,15 @@ function ProfilUtilisateur() {
         <h1 className='title'>{user?.name}</h1>
       </div>
 
-      <Section>
-        <Container>
+      <section className='section'>
+        <div className='container'>
           {/* Info -  uniquement si l'utilisateur connecté est le propriétaire du profil */}
           {connectedUser && user && id && connectedUser.userId === parseInt(id) && (
             <p className='notification is-primary has-text-centered'>
               Ceci est votre profil, vous pouvez l'éditer grâce au bouton présent plus bas.
             </p>
           )}
-          <Columns>
+          <div className='columns is-multiline'>
             <Columns.Column mobile={{ size: 12 }} tablet={{ size: 12 }} desktop={{ size: 6 }}>
               {/* Main Slider */}
               <Slider {...mainSliderSettings} ref={(slider) => setNav1(slider)}>
@@ -188,9 +189,9 @@ function ProfilUtilisateur() {
                 </>
               )}
             </Columns.Column>
-          </Columns>
-        </Container>
-      </Section>
+          </div>
+        </div>
+      </section>
 
       <Section>
         <Container>
@@ -228,11 +229,17 @@ function ProfilUtilisateur() {
       <Section>
         <Container>
           <h2 className='title'>Profils d'accueil</h2>
+          {/* {JSON.stringify(user)} */}
           {connectedUser && user && id !== undefined && connectedUser.userId === parseInt(id) && (
-            <Button color="primary" className="is-pulled-right" onClick={() => openModal('addFosterlingProfile', connectedUser.userId )}>
+            <div className='has-text-right'>
+            <button className="button is-primary " onClick={() => openModal('addFosterlingProfile', connectedUser.userId )}>
               <PlusSmall /> Ajouter
-            </Button>
+            </button>
+            </div>
           )}
+          { user?.fosterlingProfiles && user.fosterlingProfiles.length > 0 ? (
+
+          
           <table className="table is-fullwidth has-text-centered card">
             <thead>
               <tr>
@@ -250,6 +257,11 @@ function ProfilUtilisateur() {
               ))}
             </tbody>
           </table>
+          ) : (
+            <div className='notification is-info is-light has-text-centered'>
+              <p>Aucun profil d'accueil pour le moment</p>
+            </div>
+          )}
         </Container>
       </Section>
     </main>
