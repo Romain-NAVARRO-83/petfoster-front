@@ -6,6 +6,7 @@ import { useModal } from '../../hooks/ModalContext';
 import { useAuth } from '../../hooks/AuthContext';
 import { PlusSmall } from 'react-flaticons';
 import { User } from 'src/@interfaces/user';
+import { UserAnimal } from 'src/@interfaces/userAnimals';
 
 const MesAnimaux = () => {
   // State pour stocker les animaux (du user)
@@ -26,7 +27,7 @@ const MesAnimaux = () => {
 
   // Récupérer les animaux de l'utilisateur
   useEffect(() => {
-    console.log('Connected user:', connectedUser);
+    // console.log('Connected user:', connectedUser);
     if(!connectedUser){
 
     }
@@ -35,7 +36,7 @@ const MesAnimaux = () => {
       axios
         .get(`http://localhost:3000/api/users/${connectedUser.userId}`) 
         .then((response) => {
-          console.log('User data:', response.data); 
+          // console.log('User data:', response.data); 
           setMyUser(response.data);  // Assurez-vous que `response.data` contient bien la structure attendue pour `myUser`
           setLoading(false);            
         })
@@ -55,7 +56,7 @@ const MesAnimaux = () => {
         <div>
           <h1 className="title">Mes animaux</h1>
         </div>
-
+{/* {JSON.stringify(myUser?.userAnimals)} */}
         <section className="section">
           <div className="has-text-centered">
             {connectedUser && connectedUser.userType === 'association' && (
@@ -100,11 +101,11 @@ const MesAnimaux = () => {
             {/* Liste des animaux hébergés */}
            
             <div className={connectedUser?.userType === 'association' ? 'column is-full is-half-desktop': 'column is-full'}>
-            <h2 className='title'>Animaux hébergés {myUser?.userAnimals && myUser.userAnimals.length > 0 && (
-              <span className='is-size-6	'>({myUser.userAnimals.length })</span>
+            <h2 className='title'>Animaux hébergés {myUser?.userAnimals && myUser.userAnimals.filter(animal => animal.date_end === null).length > 0 && (
+              <span className='is-size-6	'>({myUser.userAnimals.filter(animal => animal.date_end === null).length })</span>
             )}</h2>
               {myUser?.userAnimals && myUser.userAnimals.length > 0 ? (
-                myUser.userAnimals.map((sejour) => (
+                myUser.userAnimals.filter(animal => animal.date_end === null).map((sejour) => (
                   <AnimalItemList animal={sejour.animal} />
                       
                     
@@ -113,7 +114,7 @@ const MesAnimaux = () => {
               ) : (
                 <div className='notification is-info is-light '>
                 <p className='is-full has-text-centered'>Vous n'hébergez aucun animal pour le moment.<br/>
-                Vous pouvez <strong>Créer un profil d'accueil</strong></p>
+                Vous pouvez <strong>Créer un profil d'accueil</strong> ou <strong>Faire une demande sur un animal</strong></p>
                 </div>
               )}
             </div>

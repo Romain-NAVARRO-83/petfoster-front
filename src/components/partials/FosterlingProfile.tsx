@@ -3,6 +3,7 @@ import { Button } from "react-bulma-components";
 import { Trash, Pencil } from "react-flaticons";
 import { Tooltip } from 'react-tooltip';
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 // Définir le type des props pour le profil d'accueil
 interface FosterlingProfileProps {
