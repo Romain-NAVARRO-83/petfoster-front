@@ -124,7 +124,7 @@ function Accueil() {
             desktop={{ size: 6 }}
             id="home-map-container"
           >
-            <MapComponent users={allUsers} animal={null} searchRadius={null} /> {/* Pas de cercle dans cette page */}
+            <MapComponent users={allUsers} animal={null}  showSearchArea={false} /> {/* Pas de cercle dans cette page */}
           </Columns.Column>
           <Columns.Column
             mobile={{ size: 12 }}

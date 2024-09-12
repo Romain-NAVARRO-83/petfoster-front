@@ -106,6 +106,7 @@ const{location} = useGeolocation();
             users={allUsers}
             // searchRadius={formData.search_area * 1000} // Convertir en mètres
             filters = {formData}
+            showSearchArea={true}  // Montre le cercle de périmètre de recherche
           />
         </Columns.Column>
       </Section>

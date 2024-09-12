@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap, Circle } from 'react-leaflet';
 import { LatLngExpression, Icon as LeafletIcon, LatLngBounds } from 'leaflet';
 import { useGeolocation } from "../../hooks/GeolocationContext";
 import { getDistance } from "geolib";
@@ -66,9 +66,10 @@ interface MapComponentProps {
   users: User[] | null;
   animal: Animal | null;
   filters: IFilters | null; 
+  showSearchArea?: boolean; // Prop optionnelle qui sert à afficher le rond uniquement sur certaines pages
 }
 
-function MapComponent({ users, animal, filters }: MapComponentProps) {
+function MapComponent({ users, animal, filters, showSearchArea = false }: MapComponentProps) {
   const { location } = useGeolocation();
   const mapCenter: LatLngExpression = location ? [location.lat, location.lng] : defaultPosition;
   const animalPosition: LatLngExpression = animal ? [animal.creator.latitude, animal.creator.longitude] : defaultPosition;
@@ -116,6 +117,15 @@ function MapComponent({ users, animal, filters }: MapComponentProps) {
             <Link to="/profil">Profil user</Link>
           </Popup>
         </Marker>
+
+          {/* Cercle de périmètre de recherche uniquement si showSearchArea est vrai */}
+        {location && showSearchArea && (
+          <Circle
+            center={mapCenter} // Le centre est la position de l'utilisateur
+            radius={filters?.search_area ? filters.search_area * 1000 : 30000} // Périmètre en mètres
+            pathOptions={{ color: 'blue', fillColor: 'blue', fillOpacity: 0.2 }} // Style du cercle (bleu, transparent)
+          />
+        )}
 
         {/* Marqueur pour l'animal sélectionné */}
         {animal && (
