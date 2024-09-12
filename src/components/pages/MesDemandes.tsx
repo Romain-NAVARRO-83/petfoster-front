@@ -119,6 +119,9 @@ const FilterPage = () => {
               </tr>
             </thead>
             <tbody>
+              {/* Liste des demandes pour les users de type association */}
+              {myUser?.type_user === "association" && (<p>Asso</p>)}
+              {/* Liste des demandes pour les users non association */}
               {myUser?.fosterlingRequests?.map((item: any, index: number) => (
                 <tr key={index}>
                   <td>
