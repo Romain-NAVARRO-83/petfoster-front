@@ -1,4 +1,5 @@
 import { useAuth } from '../../hooks/AuthContext';
+import dayjs from 'dayjs';
 
 function InterlocutorItemList({
   interlocutorLastMessage,
@@ -37,8 +38,8 @@ function InterlocutorItemList({
         <p className="is-size-7 ">
           {connectedUser?.userId === interlocutorLastMessage.sender_id
             ? 'Vous'
-            : interlocutorLastMessage.interlocutorName}
-          - {interlocutorLastMessage.created_at}
+            : interlocutorLastMessage.interlocutorName}{' '}
+          - {dayjs(interlocutorLastMessage.created_at).format(' D MMM. YYYY')}
         </p>
       </div>
     </article>
