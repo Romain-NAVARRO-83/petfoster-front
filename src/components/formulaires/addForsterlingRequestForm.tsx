@@ -67,7 +67,7 @@ function AddFosterlingRequestForm({ senderId, animalId }: AddFosterlingRequestFo
 
   return (
     <form onSubmit={handleSubmit}>
-      <h3 className='title'>Demander à accueillir l'animal</h3>
+      {/* <h3 className='title'>Demander à accueillir l'animal</h3> */}
       <p>Demandeur : {senderId}</p>
       <p>Animal : {animalId}</p>
       <textarea
