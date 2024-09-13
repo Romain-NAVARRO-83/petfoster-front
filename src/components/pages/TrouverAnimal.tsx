@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import computeAge from '../../utils/computeAge'; 
 import axios from 'axios';
 import { Heading, Button, Section, Columns, Form } from "react-bulma-components";
 const { Field, Label } = Form;
@@ -8,8 +9,21 @@ import { useGeolocation } from '../../hooks/GeolocationContext';
 import { User } from 'src/@interfaces/user';
 import { Animal } from 'src/@interfaces/animal';
 
-
-
+// Correspondance entre species_id et nom d'espèce
+const speciesMap = {
+  1: 'Chat',
+  2: 'Chien',
+  3: 'Cheval',
+  4: 'Lapin',
+  5: "Cochon d'Inde",
+  6: 'Hamster',
+  7: 'Furet',
+  8: 'Oiseau',
+  9: 'Serpent',
+  10: 'Lézard',
+  11: 'Tortue',
+  12: 'Rat',
+};
 
 function TrouverAnimal() {
 const{location} = useGeolocation();
@@ -50,12 +64,18 @@ const{location} = useGeolocation();
   }, [allUsers]);
 
   useEffect(() => {
+
+    const speciesFilter = formData.species ? `&species=${formData.species}` : '';
+    const apiUrl = `http://localhost:3000/api/users?perimeter=${formData.search_area}000&latitude=${location?.lat}&longitude=${location?.lng}${speciesFilter}`;
+  
+    console.log("API URL:", apiUrl); // Pour vérifier que l'URL est correcte
+
     axios
       .get(`http://localhost:3000/api/users?perimeter=${formData.search_area}000&latitude=${location?.lat}&longitude=${location?.lng}`) 
       .then((response) => {
         setAllUsers(response.data);  
         setLoadingUsers(false);   
-        console.log("found user "+ allUsers);    
+        console.log("found user", response.data);     
       })
       .catch(() => {
         setFetchUsersError('Error fetching data');  
@@ -85,14 +105,32 @@ const{location} = useGeolocation();
         {foundUsersAnimals?.length === 0 && (
           <p className='notification is-info is-light'>Essayez d'agrandir le périmètre de recherche.</p>
         )}
-        {foundUsersAnimals && foundUsersAnimals
-  .filter((item: any) => 
-    (formData.species === "" || item.species.name === formData.species) &&  
-    (formData.sexe === "" || item.sexe === formData.sexe)
-  )
-  .map((item: any) => (
-    <AnimalItemList animal={item} key={item.id} />
+
+{foundUsersAnimals && foundUsersAnimals
+  .filter((animal: any) => {
+    const animalAge = computeAge(animal.date_of_birth); // Calculer l'âge en années
+
+    let ageMatches = true;
+    // Appliquer le filtre d'âge seulement si une option d'âge spécifique est sélectionnée
+    if (formData.age === "- de 1 an") {
+      ageMatches = animalAge < 1;
+    } else if (formData.age === "1-3 ans") {
+      ageMatches = animalAge >= 1 && animalAge <= 3;
+    } else if (formData.age === "3-5 ans") {
+      ageMatches = animalAge >= 3 && animalAge <= 5;
+    } else if (formData.age === "+ de 5 ans") {
+      ageMatches = animalAge > 5;
+    }
+
+    return ageMatches &&
+      (formData.species === "" || (animal.species_id && speciesMap[animal.species_id] === formData.species)) && 
+      (formData.sexe === "" || animal.sexe === formData.sexe);  // Filtrer par sexe et espèce
+  })
+  .map((animal: any) => (
+    <AnimalItemList animal={animal} key={animal.id} />
   ))}
+  
+
         </Columns.Column>
 
         <Columns.Column
@@ -149,7 +187,8 @@ const{location} = useGeolocation();
               <Field>
                 <Label htmlFor="age-dropdown">Age</Label>
                 <select name="age" value={formData.age} onChange={handleChange}>
-                  <option value="">- de 1 an</option>
+                  <option value="">Peu importe</option> {/* Option par défaut */}
+                  <option value="- de 1 an">- de 1 an</option>
                   <option value="1-3 ans">entre 1 et 3 ans</option>
                   <option value="3-5 ans">entre 3 et 5 ans</option>
                   <option value="+ de 5 ans">+ de 5 ans</option>
