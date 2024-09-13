@@ -4,7 +4,7 @@ import axios from 'axios';
 // import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '../../hooks/AuthContext';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 import { useToast } from '../../hooks/ToastContext';
 import { useEffect } from 'react';
 
@@ -19,13 +19,15 @@ function LoginForm() {
   const [csrfToken, setCsrfToken] = useState<string | null>(null);
 
   const { login } = useAuth();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const { showSuccessToast, showErrorToast } = useToast();
 
   useEffect(() => {
     const fetchCsrfToken = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/csrf-token');
+        const response = await axios.get(
+          'http://localhost:3000/api/csrf-token'
+        );
         setCsrfToken(response.data);
       } catch (error) {
         console.error('Erreur lors de la récupération du token CSRF:', error);
@@ -57,24 +59,27 @@ function LoginForm() {
 
     // Validation du mot de passe
     if (passwordLogin.trim().length < 12) {
-      setPasswordErrorLogin('Le mot de passe doit contenir au moins 12 caractères.');
+      setPasswordErrorLogin(
+        'Le mot de passe doit contenir au moins 12 caractères.'
+      );
       valid = false;
     }
 
     if (valid) {
       setIsSubmitting(true); // Activer le mode soumission pour désactiver le bouton
       try {
-        const response = await axios.post('http://localhost:3000/api/login', {
-
-          email: emailLogin.trim(),
-          password: passwordLogin.trim(),
-        },
-        {
-          headers: {
-            'x-xsrf-token': csrfToken || '',
+        const response = await axios.post(
+          'http://localhost:3000/api/login',
+          {
+            email: emailLogin.trim(),
+            password: passwordLogin.trim(),
           },
-        }
-      ); 
+          {
+            headers: {
+              'x-xsrf-token': csrfToken || '',
+            },
+          }
+        );
 
         if (response.status === 200) {
           const token = response.data.token;
@@ -83,7 +88,10 @@ function LoginForm() {
           showSuccessToast('Connexion réussie!');
           navigate('/'); // Redirection vers la page d'accueil
         } else {
-          setSubmitErrorLogin('Erreur de connexion: ' + (response.data.message || 'Erreur inconnue.'));
+          setSubmitErrorLogin(
+            'Erreur de connexion: ' +
+              (response.data.message || 'Erreur inconnue.')
+          );
         }
       } catch (error) {
         setSubmitErrorLogin('Erreur, veuillez réessayer.');
@@ -96,7 +104,9 @@ function LoginForm() {
     <form onSubmit={handleSubmitLogin}>
       {/* Champ email */}
       <div className="field">
-        <label className="label" htmlFor="email">Email :</label>
+        <label className="label" htmlFor="email">
+          Email :
+        </label>
         <div className="control">
           <input
             className={`input ${emailErrorLogin ? 'is-danger' : ''}`}
@@ -110,12 +120,18 @@ function LoginForm() {
             disabled={isSubmitting} // Désactiver le champ pendant la soumission
           />
         </div>
-        {emailErrorLogin && <p className="help is-danger" id="emailErrorLogin">{emailErrorLogin}</p>}
+        {emailErrorLogin && (
+          <p className="help is-danger" id="emailErrorLogin">
+            {emailErrorLogin}
+          </p>
+        )}
       </div>
 
       {/* Champ mot de passe */}
       <div className="field">
-        <label className="label" htmlFor="password">Mot de passe :</label>
+        <label className="label" htmlFor="password">
+          Mot de passe :
+        </label>
         <div className="control">
           <input
             className={`input ${passwordErrorLogin ? 'is-danger' : ''}`}
@@ -129,31 +145,40 @@ function LoginForm() {
             disabled={isSubmitting} // Désactiver le champ pendant la soumission
           />
         </div>
-        {passwordErrorLogin && <p className="help is-danger" id="passwordErrorLogin">{passwordErrorLogin}</p>}
+        {passwordErrorLogin && (
+          <p className="help is-danger" id="passwordErrorLogin">
+            {passwordErrorLogin}
+          </p>
+        )}
       </div>
 
       {/* Bouton de soumission */}
       <div className="field">
         <div className="control">
-          <Button color="primary" fullwidth type="submit" disabled={isSubmitting}>
+          <Button
+            color="primary"
+            fullwidth
+            type="submit"
+            disabled={isSubmitting}
+          >
             {isSubmitting ? 'Connexion en cours...' : 'Se connecter'}
           </Button>
         </div>
       </div>
 
       {/* Identifiants de test */}
-      <div className='notification is-info is-light columns'>
-        <ul className='column'>
+      <div className="notification is-info is-light columns">
+        <ul className="column">
           <li>Adoptant</li>
           <li>marie.dubois@example.com</li>
           <li>hashed_password3</li>
         </ul>
-        <ul className='column'>
+        <ul className="column">
           <li>Famille d'accueil</li>
           <li>jean.martin@example.com</li>
           <li>hashed_password2</li>
         </ul>
-        <ul className='column'>
+        <ul className="column">
           <li>Association</li>
           <li>contact@spa-example.com</li>
           <li>hashed_password5</li>
@@ -167,4 +192,3 @@ function LoginForm() {
 }
 
 export default LoginForm;
-
