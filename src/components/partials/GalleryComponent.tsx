@@ -43,7 +43,9 @@ const GalleryComponent = ({ pictures, userPictures }: IGalleryComponentProps) =>
     focusOnSelect: true,
     navigation: true,
     arrows: true,
-    infinite:false
+    infinite:false,
+    // centerMode: true,
+    // centerPadding: '40%',  
 
   };
 
