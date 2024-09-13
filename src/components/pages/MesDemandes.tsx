@@ -115,9 +115,10 @@ const FilterPage = () => {
           <table className="table is-fullwidth">
             <thead>
               <tr>
-                <th>Image</th>  
-                <th>Animal</th>
+                
+                <th colSpan={2} className='has-text-centered'>Animal</th>
                 {connectedUser?.userType === 'association' ? <th>Demandeur</th> : <th>Propriétaire</th>}
+                <th>Texte</th>
                 <th>Statut</th>
                 {connectedUser?.userType === 'association' && <th>Validation</th>}
               </tr>
@@ -131,6 +132,7 @@ const FilterPage = () => {
       <tr key={request.id}>
         <td>image</td>
         <td>{animal.name}</td>
+        <td>nom</td>
         <td>{request.content_request}</td>
         <td>{request.request_status.toLowerCase() === 'pending' && (<span className="tag is-warning">En attente</span>)}
                     {request.request_status.toLowerCase() === 'rejected' && (<span className="tag is-danger">Rejetée</span>)}
