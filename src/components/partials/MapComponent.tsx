@@ -101,7 +101,7 @@ function MapComponent({ users, animal, filters, showSearchArea = false }: MapCom
         center={mapCenter}  // Centrer la carte sur la position de l'utilisateur (ou position par défaut)
         zoom={13} // Zoom par défaut
         scrollWheelZoom={false} // Désactiver le zoom avec la molette
-        style={{ height: '500px', zIndex: 1 }}
+        style={{ height:"500px", zIndex: 1 }}
         className='card'
       >
         <TileLayer

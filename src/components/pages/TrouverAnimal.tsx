@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import computeAge from '../../utils/computeAgeTrouverAnimal'; 
 import axios from 'axios';
-import { Heading, Button, Section, Columns, Form } from "react-bulma-components";
-const { Field, Label } = Form;
 import AnimalItemList from "../partials/AnimalItemList";
 import MapComponent from '../partials/MapComponent';
 import { useGeolocation } from '../../hooks/GeolocationContext';
 import { User } from 'src/@interfaces/user';
 import { Animal } from 'src/@interfaces/animal';
+import { Filter, FilterSlash } from 'react-flaticons';
 
 // Correspondance entre species_id et nom d'espèce
-const speciesMap: { [key: number]: string } = {
+const speciesMap = {
   1: 'Chat',
   2: 'Chien',
   3: 'Cheval',
@@ -26,8 +25,7 @@ const speciesMap: { [key: number]: string } = {
 };
 
 function TrouverAnimal() {
-const{location} = useGeolocation();
-// console.log(location);
+  const { location } = useGeolocation();
   const [formData, setFormData] = useState({
     species: '',
     age: '',
@@ -35,25 +33,23 @@ const{location} = useGeolocation();
     search_area: 30, 
   });
 
-  
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
     });
   };
-  const handleAnimalFIlterSubmit = (e: React.FormEvent) => {
+
+  const handleAnimalFIlterSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
-    // formData.species != "" && setAllAnimals
-  }
+  };
 
-  // Fetch users
-  const [allUsers, setAllUsers] = useState<User[] | null>(null);
+  const [allUsers, setAllUsers] = useState(null);
   const [loadingUsers, setLoadingUsers] = useState(true);
-  const [fetchUsersError, setFetchUsersError] = useState<string | null>(null);
-  const [foundUsersAnimals, setFoundUsersAnimals] = useState<Animal[] | null>(null)
+  const [fetchUsersError, setFetchUsersError] = useState(null);
+  const [foundUsersAnimals, setFoundUsersAnimals] = useState(null);
 
   useEffect(() => {
     if (allUsers) {
@@ -64,170 +60,152 @@ const{location} = useGeolocation();
   }, [allUsers]);
 
   useEffect(() => {
-
     const speciesFilter = formData.species ? `&species=${formData.species}` : '';
     const apiUrl = `http://localhost:3000/api/users?perimeter=${formData.search_area}000&latitude=${location?.lat}&longitude=${location?.lng}${speciesFilter}`;
-  
-    console.log("API URL:", apiUrl); // Pour vérifier que l'URL est correcte
 
     axios
-      .get(`http://localhost:3000/api/users?perimeter=${formData.search_area}000&latitude=${location?.lat}&longitude=${location?.lng}`) 
+      .get(apiUrl)
       .then((response) => {
-        setAllUsers(response.data);  
-        setLoadingUsers(false);   
-        console.log("found user", response.data);     
+        setAllUsers(response.data);
+        setLoadingUsers(false);
       })
       .catch(() => {
-        setFetchUsersError('Error fetching data');  
+        setFetchUsersError('Error fetching data');
         setLoadingUsers(false);
       });
   }, [formData]);
 
-
-
-  // Déploiement des filtres
-  const [filterOpen, setFilterOpen] = useState<boolean>(false);
-  // Handler du toggle des filtres
+  const [filterOpen, setFilterOpen] = useState(false);
   const handleFilterOpen = () => {
-    setFilterOpen(!filterOpen);  
+    setFilterOpen(!filterOpen);
   };
 
   return (
-    
     <main>
       <div>
-        <Heading>Trouver un animal</Heading>
+        <h1 className="title">Trouver un animal</h1>
       </div>
-{/*JSON.stringify(foundUsersAnimals)*/}
-      <Section className="columns">
-        <Columns.Column mobile={{ size: 12 }} tablet={{ size: 12 }} desktop={{ size: 6 }} className="animal-list">
-        <h2 className='subtitle'>{foundUsersAnimals?.length} animaux trouvés dans un périmètre de {formData.search_area} Km</h2>
-        {foundUsersAnimals?.length === 0 && (
-          <p className='notification is-info is-light'>Essayez d'agrandir le périmètre de recherche.</p>
-        )}
+      <div id="animal-filter" className={filterOpen ? "open " : ""}>
+        <button onClick={handleFilterOpen} className="button is-success ">
+          <h2 className="title is-4">{filterOpen ? (<FilterSlash />) : (<Filter />)}</h2>
+        </button>
 
-{foundUsersAnimals && foundUsersAnimals
-  .filter((animal: any) => {
-    const animalAge = computeAge(animal.date_of_birth); // Calculer l'âge en années
+        <form>
+  <div className="field">
+    <label className="label" htmlFor="species-dropdown">Espèce</label>
+    <div className="control">
+      <div className="select">
+        <select name="species" value={formData.species} onChange={handleChange}>
+          <option value="">Toutes</option>
+          <option value="Chat">Chat</option>
+          <option value="Chien">Chien</option>
+          <option value="Cheval">Cheval</option>
+          <option value="Lapin">Lapin</option>
+          <option value="Cochon d'Inde">Cochon d'Inde</option>
+          <option value="Hamster">Hamster</option>
+          <option value="Furet">Furet</option>
+          <option value="Oiseau">Oiseau</option>
+          <option value="Serpent">Serpent</option>
+          <option value="Lézard">Lézard</option>
+          <option value="Tortue">Tortue</option>
+          <option value="Rat">Rat</option>
+        </select>
+      </div>
+    </div>
+  </div>
 
-    let ageMatches = true;
-    // Appliquer le filtre d'âge seulement si une option d'âge spécifique est sélectionnée
-    if (formData.age === "- de 1 an") {
-      ageMatches = animalAge < 1;
-    } else if (formData.age === "1-3 ans") {
-      ageMatches = animalAge >= 1 && animalAge <= 3;
-    } else if (formData.age === "3-5 ans") {
-      ageMatches = animalAge >= 3 && animalAge <= 5;
-    } else if (formData.age === "+ de 5 ans") {
-      ageMatches = animalAge > 5;
-    }
+  <div className="field">
+    <label className="label" htmlFor="age-dropdown">Age</label>
+    <div className="control">
+      <div className="select">
+        <select name="age" value={formData.age} onChange={handleChange}>
+          <option value="">Peu importe</option>
+          <option value="- de 1 an">- de 1 an</option>
+          <option value="1-3 ans">entre 1 et 3 ans</option>
+          <option value="3-5 ans">entre 3 et 5 ans</option>
+          <option value="+ de 5 ans">+ de 5 ans</option>
+        </select>
+      </div>
+    </div>
+  </div>
 
-    return ageMatches &&
-      (formData.species === "" || (animal.species_id && speciesMap[animal.species_id] === formData.species)) && 
-      (formData.sexe === "" || animal.sexe === formData.sexe);  // Filtrer par sexe et espèce
-  })
-  .map((animal: any) => (
-    <AnimalItemList animal={animal} key={animal.id} />
-  ))}
-  
+  <div className="field">
+    <label className="label" htmlFor="sexe-dropdown">Sexe</label>
+    <div className="control">
+      <div className="select">
+        <select name="sexe" value={formData.sexe} onChange={handleChange}>
+          <option value="">Indifférent</option>
+          <option value="M">Mâle</option>
+          <option value="F">Femelle</option>
+        </select>
+      </div>
+    </div>
+  </div>
 
-        </Columns.Column>
+  <div className="field">
+    <label className="label">Périmètre</label>
+    <div className="control">
+      <input
+        type="range"
+        name="search_area"
+        value={formData.search_area}
+        onChange={handleChange}
+        min="30"
+        max="1000"
+      />
+      <p>Périmètre : {formData.search_area} Km</p>
+    </div>
+  </div>
+</form>
 
-        <Columns.Column
-          id="map"
-          mobile={{ size: 12 }}
-          tablet={{ size: 12 }}
-          desktop={{ size: 6 }}
-          
-        >
-          <MapComponent 
+
+      </div>
+      <div className='map-and-animals'>
+        <div className="animals-maplist ">
+          <h2 className="subtitle">
+            {foundUsersAnimals?.length} animaux trouvés dans un périmètre de {formData.search_area} Km
+          </h2>
+          {foundUsersAnimals?.length === 0 && (
+            <p className="notification is-info is-light">
+              Essayez d'agrandir le périmètre de recherche.
+            </p>
+          )}
+<div className='animal-list '>
+          {foundUsersAnimals &&
+            foundUsersAnimals
+              .filter((animal) => {
+                const animalAge = computeAge(animal.date_of_birth);
+                let ageMatches = true;
+                if (formData.age === "- de 1 an") {
+                  ageMatches = animalAge < 1;
+                } else if (formData.age === "1-3 ans") {
+                  ageMatches = animalAge >= 1 && animalAge <= 3;
+                } else if (formData.age === "3-5 ans") {
+                  ageMatches = animalAge >= 3 && animalAge <= 5;
+                } else if (formData.age === "+ de 5 ans") {
+                  ageMatches = animalAge > 5;
+                }
+
+                return (
+                  ageMatches &&
+                  (formData.species === "" || (animal.species_id && speciesMap[animal.species_id] === formData.species)) &&
+                  (formData.sexe === "" || animal.sexe === formData.sexe)
+                );
+              })
+              .map((animal) => <AnimalItemList animal={animal} key={animal.id} />)}
+              </div>
+        </div>
+
+        <div className="map-column">
+          <MapComponent
             users={allUsers}
-            // searchRadius={formData.search_area * 1000} // Convertir en mètres
-            filters = {formData}
-            showSearchArea={true}  // Montre le cercle de périmètre de recherche
+            filters={formData}
+            showSearchArea={true}
           />
-        </Columns.Column>
-      </Section>
-      {/* {console.log(formData)} */}
+        </div>
+      </div>
 
-      <Section id="animal-filter" className={filterOpen ? "open" : ""}>
-        <Button onClick={handleFilterOpen} className='is-ghost is-fullwidth'>
-        <Heading renderAs="h2">
-          {filterOpen ? "Cacher les filtres" : "Afficher les filtres"}
-        </Heading>
-        </Button>
-        
-        <form >
-          <Columns className="container">
-            <Columns.Column>
-              <Field>
-                <Label htmlFor="species-dropdown">Espèce</Label>
-                <select name="species" value={formData.species} onChange={handleChange}>
-                  <option value="">Toutes</option>
-                  {/* {allSpecies.map((species) => (
-                    <option value={species}>{species}</option>
-                  ))} */}
-                  <option value="Chat">Chat</option>
-                  <option value="Chien">Chien</option>
-                  <option value="Cheval">Cheval</option>
-                  <option value="Lapin">Lapin</option>
-                  <option value="Cochon d'Inde">Cochon d'Inde</option>
-                  <option value="Hamster">Hamster</option>
-                  <option value="Furet">Furet</option>
-                  <option value="Oiseau">Oiseau</option>
-                  <option value="Serpent">Serpent</option>
-                  <option value="Lézard">Lézard</option>
-                  <option value="Tortue">Tortue</option>
-                  <option value="Rat">Rat</option>
-                </select>
-              </Field>
-            </Columns.Column>
-
-            <Columns.Column>
-              <Field>
-                <Label htmlFor="age-dropdown">Age</Label>
-                <select name="age" value={formData.age} onChange={handleChange}>
-                  <option value="">Peu importe</option> {/* Option par défaut */}
-                  <option value="- de 1 an">- de 1 an</option>
-                  <option value="1-3 ans">entre 1 et 3 ans</option>
-                  <option value="3-5 ans">entre 3 et 5 ans</option>
-                  <option value="+ de 5 ans">+ de 5 ans</option>
-                </select>
-              </Field>
-            </Columns.Column>
-
-            <Columns.Column>
-              <Field>
-                <Label htmlFor="sexe-dropdown">Sexe</Label>
-                <select name="sexe" value={formData.sexe} onChange={handleChange}>
-                  <option value="">Indifférent</option>
-                  <option value="M">Mâle</option>
-                  <option value="F">Femelle</option>
-                </select>
-              </Field>
-            </Columns.Column>
-
-            <Columns.Column>
-              <Field>
-                <Label>Périmètre</Label>
-                <input
-                  type="range"
-                  name="search_area"
-                  value={formData.search_area}
-                  onChange={handleChange}
-                  min="30"
-                  max="1000"
-                />
-                <p>Périmètre : {formData.search_area} Km</p>
-              </Field>
-            </Columns.Column>
-            {/* <Columns.Column narrow>
-            <Button type="submit" color="primary" onClick={handleAnimalFIlterSubmit}>Ok</Button>
-            </Columns.Column> */}
-          </Columns>
-          
-        </form>
-      </Section>
+      
     </main>
   );
 }
