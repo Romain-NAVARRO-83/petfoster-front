@@ -10,7 +10,7 @@ import { User } from 'src/@interfaces/user';
 import { Animal } from 'src/@interfaces/animal';
 
 // Correspondance entre species_id et nom d'espèce
-const speciesMap = {
+const speciesMap: { [key: number]: string } = {
   1: 'Chat',
   2: 'Chien',
   3: 'Cheval',
