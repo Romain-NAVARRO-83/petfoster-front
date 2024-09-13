@@ -190,6 +190,22 @@ footer>div>ul {
     max-height: 20vh;
     overflow: auto;
   }
+
+  #splash-screen {
+    padding-top: 100px;
+  }
+
+  header img[alt="Logo"] {
+    width: 40px;
+  }
+
+  header img[alt="Pet Foster"] {
+    width: 120px;
+  }
+
+  header:not(.scrolled) .navbar-burger {
+    background-color: rgba(255, 255, 255, .5)
+  }
 }
 
 .chat-window {
