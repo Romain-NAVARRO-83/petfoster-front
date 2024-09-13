@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import computeAge from '../../utils/computeAge'; 
+import computeAge from '../../utils/computeAgeTrouverAnimal'; 
 import axios from 'axios';
 import { Heading, Button, Section, Columns, Form } from "react-bulma-components";
 const { Field, Label } = Form;
