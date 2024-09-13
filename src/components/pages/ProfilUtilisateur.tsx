@@ -13,7 +13,7 @@ import { User } from 'src/@interfaces/user';
 function ProfilUtilisateur() {
   const { showSuccessToast, showErrorToast } = useToast();
   const [csrfToken, setCsrfToken] = useState<string | null>(null);
-  const { openModal } = useModal();
+  const { openModal, closeModal } = useModal();
   const { id } = useParams<{ id: string }>(); 
   const [user, setUser] = useState<User | null>(null); 
   const [loading, setLoading] = useState(true); 
@@ -45,7 +45,7 @@ function ProfilUtilisateur() {
     } finally {
       setLoading(false);
     }
-  }, [id, showErrorToast]);
+  }, [id, showErrorToast, closeModal]);
 
   // Appel de la fonction pour récupérer les données au montage du composant
   useEffect(() => {

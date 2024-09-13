@@ -162,6 +162,7 @@ footer>div>ul {
       rgba(255, 238, 173, 1) 0%,
       rgba(255, 173, 96, 1) 100%);
   padding-bottom: 75px;
+  padding-top: 75px;
 }
 
 #home-map-container>* {
