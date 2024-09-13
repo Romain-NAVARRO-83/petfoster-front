@@ -34,69 +34,84 @@ function Header() {
   // Contrôle de l'authentification via le contexte
   const { user, logout } = useAuth();
 
+  // Dropdown state
+  const [isDropdownActive, setIsDropdownActive] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsDropdownActive(!isDropdownActive);
+  };
+
   return (
+    <>
+      {/* Lien "Jump to content" */}
+      <a href="#main-content" className="button is-primary is-sr-only focusable">Aller au contenu</a>
 
-      <>
-        {/* Lien "Jump to content" */}
-        <a href="#main-content" className="button is-primary is-sr-only focusable">Aller au contenu</a>
-    
-    <header className={scrolled ? 'header scrolled' : 'header'}>
-      <nav className="navbar">
-        <div className="navbar-brand">
-          <Link to="/">
-            <img src="/img/vector/petfoster-logo-grad.svg" alt="Logo" width={75} />
-            <img src="/img/vector/petfoster-title-grad.svg" alt="Pet Foster" width={200} />
-          </Link>
-          <button
-            className={`navbar-burger ${isActive ? 'is-active' : ''}`}
-            onClick={handleBurgerClick}
-            aria-label="menu"
-            aria-expanded={isActive ? 'true' : 'false'}
-          >
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-          </button>
-        </div>
+      <header className={scrolled ? 'header scrolled' : 'header'}>
+        <nav className="navbar">
+          <div className="navbar-brand">
+            <Link to="/">
+              <img src="/img/vector/petfoster-logo-grad.svg" alt="Logo" width={75} />
+              <img src="/img/vector/petfoster-title-grad.svg" alt="Pet Foster" width={200} />
+            </Link>
+            <button
+              className={`navbar-burger ${isActive ? 'is-active' : ''}`}
+              onClick={handleBurgerClick}
+              aria-label="menu"
+              aria-expanded={isActive ? 'true' : 'false'}
+            >
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+            </button>
+          </div>
 
-        <div className={`navbar-menu ${isActive ? 'is-active' : ''}`} id="navbarMenu">
-          <div className="navbar-end">
-            <NavLink to="/trouver-animal" className="navbar-item">
-              Voir les animaux
-            </NavLink>
+          <div className={`navbar-menu ${isActive ? 'is-active' : ''}`} id="navbarMenu">
+            <div className="navbar-end">
+              <NavLink to="/trouver-animal" className="navbar-item">
+                Voir les animaux
+              </NavLink>
 
-            {/* Si l'utilisateur est connecté, afficher des options supplémentaires */}
-            {user && (
-              <>
-                <NavLink to="/mes-demandes" className="navbar-item">
-                  Mes demandes
-                </NavLink>
-                <NavLink to="/mes-animaux" className="navbar-item">
-                  Mes animaux
-                </NavLink>
-              </>
-            )}
-
-            {/* Affiche l'icône de l'utilisateur et le lien vers le profil, ou le lien vers la page de connexion */}
-            <div className="navbar-item">
-              {user ? (
+              {/* Si l'utilisateur est connecté, afficher des options supplémentaires */}
+              {user && (
                 <>
-                  <Link to={`/profil/${user.userId}`} className='has-text-centered'>
-                    <User size={24} /><br/>
-                    {user.userName}
-                  </Link>
-                  <button onClick={logout} className="navbar-item">Déconnexion</button>
+                  <NavLink to="/mes-demandes" className="navbar-item">
+                    Mes demandes
+                  </NavLink>
+                  <NavLink to="/mes-animaux" className="navbar-item">
+                    Mes animaux
+                  </NavLink>
                 </>
-              ) : (
-                <Link to="/connexion">
-                  <User size={24} />
+              )}
+
+              {/* Dropdown for user account and logout */}
+              <div className={`navbar-item has-dropdown ${isDropdownActive ? 'is-active' : ''}`}>
+                <a className="navbar-link" onClick={toggleDropdown}>
+                  <User size={24} /> 
+                </a>
+
+                {user && (
+                  <div className="navbar-dropdown is-right">
+                    <Link to={`/profil/${user.userId}`} className="navbar-item" onClick={toggleDropdown}>
+                      Votre compte
+                    </Link>
+                    <hr className="navbar-divider" />
+                    <a href="#logout" className="navbar-item" onClick={logout}>
+                      Déconnexion
+                    </a>
+                  </div>
+                )}
+              </div>
+
+              {/* Si non connecté, affiche le lien vers la page de connexion */}
+              {!user && (
+                <Link to="/connexion" className="navbar-item">
+                  <User size={24} /> Connexion
                 </Link>
               )}
             </div>
           </div>
-        </div>
-      </nav>
-    </header>
+        </nav>
+      </header>
     </>
   );
 }

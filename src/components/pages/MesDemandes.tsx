@@ -4,68 +4,56 @@ import { useAuth } from '../../hooks/AuthContext';
 import { User } from '../../@interfaces/user'; 
 import { Animal } from '../../@interfaces/animal';
 import { useNavigate } from 'react-router-dom';
+import { Check, Cross, Delete } from 'react-flaticons';
 
-// Composant principal de la page de filtrage des demandes
 const FilterPage = () => {
   const navigate = useNavigate();
-  const [myUser, setMyUser] = useState<User | null>(null); // Stocker les données de l'utilisateur connecté
-  const [loading, setLoading] = useState(true); // État pour afficher le chargement
-  const [fetchError, setFetchError] = useState<string | null>(null); // Stocker les erreurs de récupération de données
-  const { user: connectedUser } = useAuth(); // Récupérer l'utilisateur connecté via le contexte d'authentification
-  const [requestUserDetails, setRequestUserDetails] = useState<Record<number, User>>({}); // Stocker les détails des utilisateurs liés aux demandes
-  const [requestAnimalDetails, setRequestAnimalDetails] = useState<Record<number, Animal>>({}); // Stocker les détails des animaux liés aux demandes
-
+  const [myUser, setMyUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
+  const { user: connectedUser } = useAuth(); 
+  const [requestUserDetails, setRequestUserDetails] = useState<Record<number, User>>({});
+  const [requestAnimalDetails, setRequestAnimalDetails] = useState<Record<number, Animal>>({});
   const [allFosterlingRequests, setAllFosterlingRequests] = useState(null);
 
-  // Effet pour récupérer les données de l'utilisateur connecté
+  // Récupérer les données de l'utilisateur connecté
   useEffect(() => {
     if (connectedUser) {
-      console.log(connectedUser.userType);
-
-      // Requête pour récupérer les données de l'utilisateur connecté
       axios
         .get(`http://localhost:3000/api/users/${connectedUser.userId}`)
         .then((response) => {
           const userData = response.data;
-          setMyUser(userData); // Stocker les données de l'utilisateur
-          setLoading(false); // Fin du chargement
+          setMyUser(userData);
+          setLoading(false);
 
-          // Fonction asynchrone pour récupérer les détails des utilisateurs et des animaux liés aux demandes
           const fetchFosterlingDetails = async () => {
             const userRequests = userData.fosterlingRequests || [];
 
-            // Promesses pour récupérer les détails des utilisateurs liés aux demandes
+            // Récupérer les détails des utilisateurs et des animaux
             const userDetailsPromises = userRequests.map((request: any) =>
               axios.get(`http://localhost:3000/api/users/${request.users_id}`)
             );
-
-            // Promesses pour récupérer les détails des animaux liés aux demandes
             const animalDetailsPromises = userRequests.map((request: any) =>
               axios.get(`http://localhost:3000/api/animals/${request.animals_id}`)
             );
 
-            // Attendre que toutes les requêtes soient terminées
             const userDetailsResponses = await Promise.all(userDetailsPromises);
             const animalDetailsResponses = await Promise.all(animalDetailsPromises);
 
-            // Créer un objet pour stocker les détails des utilisateurs en fonction de leur id
             const userDetailsMap = userDetailsResponses.reduce((acc: Record<number, User>, userResponse) => {
               acc[userResponse.data.id] = userResponse.data;
               return acc;
             }, {});
 
-            // Créer un objet pour stocker les détails des animaux en fonction de leur id
             const animalDetailsMap = animalDetailsResponses.reduce((acc: Record<number, Animal>, animalResponse) => {
               acc[animalResponse.data.id] = animalResponse.data;
               return acc;
             }, {});
 
-            // Mettre à jour l'état avec les détails récupérés
             setRequestUserDetails(userDetailsMap);
             setRequestAnimalDetails(animalDetailsMap);
           };
 
-          // Lancer la récupération des détails des utilisateurs et des animaux
           fetchFosterlingDetails();
         })
         .catch((error) => {
@@ -78,20 +66,20 @@ const FilterPage = () => {
       navigate('/'); 
     }
   }, [connectedUser, navigate]);
-  useEffect(()=>{
-    async function getAllRequests(){
-      try{
-        const response = await axios.get('http://localhost:3000/api/requests');
-        console.log(response.data);
-        setAllFosterlingRequests(response.data)
-      }catch(e){
 
+  // Récupérer toutes les demandes
+  useEffect(() => {
+    async function getAllRequests() {
+      try {
+        const response = await axios.get('http://localhost:3000/api/requests');
+        setAllFosterlingRequests(response.data);
+      } catch (e) {
+        console.error(e);
       }
     }
     getAllRequests();
-  },[])
+  }, []);
 
-  // Fonction pour gérer la confirmation de validation
   const handleConfirm = (requestId: number) => {
     if (window.confirm('Êtes-vous sûr de vouloir valider ?')) {
       axios.post(`http://localhost:3000/api/requests/${requestId}/validate`)
@@ -105,49 +93,60 @@ const FilterPage = () => {
     }
   };
 
-  // Affichage du chargement ou des erreurs
   if (loading) return <p>Chargement...</p>;
   if (fetchError) return <p>{fetchError}</p>;
 
   return (
     <>
       <div>
-        <h1 className='title'>Mes demandes</h1>
+        <h1 className="title">Mes demandes</h1>
       </div>
       <section className="section">
-        <div className='container'>
-          <div className='notification is-info is-light'>
-          {connectedUser && connectedUser.userType === 'association' ? (
-            <p>Cette page liste les demandes d'adopion (ou d'accueil temporaire) concernant les animaux que vous avez enregistrés.</p>
-          ) : (
-            <p>Cette page liste les demandes d'adoption que vous avez formulées. Si l'une d'elles est validée, vous pourrez le voir dans le tableau.</p>
-          )}
+        <div className="container">
+          <div className="notification is-info is-light">
+            {connectedUser?.userType === 'association' ? (
+              <p>Cette page liste les demandes d'adoption ou d'accueil temporaire pour vos animaux enregistrés.</p>
+            ) : (
+              <p>Cette page liste les demandes d'adoption que vous avez formulées.</p>
+            )}
           </div>
         </div>
         <div className="container">
           <table className="table is-fullwidth">
             <thead>
               <tr>
-                <th>Image</th>  
-                <th>Nom animal</th>
-                {connectedUser && connectedUser.userType === 'association' &&  <th>Nom demandeur</th>}
+                
+                <th colSpan={2} className='has-text-centered'>Animal</th>
+                {connectedUser?.userType === 'association' ? <th>Demandeur</th> : <th>Propriétaire</th>}
+                <th>Texte</th>
                 <th>Statut</th>
-                {connectedUser && connectedUser.userType === 'association' && <th>Valider</th>}
+                {connectedUser?.userType === 'association' && <th>Validation</th>}
               </tr>
             </thead>
             <tbody>
-              {/* Liste des demandes pour les users de type association */}
-              {myUser?.type_user === "association" && allFosterlingRequests?.map((request)=>(
-                <tr key={request.id}>
-                  <td>image</td>
-                  {/* <td>{request.}</td> */}
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              ))}
-              
-              {/* Liste des demandes pour les users non association */}
+            {myUser?.type_user === 'association' && allFosterlingRequests?.map((request) => {
+  const animal = myUser.createdAnimals.find(animal => animal.id === request.animals_id);
+
+  if (animal) {
+    return (
+      <tr key={request.id}>
+        <td>image</td>
+        <td>{animal.name}</td>
+        <td>nom</td>
+        <td>{request.content_request}</td>
+        <td>{request.request_status.toLowerCase() === 'pending' && (<span className="tag is-warning">En attente</span>)}
+                    {request.request_status.toLowerCase() === 'rejected' && (<span className="tag is-danger">Rejetée</span>)}
+                    {request.request_status.toLowerCase() === 'approved' && (<span className="tag is-success">Validée</span>)}</td>
+        <td>
+          <button className='button is-small is-success' aria-label='Valider la demande'><Check size={15}/></button>
+          <button className='button is-small is-danger' aria-label='Refuser la demande'><Cross size={15}/></button>
+        </td>
+      </tr>
+    );
+  }
+  return null;
+})}
+
               {myUser?.fosterlingRequests?.map((item: any, index: number) => (
                 <tr key={index}>
                   <td>
@@ -165,17 +164,21 @@ const FilterPage = () => {
                       {requestAnimalDetails[item.animals_id]?.name || 'Chargement...'}
                     </a>
                   </td>
-                  {connectedUser && connectedUser.userType === 'association' &&<td>
-                    <a href="#">
-                      {requestUserDetails[item.users_id]?.name || 'Chargement...'}
-                    </a>
-                  </td>}
+                  {connectedUser?.userType === 'association' ? (
+                    <td>
+                      <a href="#">
+                        {requestUserDetails[item.users_id]?.name || 'Chargement...'}
+                      </a>
+                    </td>
+                  ) : (
+                    <td>Propriétaire</td>
+                  )}
                   <td>
-                    {item.request_status === 'Pending' && (<span className="tag is-warning">En attente</span>)}
-                    {item.request_status === 'Rejected' && (<span className="tag is-danger">Rejetée</span>)}
-                    {item.request_status === 'Approved' && (<span className="tag is-success">Validée</span>)}
+                    {item.request_status.toLowerCase() === 'pending' && (<span className="tag is-warning">En attente</span>)}
+                    {item.request_status.toLowerCase() === 'rejected' && (<span className="tag is-danger">Rejetée</span>)}
+                    {item.request_status.toLowerCase() === 'approved' && (<span className="tag is-success">Validée</span>)}
                   </td>
-                  {connectedUser && connectedUser.userType === 'association' && (
+                  {connectedUser?.userType === 'association' && (
                     <td>
                       <button className="button is-primary" onClick={() => handleConfirm(item.id)}>
                         Valider
@@ -193,4 +196,3 @@ const FilterPage = () => {
 };
 
 export default FilterPage;
-

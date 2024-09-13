@@ -1,69 +1,66 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import du hook useNavigate pour la redirection
-import { Container, Section, Box, Button, Heading, Columns } from 'react-bulma-components';
+// import { useNavigate } from 'react-router-dom';
 
 const ContactPage = () => {
-  // États pour capturer les valeurs des champs du formulaire
-  const [formData, setFormData] = useState({
-    nom: '',
-    email: '',
-    message: ''
-  });
+//   const [formData, setFormData] = useState({
+//     nom: '',
+//     email: '',
+//     message: ''
+//   });
 
-  const [errorMessage, setErrorMessage] = useState('');
+//   const [errorMessage, setErrorMessage] = useState('');
 
-  // Hook pour la navigation
-  const navigate = useNavigate();
+//   const navigate = useNavigate();
 
-  // Fonction pour gérer les changements dans les champs du formulaire
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
+  // const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  //   setFormData({
+  //     ...formData,
+  //     [e.target.name]: e.target.value
+  //   });
+  // };
 
-  // Fonction pour gérer la soumission du formulaire
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
 
-    // Remplace cette URL par celle de ton API ou service d'envoi d'email
-    const apiUrl = 'https://ton-api-backend.com/send-email';
+  //   const apiUrl = 'https://ton-api-backend.com/send-email';
 
-    try {
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      });
+  //   try {
+  //     const response = await fetch(apiUrl, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json'
+  //       },
+  //       body: JSON.stringify(formData)
+  //     });
 
-      if (response.ok) {
-        // Si le message a été envoyé avec succès, redirige vers la page d'accueil
-        navigate('/'); // Redirige vers la page principale
-      } else {
-        setErrorMessage('Erreur lors de l\'envoi du message. Veuillez réessayer.');
-      }
-    } catch (error) {
-      setErrorMessage('Erreur lors de l\'envoi du message. Veuillez vérifier votre connexion.');
-    }
-  };
+  //     if (response.ok) {
+  //       navigate('/');
+  //     } else {
+  //       setErrorMessage('Erreur lors de l\'envoi du message. Veuillez réessayer.');
+  //     }
+  //   } catch (error) {
+  //     setErrorMessage('Erreur lors de l\'envoi du message. Veuillez vérifier votre connexion.');
+  //   }
+  // };
 
   return (
-    <Section className="contact-page">
-      <Container>
+    <>
+    <div><h1 className="title mb-5">Contactez-nous</h1>
+      </div>
+    <section className="section contact-page">
+      
+      <div className="container">
         
-        <Heading size={3} className="has-text-centered mb-5">Contactez-nous</Heading>
+        {/* {errorMessage && <p className="has-text-danger">{errorMessage}</p>} */}
 
-        {errorMessage && <p className="has-text-danger">{errorMessage}</p>}
-
-        <Columns>
+        <div className="columns">
           {/* Formulaire de contact */}
-          <Columns.Column size={6}>
-            <Heading size={4}>Formulaire de contact</Heading>
-            <Box>
-              <form onSubmit={handleSubmit}>
+          <div className="column is-half">
+            <h4 className="title is-4">Formulaire de contact</h4>
+            <div className="box">
+              <form 
+              // onSubmit={handleSubmit}
+              >
                 <div className="field">
                   <label className="label" htmlFor="nom">Nom</label>
                   <div className="control">
@@ -73,8 +70,8 @@ const ContactPage = () => {
                       id="nom"
                       name="nom"
                       placeholder="Votre nom"
-                      value={formData.nom}
-                      onChange={handleChange}
+                      // value={formData.nom}
+                      // onChange={handleChange}
                       required
                     />
                   </div>
@@ -89,8 +86,8 @@ const ContactPage = () => {
                       id="email"
                       name="email"
                       placeholder="Votre adresse email"
-                      value={formData.email}
-                      onChange={handleChange}
+                      // value={formData.email}
+                      // onChange={handleChange}
                       required
                     />
                   </div>
@@ -104,8 +101,8 @@ const ContactPage = () => {
                       id="message"
                       name="message"
                       placeholder="Votre message"
-                      value={formData.message}
-                      onChange={handleChange}
+                      // value={formData.message}
+                      // onChange={handleChange}
                       required
                     ></textarea>
                   </div>
@@ -113,16 +110,16 @@ const ContactPage = () => {
 
                 <div className="field">
                   <div className="control">
-                    <Button color="primary" type="submit">Soumettre</Button>
+                    <button className="button is-primary" type="submit">Soumettre</button>
                   </div>
                 </div>
               </form>
-            </Box>
-          </Columns.Column>
+            </div>
+          </div>
 
           {/* Informations pratiques */}
-          <Columns.Column size={6}>
-            <Heading size={4}>Informations pratiques</Heading>
+          <div className="column is-half">
+            <h4 className="title is-4">Informations pratiques</h4>
 
             <p><strong>Email</strong></p>
             <p><a href="mailto:petfoster@gmail.com">petfoster@gmail.com</a></p>
@@ -133,19 +130,17 @@ const ContactPage = () => {
             <p><strong>Téléphone</strong></p>
             <p><a href="tel:+33237234000">+33 2 37 23 40 00</a></p>
 
-            <Box>
+            {/* <div className="box">
               <figure className="image is-16by9">
                 <img src="#" alt="Carte de l'emplacement" />
               </figure>
-            </Box>
-          </Columns.Column>
-        </Columns>
-        
-      </Container>
-    </Section>
+            </div> */}
+          </div>
+        </div>
+      </div>
+    </section>
+    </>
   );
 };
 
 export default ContactPage;
-
-
