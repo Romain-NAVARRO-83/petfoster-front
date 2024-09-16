@@ -48,8 +48,7 @@ function UploadImageForm({ userId, fetchUserImages }: UploadImageFormProps) {
           headers: {
             'x-csrf-token': csrfToken,
             'Content-Type': 'multipart/form-data',
-          },
-          withCredentials: true,
+          }
         }
       );
       alert('Image téléchargée avec succès');

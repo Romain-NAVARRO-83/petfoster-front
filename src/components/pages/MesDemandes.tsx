@@ -5,6 +5,7 @@ import { User } from '../../@interfaces/user';
 import { Animal } from '../../@interfaces/animal';
 import { useNavigate } from 'react-router-dom';
 import { Check, Cross } from 'react-flaticons';
+import { request } from 'node_modules/axios/index.d.cts';
 
 const FilterPage = () => {
   // Gestion du token CSRF
@@ -225,11 +226,15 @@ const FilterPage = () => {
                   if (animal) {
                     return (
                       <tr key={request.id}>
-                        <td>
+                        <td >
+                          <div className='animal-miniature'>
                           <img
-                            src={request.animal.pictures[0].URL_picture}
+                            src={`/img/animaux/${request.animal.pictures[0].URL_picture}`}
                             alt={request.animal.name}
+                            width="64"
+            height="64"
                           />
+                          </div>
                         </td>
                         <td>{animal.name}</td>
                         <td>
@@ -286,12 +291,10 @@ const FilterPage = () => {
               {myUser?.fosterlingRequests?.map((item: any, index: number) => (
                 <tr key={index}>
                   <td>
-                    <figure className="image is-48x48">
+                    <figure className="image animal-miniature ">
                       <img
-                        src={
-                          requestAnimalDetails[item.animals_id]?.pictures[0]
-                            ?.URL_picture || '/img/default.jpg'
-                        }
+                        src={`/img/animaux/${requestAnimalDetails[item.animals_id]?.pictures[0]
+                          ?.URL_picture}`}
                         alt={
                           requestAnimalDetails[item.animals_id]?.name ||
                           'Animal'
@@ -309,16 +312,24 @@ const FilterPage = () => {
                         'Chargement...'}
                     </a>
                   </td>
-                  {/* {connectedUser?.userType === 'association' ? (
+                  {connectedUser?.userType === 'association' ? (
                     <td>
-                      <a href="#">
+                      <a href={`/profil/${requestUserDetails[item.users_id]?.id}`}>
                         {requestUserDetails[item.users_id]?.name ||
                           'Chargement...'}
                       </a>
                     </td>
                   ) : (
-                    <td>Propriétaire</td>
-                  )} */}
+                    <>
+                    
+                    <td>
+                      <a href={`/profil/${requestAnimalDetails[item.animals_id]?.creator.id}`}>
+                     {requestAnimalDetails[item.animals_id]?.creator.name}
+                     </a>
+                    </td>
+                    <td>{item.content_request}</td>
+                    </>
+                  )}
                   <td>
                     {item.request_status.toLowerCase() === 'pending' && (
                       <span className="tag is-warning">En attente</span>

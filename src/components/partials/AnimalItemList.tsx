@@ -67,7 +67,7 @@ function AnimalItemList({ animal }: AnimalListItemProps) {
         <div className="animal-miniature is-narrow column has-text-centered">
           <img
             src={`/img/animaux/${animal.id}-${animal.name}-1.webp`}  
-            alt="Animal"
+            alt={animal.name}
             width="64"
             height="64"
           />

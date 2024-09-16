@@ -93,6 +93,13 @@ function ProfilUtilisateur() {
                 pictures={user?.pictures ?? []} 
                 userPictures={user?.pictures ?? []} 
               />
+              {/* Ajout du formulaire d'upload */}
+      {/* {connectedUser && connectedUser.userId === user?.id &&
+        <UploadImageForm 
+          userId={connectedUser.userId} 
+          fetchUserImages={fetchUserData} // Ajoutez cette ligne
+        />
+      } */}
             </div>
 
             <div className="column is-6">
@@ -115,13 +122,7 @@ function ProfilUtilisateur() {
         </div>
       </section>
 
-      {/* Ajout du formulaire d'upload */}
-      {connectedUser && 
-        <UploadImageForm 
-          userId={connectedUser.userId} 
-          fetchUserImages={fetchUserData} // Ajoutez cette ligne
-        />
-      }
+      
 
       {/* Section Description */}
       <section>
