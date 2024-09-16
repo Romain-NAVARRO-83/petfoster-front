@@ -145,8 +145,7 @@ function EditProfileForm({ user }: EditProfileFormProps) {
         headers: {
           'Content-Type': 'application/json',
           'x-xsrf-token': csrfToken || '',
-        },
-        withCredentials: true,
+        }
       });
 
       if (response.status === 200) {
