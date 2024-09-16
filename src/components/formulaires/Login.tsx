@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from 'react-bulma-components';
 import axios from 'axios';
-// import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '../../hooks/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../../hooks/ToastContext';
@@ -96,6 +93,7 @@ function LoginForm() {
       } catch (error) {
         setSubmitErrorLogin('Erreur, veuillez réessayer.');
         showErrorToast('Erreur lors de la connexion, veuillez réessayer.');
+        setIsSubmitting(false);
       }
     }
   };
@@ -155,14 +153,13 @@ function LoginForm() {
       {/* Bouton de soumission */}
       <div className="field">
         <div className="control">
-          <Button
-            color="primary"
-            fullwidth
+          <button
+            className='button is-primary is-fullwidth'
             type="submit"
             disabled={isSubmitting}
           >
             {isSubmitting ? 'Connexion en cours...' : 'Se connecter'}
-          </Button>
+          </button>
         </div>
       </div>
 

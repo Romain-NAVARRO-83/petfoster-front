@@ -92,8 +92,15 @@ function AnimalItemList({ animal }: AnimalListItemProps) {
           </div>
         </div>
         {/* {JSON.stringify(animalDetail)} */}
-        <div className='column is-narrow'>
-          hébergé par
+        <div className='column is-narrow is-size-7'>
+          {animal && animal.animalOwners && (
+            // JSON.stringify()
+            <Link to={`/profiles/${animal?.animalOwners[0].user.id}`}>
+              {animal?.animalOwners[0].user.name}
+            </Link>
+            
+          )}
+          {/* {JSON.stringify(animal?.animalOwners?[0].users)} */}
         </div>
 
         {/* Colonne avec les boutons d'actions (édition et visualisation) */}
