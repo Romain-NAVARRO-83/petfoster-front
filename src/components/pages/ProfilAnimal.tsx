@@ -11,7 +11,7 @@ import { User } from 'src/@interfaces/user';
 import GeolocNotification from '../partials/GeolocNotification';
 
 const AnimalProfile = () => {
-  const { openModal } = useModal();
+  const { openModal, closeModal } = useModal();
   const { user: connectedUser } = useAuth(); 
   
   console.log('connectedUser:', connectedUser ,); // Pour vérifier le contenu de l'utilisateur connecté
@@ -49,7 +49,7 @@ const AnimalProfile = () => {
     if (id) {
       fetchAnimalData();
     }
-  }, [id, connectedUser]);
+  }, [id, connectedUser, closeModal]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -113,7 +113,7 @@ const AnimalProfile = () => {
             </p>
             <button
               className="button is-pulled-right is-primary"
-              onClick={() => openModal('editAnimalProfile')}
+              onClick={() => openModal('editAnimalProfile', null, null, animal.id)}
             >
               Éditer
             </button>

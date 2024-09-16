@@ -52,7 +52,7 @@ function MainModal() {
           )}
 
           {modalContent === 'editAnimalProfile' && (
-            <EditAnimalProfileForm />
+            <EditAnimalProfileForm animalId={animalId}/>
           )}
 
           {modalContent === 'createAnimal' && (
