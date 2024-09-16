@@ -5,7 +5,7 @@ interface UploadImageFormProps {
   userId: number | null; // Passer l'ID de l'utilisateur comme prop
 }
 
-const UploadImageForm: React.FC<UploadImageFormProps> = ({ userId }) => {
+function UploadImageForm({ userId }: UploadImageFormProps) {
   const [csrfToken, setCsrfToken] = useState<string | null>(null);
   const [image, setImage] = useState<File | null>(null);
 
@@ -69,8 +69,6 @@ const UploadImageForm: React.FC<UploadImageFormProps> = ({ userId }) => {
       <button type="submit" className="button is-primary is-fullwidth">Télécharger</button>
     </form>
   );
-};
+}
 
 export default UploadImageForm;
-
-

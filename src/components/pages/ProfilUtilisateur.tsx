@@ -8,10 +8,7 @@ import { useAuth } from '../../hooks/AuthContext';
 import { useToast } from '../../hooks/ToastContext';
 import GalleryComponent from '../partials/GalleryComponent';
 import { User } from 'src/@interfaces/user';
-import UploadImageForm from '../formulaires/UploadImageForm'; 
-
-// Ajout des imports pour Bulma ou autres composants
-import { Section, Container, Heading } from 'react-bulma-components';
+import UploadImageForm from '../formulaires/UploadImageForm';
 
 function ProfilUtilisateur() {
   const { showSuccessToast, showErrorToast } = useToast();
@@ -21,9 +18,9 @@ function ProfilUtilisateur() {
   const [user, setUser] = useState<User | null>(null); 
   const [loading, setLoading] = useState(true); 
   const [error, setError] = useState<Error | null>(null); 
-  const { user: connectedUser } = useAuth(); // Obtenir l'utilisateur connecté
+  const { user: connectedUser } = useAuth(); 
 
-  // Récupération du token CSRF
+  // Fetch CSRF token
   useEffect(() => {
     const fetchCsrfToken = async () => {
       try {
@@ -36,7 +33,7 @@ function ProfilUtilisateur() {
     fetchCsrfToken();
   }, []);
 
-  // Récupération des données de l'utilisateur
+  // Fetch user data
   const fetchUserData = useCallback(async () => {
     try {
       const userResponse = await axios.get(`http://localhost:3000/api/users/${id}`);
@@ -52,7 +49,7 @@ function ProfilUtilisateur() {
     fetchUserData();
   }, [fetchUserData]);
 
-  // Suppression d'un profil d'accueil
+  // Delete profile function
   const deleteProfile = async (profileId: number) => {
     try {
       await axios.delete(`http://localhost:3000/api/profiles/${profileId}`, {
@@ -67,7 +64,7 @@ function ProfilUtilisateur() {
     }
   };
 
-  // Affichage du loading ou des erreurs
+  // Loading or error handling
   if (loading) {
     return <div>Loading...</div>; 
   }
@@ -82,8 +79,8 @@ function ProfilUtilisateur() {
         <h1 className="title">{user?.name}</h1>
       </div>
 
-      <Section>
-        <Container>
+      <section className="section">
+        <div className="container">
           {connectedUser && user && id && connectedUser.userId === parseInt(id) && (
             <p className="notification is-primary has-text-centered">
               Ceci est votre profil, vous pouvez l'éditer grâce au bouton présent plus bas.
@@ -111,21 +108,21 @@ function ProfilUtilisateur() {
               )}
             </div>
           </div>
-        </Container>
-      </Section>
+        </div>
+      </section>
 
-      {/* Ajout du formulaire d'upload */}
-      <Section>
-        <Container>
-          <Heading size={2} renderAs="h2">Changer l'image de profil</Heading>
+      {/* Upload image form */}
+      <section className="section">
+        <div className="container">
+          <h2 className="title">Changer l'image de profil</h2>
           {connectedUser && <UploadImageForm userId={connectedUser.userId} />}
-        </Container>
-      </Section>
+        </div>
+      </section>
 
       {/* Section Description */}
-      <Section>
-        <Container>
-          <Heading size={2} renderAs="h2">Description</Heading>
+      <section className="section">
+        <div className="container">
+          <h2 className="title">Description</h2>
           {user && <p>{user.description}</p>}
 
           {!connectedUser && (
@@ -145,51 +142,50 @@ function ProfilUtilisateur() {
             <button className="button is-primary is-pulled-right" onClick={() => openModal('editUserProfile')}>
               <Pencil /> Éditer
             </button>
-            
-          )}
-          {/* {JSON.stringify(user)} */}
-        </div>
-      </section>
-{user?.type_user !== "association" &&(
-      <section className="section">
-        <div className="container">
-          <h2 className="title">Profils d'accueil</h2>
-          {connectedUser && user && id !== undefined && connectedUser.userId === parseInt(id) && (
-            <div className="has-text-right">
-              <button className="button is-primary" onClick={() => openModal('addFosterlingProfile', connectedUser.userId)}>
-                <PlusSmall /> Ajouter
-              </button>
-            </div>
-          )}
-          {user?.fosterlingProfiles && user.fosterlingProfiles.length > 0 ? (
-            <table className="table is-fullwidth has-text-centered card">
-              <thead>
-                <tr>
-                  <th className="has-text-centered">Espèce</th>
-                  <th className="has-text-centered">Âge</th>
-                  <th className="has-text-centered">Sexe</th>
-                  <th className="has-text-centered">Quantité</th>
-                  <th className="has-text-centered">Périmètre</th>
-                  <th className="has-text-right">Contrôle</th>
-                </tr>
-              </thead>
-              <tbody>
-                {user?.fosterlingProfiles?.map((profile) => (
-                  <FosterlingProfile key={profile.id} profile={profile} deleteFunction={deleteProfile} />
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <div className="notification is-info is-light has-text-centered">
-              <p>Aucun profil d'accueil pour le moment</p>
-            </div>
           )}
         </div>
       </section>
+
+      {/* Fosterling Profiles Section */}
+      {user?.type_user !== "association" && (
+        <section className="section">
+          <div className="container">
+            <h2 className="title">Profils d'accueil</h2>
+            {connectedUser && user && id !== undefined && connectedUser.userId === parseInt(id) && (
+              <div className="has-text-right">
+                <button className="button is-primary" onClick={() => openModal('addFosterlingProfile', connectedUser.userId)}>
+                  <PlusSmall /> Ajouter
+                </button>
+              </div>
+            )}
+            {user?.fosterlingProfiles && user.fosterlingProfiles.length > 0 ? (
+              <table className="table is-fullwidth has-text-centered card">
+                <thead>
+                  <tr>
+                    <th className="has-text-centered">Espèce</th>
+                    <th className="has-text-centered">Âge</th>
+                    <th className="has-text-centered">Sexe</th>
+                    <th className="has-text-centered">Quantité</th>
+                    <th className="has-text-centered">Périmètre</th>
+                    <th className="has-text-right">Contrôle</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {user?.fosterlingProfiles?.map((profile) => (
+                    <FosterlingProfile key={profile.id} profile={profile} deleteFunction={deleteProfile} />
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <div className="notification is-info is-light has-text-centered">
+                <p>Aucun profil d'accueil pour le moment</p>
+              </div>
+            )}
+          </div>
+        </section>
       )}
     </main>
   );
 }
 
 export default ProfilUtilisateur;
-

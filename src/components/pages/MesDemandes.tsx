@@ -178,13 +178,13 @@ const FilterPage = () => {
                     {item.request_status.toLowerCase() === 'rejected' && (<span className="tag is-danger">Rejetée</span>)}
                     {item.request_status.toLowerCase() === 'approved' && (<span className="tag is-success">Validée</span>)}
                   </td>
-                  {connectedUser?.userType === 'association' && (
+                  {/* {connectedUser?.userType === 'association' && (
                     <td>
                       <button className="button is-primary" onClick={() => handleConfirm(item.id)}>
                         Valider
                       </button>
                     </td>
-                  )}
+                  )} */}
                 </tr>
               ))}
             </tbody>
