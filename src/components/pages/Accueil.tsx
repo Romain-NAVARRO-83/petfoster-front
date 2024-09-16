@@ -1,49 +1,48 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { LatLngExpression, Icon } from 'leaflet';
-import {Heading,Container,Columns,Section,} from 'react-bulma-components';
 import AnimalItemList from '../partials/AnimalItemList';
 import MapComponent from '../partials/MapComponent';
 import Messagerie from '../partials/Messagerie';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext';
+import GeolocNotification from '../partials/GeolocNotification';
+// import { useGeolocation } from '../../hooks/GeolocationContext';
 
-import { useGeolocation } from '../../hooks/GeolocationContext';
+// const defaultPosition: LatLngExpression = [43.3365, 1.3396];
 
-const defaultPosition: LatLngExpression = [43.3365, 1.3396];
-
-// Icône personnalisée pour la position de l'utilisateur
-const userIcon = new Icon({
-  iconUrl: '/img/vector/your-position-marker.svg',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-});
+// Custom icon for the user's location
+// const userIcon = new Icon({
+//   iconUrl: '/img/vector/your-position-marker.svg',
+//   iconSize: [25, 41],
+//   iconAnchor: [12, 41],
+//   popupAnchor: [1, -34],
+// });
 
 function Accueil() {
   const { user: connectedUser } = useAuth();
-  const { location, error } = useGeolocation();
+  // const { location, error } = useGeolocation();
 
-  // Utiliser la position de l'utilisateur (ou celle par défaut)
-  const mapCenter: LatLngExpression = location ? [location.lat, location.lng] : defaultPosition;
+  // Use the user's location or the default one
+  // const mapCenter: LatLngExpression = location ? [location.lat, location.lng] : defaultPosition;
 
-  // GESTION DU FETCH des animaux
+  // Fetching animals data
   const [allAnimals, setAllAnimals] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
-  // GESTION DU FETCH des utilisateurs
+  // Fetching users data
   const [allUsers, setAllUsers] = useState<any>(null);
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [fetchUsersError, setFetchUsersError] = useState<string | null>(null);
 
-  // Fetch des animaux
+  // Fetch animals data
   useEffect(() => {
     axios
       .get('http://localhost:3000/api/animals')
       .then((response) => {
         setAllAnimals(response.data);
-        setLoading(false);       
+        setLoading(false);
       })
       .catch(() => {
         setFetchError('Erreur lors de la récupération des données');
@@ -51,13 +50,13 @@ function Accueil() {
       });
   }, []);
 
-  // Fetch des utilisateurs
+  // Fetch users data
   useEffect(() => {
     axios
-      .get('http://localhost:3000/api/users') 
+      .get('http://localhost:3000/api/users')
       .then((response) => {
-        setAllUsers(response.data);  
-        setLoadingUsers(false);       
+        setAllUsers(response.data);
+        setLoadingUsers(false);
       })
       .catch(() => {
         setFetchUsersError('Erreur lors de la récupération des données');
@@ -65,116 +64,85 @@ function Accueil() {
       });
   }, []);
 
-  // Suppression du filtrage par distance dans Accueil.tsx (donc on affiche tout)
-  
   return (
     <main>
-      <Columns id="splash-screen" vCentered className="has-text-centered">
-        <Columns.Column
-          mobile={{ size: 12 }}
-          tablet={{ size: 12 }}
-          desktop={{ size: 6 }}
-          narrow
-        >
-          <Heading>Bienvenue sur Pet Foster !</Heading>
-          <Heading renderAs="h2">Cette phrase vous va comme un slogan</Heading>
-        </Columns.Column>
-        <Columns.Column
-          mobile={{ size: 12 }}
-          tablet={{ size: 12 }}
-          desktop={{ size: 6 }}
-        >
-          <Link className="is-primary is-large button" to="/connexion">
+      <div id="splash-screen" className="columns is-vcentered has-text-centered">
+        <div className="column is-full-mobile is-half-desktop">
+          <h1 className="title">Bienvenue sur Pet Foster !</h1>
+          <h2 className="subtitle">Cette phrase vous va comme un slogan</h2>
+        </div>
+        <div className="column is-full-mobile is-half-desktop">
+          <Link className="button is-primary is-large" to="/connexion">
             Créer mon compte
           </Link>
-        </Columns.Column>
-      </Columns>
+        </div>
+      </div>
 
-      <Section>
-        <Columns className="container">
-          <Columns.Column>
-            <Heading renderAs='h3'>Familles d'accueil</Heading>
-            <p>
-              Les familles d'accueil offrent un refuge temporaire aux animaux en attente d'adoption.
-            </p>
-          </Columns.Column>
+      <section className="section">
+        <div className="columns is-variable is-8">
+          <div className="column">
+            <h3 className="title is-4">Familles d'accueil</h3>
+            <p>Les familles d'accueil offrent un refuge temporaire aux animaux en attente d'adoption.</p>
+          </div>
 
-          <Columns.Column>
-            <Heading renderAs='h3'>Associations</Heading>
-            <p>
-              Les associations jouent un rôle crucial dans la protection animale.
-            </p>
-          </Columns.Column>
+          <div className="column">
+            <h3 className="title is-4">Associations</h3>
+            <p>Les associations jouent un rôle crucial dans la protection animale.</p>
+          </div>
 
-          <Columns.Column>
-            <Heading renderAs='h3'>Adoptants</Heading>
-            <p>
-              Les adoptants ouvrent leur foyer à des animaux pour la vie.
-            </p>
-          </Columns.Column>
-        </Columns>
-      </Section>
+          <div className="column">
+            <h3 className="title is-4">Adoptants</h3>
+            <p>Les adoptants ouvrent leur foyer à des animaux pour la vie.</p>
+          </div>
+        </div>
+        < GeolocNotification />
+      </section>
+
       {connectedUser && <Messagerie />}
-      <Section className="yellow-line">
-        <Container className="info-block">
-          <Heading renderAs="h2">
-            {allAnimals?.length} animaux et {allUsers?.length} associations dans
-            votre secteur
-          </Heading>
-        </Container>
-        <Columns className="container ">
-          <Columns.Column
-            mobile={{ size: 12 }}
-            tablet={{ size: 12 }}
-            desktop={{ size: 6 }}
-            id="home-map-container"
-          >
-            <MapComponent users={allUsers} />
-          </Columns.Column>
-          <Columns.Column
-            mobile={{ size: 12 }}
-            tablet={{ size: 12 }}
-            desktop={{ size: 6 }}
-            className="animal-list"
-          >
-            {allAnimals &&
-              allAnimals.map((item: any) => (
-                <AnimalItemList animal={item} key={item.id} />
-              ))}
-          </Columns.Column>
-        </Columns>
-      </Section>
 
-      <Section className="info-block">
-        <Heading renderAs="h2">Vous souhaitez affiner votre recherche?</Heading>
-        <Columns className="container">
-          <Columns.Column
-            mobile={{ size: 12 }}
-            tablet={{ size: 12 }}
-            desktop={{ size: 6 }}
-          >
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis
-              facere iure similique cum ab maiores iste quod. Temporibus facilis
-              facere enim ad voluptatum! Nihil recusandae, iure soluta nam cum
-              explicabo.
-            </p>
-          </Columns.Column>
-          <Columns.Column
-            mobile={{ size: 12 }}
-            tablet={{ size: 12 }}
-            desktop={{ size: 6 }}
-            className="has-text-centered"
-          >
-            <Link className="is-primary button" to="/trouver-animal">
-              Voir les animaux
-            </Link>
-          </Columns.Column>
-        </Columns>
-      </Section>
+      <section className="section yellow-line">
+        <div className="container info-block">
+          <h2 className="title is-3">
+            {allAnimals?.length} animaux et {allUsers?.length} associations dans votre secteur
+          </h2>
+        </div>
+
+        <div className="columns is-align-items-start">
+          <div className="column is-full-mobile is-half-desktop" id="home-map-container">
+            <MapComponent users={allUsers} />
+          </div>
+
+          <div className="column is-full-mobile is-half-desktop">
+            <div className="animal-list">
+              {allAnimals &&
+                allAnimals.map((item: any) => (
+                  <AnimalItemList animal={item} key={item.id} />
+                ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section info-block">
+        <div className="container">
+          <h2 className="title is-3">Vous souhaitez affiner votre recherche?</h2>
+          <div className="columns is-variable is-8">
+            <div className="column is-full-mobile is-half-desktop">
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis facere iure similique cum ab maiores
+                iste quod. Temporibus facilis facere enim ad voluptatum! Nihil recusandae, iure soluta nam cum explicabo.
+              </p>
+            </div>
+            <div className="column is-full-mobile is-half-desktop has-text-centered">
+              <Link className="button is-primary" to="/trouver-animal">
+                Voir les animaux
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }
 
 export default Accueil;
-

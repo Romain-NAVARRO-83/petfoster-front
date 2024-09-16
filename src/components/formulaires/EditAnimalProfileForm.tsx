@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useAuth } from '../../hooks/AuthContext';
 import { useToast } from '../../hooks/ToastContext';
 import { useModal } from '../../hooks/ModalContext';
-import { useParams } from 'react-router-dom';
 
 interface FormData {
   name: string;
@@ -14,14 +12,13 @@ interface FormData {
   short_story: string;
   long_story: string;
   health: string;
-  creator_id: number | null;
+  // creator_id: number | null;
 }
 
-const EditAnimalProfileForm = () => {
+const EditAnimalProfileForm = ({ animalId }: { animalId: number | null }) => {
   const { showSuccessToast, showErrorToast } = useToast();
   const { closeModal } = useModal();
-  const { user: connectedUser } = useAuth(); // Récupère les infos du token JWT
-  const { id } = useParams<{ id: string }>(); // Récupère l'id de l'animal à éditer
+  const id = animalId;
 
   // Gestion du token CSRF
   const [csrfToken, setCsrfToken] = useState<string | null>(null);
@@ -29,7 +26,6 @@ const EditAnimalProfileForm = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null); // Pour afficher un message d'erreur
   const [loading, setLoading] = useState<boolean>(true); // Gérer l'état de chargement
 
-  
   // Récupère le token CSRF
   useEffect(() => {
     const fetchCsrfToken = async () => {
@@ -58,7 +54,6 @@ const EditAnimalProfileForm = () => {
           short_story: animalData.short_story,
           long_story: animalData.long_story,
           health: animalData.health,
-          creator_id: connectedUser?.userId || null,
         });
         setLoading(false);
       } catch (error) {
@@ -70,7 +65,7 @@ const EditAnimalProfileForm = () => {
     if (id) {
       fetchAnimalData();
     }
-  }, [id, connectedUser]);
+  }, [id]);
 
   // Gère les changements de formulaire
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -128,6 +123,7 @@ const EditAnimalProfileForm = () => {
 
   return (
     <form className="columns is-multiline" onSubmit={handleSubmit}>
+      {/* Animal : {animalId} */}
       {/* Affichage des erreurs */}
       {errorMessage && (
         <div className="notification is-danger">{errorMessage}</div>
@@ -158,7 +154,6 @@ const EditAnimalProfileForm = () => {
               <option value={2}>Chien</option>
               <option value={3}>Cheval</option>
               <option value={4}>Lapin</option>
-              {/* Ajoutez espèces ici */}
             </select>
           </div>
         </div>
@@ -206,6 +201,51 @@ const EditAnimalProfileForm = () => {
         </div>
       </div>
 
+      {/* Short Story */}
+      <div className="field column is-full">
+        <label className="label" htmlFor="short_story">Histoire courte</label>
+        <div className="control">
+          <textarea
+            className="textarea"
+            id="short_story"
+            name="short_story"
+            value={formData?.short_story || ''}
+            onChange={handleChange}
+            placeholder="Une courte histoire sur l'animal"
+          />
+        </div>
+      </div>
+
+      {/* Long Story */}
+      <div className="field column is-full">
+        <label className="label" htmlFor="long_story">Histoire longue</label>
+        <div className="control">
+          <textarea
+            className="textarea"
+            id="long_story"
+            name="long_story"
+            value={formData?.long_story || ''}
+            onChange={handleChange}
+            placeholder="L'histoire complète de l'animal"
+          />
+        </div>
+      </div>
+
+      {/* Health */}
+      <div className="field column is-full">
+        <label className="label" htmlFor="health">Santé</label>
+        <div className="control">
+          <textarea
+            className="textarea"
+            id="health"
+            name="health"
+            value={formData?.health || ''}
+            onChange={handleChange}
+            placeholder="Informations sur la santé de l'animal"
+          />
+        </div>
+      </div>
+
       <div className="field column is-full">
         <div className="control">
           <button className="button is-primary is-fullwidth" type="submit">
@@ -218,4 +258,3 @@ const EditAnimalProfileForm = () => {
 };
 
 export default EditAnimalProfileForm;
-

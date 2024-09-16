@@ -1,18 +1,18 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
+import { User } from 'src/@interfaces/user';
 
-// Define the type for the context value
+
 interface ModalContextType {
   modalContent: string | null;
   setModalContent: (content: string | null) => void;
   isActive: boolean;
-  // openModal: (content: string) => void;
-  openModal: (content: string, userId?: number, id?: number) => void;
+  openModal: (content: string, senderId?: number, receiverId?: number, id?: number, fullUser?: User | null) => void;
   closeModal: () => void;
   senderId: number | null;
   receiverId: number | null;
   animalId: number | null;
+  fullUser: User | null;
 }
-
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
 
@@ -26,29 +26,32 @@ export function ModalProvider({ children }: ModalProviderProps) {
   const [senderId, setSenderId] = useState<number | null>(null);
   const [receiverId, setReceiverId] = useState<number | null>(null);
   const [animalId, setAnimalId] = useState<number | null>(null);
+  const [fullUser, setFullUser] = useState<User | null>(null); 
 
-  const openModal = (content: string, senderId?: number, receiverId?: number, id?: number) => {
+  const openModal = (content: string, senderId?: number, receiverId?: number, id?: number, fullUser?: User | null) => {
     setModalContent(content);
-    setSenderId(senderId || null);
-    setReceiverId(receiverId || null);
-    setAnimalId(id || null);  // Utilisez l'argument `id`
+    if (senderId !== null) setSenderId(senderId);
+    if (receiverId !== null) setReceiverId(receiverId);
+    if (id !== null) setAnimalId(id);
+    if (fullUser !== null) setFullUser(fullUser);
     setIsActive(true);
   };
 
   const closeModal = () => {
-    setIsActive(false); 
-    setModalContent(null); 
+    setIsActive(false);
+    setModalContent(null);
     setSenderId(null);
-    setReceiverId(null); 
+    setReceiverId(null);
+    setAnimalId(null);
+    setFullUser(null);
   };
 
   return (
-    <ModalContext.Provider value={{ isActive, openModal, closeModal, modalContent, setModalContent,senderId, receiverId, animalId  }}>
+    <ModalContext.Provider value={{ isActive, openModal, closeModal, modalContent, setModalContent, senderId, receiverId, animalId, fullUser }}>
       {children}
     </ModalContext.Provider>
   );
 }
-
 
 export function useModal(): ModalContextType {
   const context = useContext(ModalContext);

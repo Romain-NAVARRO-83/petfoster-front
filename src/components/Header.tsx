@@ -1,9 +1,11 @@
 import { NavLink, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { useAuth } from '../hooks/AuthContext'; // Import du contexte
+import { useAuth } from '../hooks/AuthContext';
 import { User } from 'react-flaticons'; 
 
+
 function Header() {
+  
   // State pour le menu burger
   const [isActive, setIsActive] = useState(false);
 
@@ -111,6 +113,7 @@ function Header() {
           </div>
         </nav>
       </header>
+      
     </>
   );
 }

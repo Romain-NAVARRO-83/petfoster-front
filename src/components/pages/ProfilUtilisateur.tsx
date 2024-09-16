@@ -1,28 +1,26 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Button, Heading, Section, Columns, Container } from 'react-bulma-components';
-import { Pencil, PlusSmall } from 'react-flaticons';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { Pencil, PlusSmall } from 'react-flaticons';
 import { useModal } from '../../hooks/ModalContext';
-import FosterlingProfile from '../partials/FosterlingProfile'; 
-import { useAuth } from '../../hooks/AuthContext'; 
+import FosterlingProfile from '../partials/FosterlingProfile';
+import { useAuth } from '../../hooks/AuthContext';
 import { useToast } from '../../hooks/ToastContext';
 import GalleryComponent from '../partials/GalleryComponent';
 import { User } from 'src/@interfaces/user';
+import UploadImageForm from '../formulaires/UploadImageForm';
 
 function ProfilUtilisateur() {
   const { showSuccessToast, showErrorToast } = useToast();
   const [csrfToken, setCsrfToken] = useState<string | null>(null);
   const { openModal, closeModal } = useModal();
-  const { id } = useParams<{ id: string }>(); 
-  const [user, setUser] = useState<User | null>(null); 
-  const [loading, setLoading] = useState(true); 
-  const [error, setError] = useState<Error | null>(null); 
+  const { id } = useParams<{ id: string }>();
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+  const { user: connectedUser } = useAuth(); // Obtenir l'utilisateur connecté
 
-  // Obtenir l'utilisateur connecté à partir du contexte d'authentification
-  const { user: connectedUser } = useAuth();
-
-  // Fonction pour récupérer le token CSRF
+  // Récupération du token CSRF
   useEffect(() => {
     const fetchCsrfToken = async () => {
       try {
@@ -35,7 +33,7 @@ function ProfilUtilisateur() {
     fetchCsrfToken();
   }, []);
 
-  // Fonction pour récupérer les données de l'utilisateur
+  // Récupération des données de l'utilisateur
   const fetchUserData = useCallback(async () => {
     try {
       const userResponse = await axios.get(`http://localhost:3000/api/users/${id}`);
@@ -47,12 +45,11 @@ function ProfilUtilisateur() {
     }
   }, [id, showErrorToast, closeModal]);
 
-  // Appel de la fonction pour récupérer les données au montage du composant
   useEffect(() => {
     fetchUserData();
   }, [fetchUserData]);
 
-  // Fonction pour supprimer un profil
+  // Suppression d'un profil d'accueil
   const deleteProfile = async (profileId: number) => {
     try {
       await axios.delete(`http://localhost:3000/api/profiles/${profileId}`, {
@@ -61,18 +58,19 @@ function ProfilUtilisateur() {
         },
       });
       showSuccessToast("Profil supprimé avec succès");
-      await fetchUserData(); 
+      await fetchUserData();
     } catch (error) {
       showErrorToast("Erreur lors de la suppression du profil");
     }
   };
 
+  // Affichage du loading ou des erreurs
   if (loading) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>; 
+    return <div>Error: {error.message}</div>;
   }
 
   return (
@@ -81,7 +79,7 @@ function ProfilUtilisateur() {
         <h1 className="title">{user?.name}</h1>
       </div>
 
-      <section className="section">
+      <section>
         <div className="container">
           {connectedUser && user && id && connectedUser.userId === parseInt(id) && (
             <p className="notification is-primary has-text-centered">
@@ -89,12 +87,11 @@ function ProfilUtilisateur() {
             </p>
           )}
           <div className="columns is-multiline">
-            <Columns.Column mobile={{ size: 12 }} tablet={{ size: 12 }} desktop={{ size: 6 }}>
-              {/* Gallery component displaying pictures or userPictures */}
+            <div className="column is-6">
               <GalleryComponent pictures={user?.pictures} userPictures={user?.pictures} />
-            </Columns.Column>
+            </div>
 
-            <Columns.Column mobile={{ size: 12 }} tablet={{ size: 12 }} desktop={{ size: 6 }}>
+            <div className="column is-6">
               {user && (
                 <>
                   <h2 className="title">{user.type_user}</h2>
@@ -109,17 +106,25 @@ function ProfilUtilisateur() {
                   </ul>
                 </>
               )}
-            </Columns.Column>
+            </div>
           </div>
         </div>
       </section>
 
-      <Section>
-        <Container>
-          <Heading size={2} renderAs="h2">Description</Heading>
-          <Section>
-            {user && <p>{user.description}</p>}
-          </Section>
+      {/* Ajout du formulaire d'upload */}
+      <section>
+        <div className="container">
+          <h2 className="title">Changer l'image de profil</h2>
+          {connectedUser && <UploadImageForm userId={connectedUser.userId} />}
+        </div>
+      </section>
+
+      {/* Section Description */}
+      <section>
+        <div className="container">
+          <h2 className="title">Description</h2>
+          {user && <p>{user.description}</p>}
+
           {!connectedUser && (
             <div className="notification is-info is-light has-text-right is-pulled-right">
               <p>Connectez-vous à votre compte pour pouvoir contacter {user?.name}</p>
@@ -127,55 +132,57 @@ function ProfilUtilisateur() {
             </div>
           )}
 
-          {user && connectedUser && (
-            <Button color="primary" className="is-pulled-right" onClick={() => openModal('contactUser', connectedUser.userId, user.id)}>
+          {user && connectedUser && connectedUser.userId !== user.id && (
+            <button className="button is-primary is-pulled-right" onClick={() => openModal('contactUser', connectedUser.userId, user.id)}>
               Contacter
-            </Button>
+            </button>
           )}
 
           {connectedUser && user && id !== undefined && connectedUser.userId === parseInt(id) && (
-            <Button color="primary" className="is-pulled-right" onClick={() => openModal('editUserProfile')}>
-              <Pencil /> Éditer
-            </Button>
+          <button className="button is-primary is-pulled-right" onClick={() => openModal('editUserProfile', null, null, null, user)}>
+          <Pencil /> Éditer
+        </button>
           )}
-        </Container>
-      </Section>
+        </div>
+      </section>
 
-      <Section>
-        <Container>
-          <h2 className="title">Profils d'accueil</h2>
-          {connectedUser && user && id !== undefined && connectedUser.userId === parseInt(id) && (
-            <div className="has-text-right">
-              <button className="button is-primary" onClick={() => openModal('addFosterlingProfile', connectedUser.userId)}>
-                <PlusSmall /> Ajouter
-              </button>
-            </div>
-          )}
-          {user?.fosterlingProfiles && user.fosterlingProfiles.length > 0 ? (
-            <table className="table is-fullwidth has-text-centered card">
-              <thead>
-                <tr>
-                  <th className="has-text-centered">Espèce</th>
-                  <th className="has-text-centered">Âge</th>
-                  <th className="has-text-centered">Sexe</th>
-                  <th className="has-text-centered">Quantité</th>
-                  <th className="has-text-centered">Périmètre</th>
-                  <th className="has-text-right">Contrôle</th>
-                </tr>
-              </thead>
-              <tbody>
-                {user?.fosterlingProfiles?.map((profile) => (
-                  <FosterlingProfile key={profile.id} profile={profile} deleteFunction={deleteProfile} />
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <div className="notification is-info is-light has-text-centered">
-              <p>Aucun profil d'accueil pour le moment</p>
-            </div>
-          )}
-        </Container>
-      </Section>
+      {user?.type_user !== "association" && (
+        <section className="section">
+          <div className="container">
+            <h2 className="title">Profils d'accueil</h2>
+            {connectedUser && user && id !== undefined && connectedUser.userId === parseInt(id) && (
+              <div className="has-text-right">
+                <button className="button is-primary" onClick={() => openModal('addFosterlingProfile', connectedUser.userId)}>
+                  <PlusSmall /> Ajouter
+                </button>
+              </div>
+            )}
+            {user?.fosterlingProfiles && user.fosterlingProfiles.length > 0 ? (
+              <table className="table is-fullwidth has-text-centered card">
+                <thead>
+                  <tr>
+                    <th className="has-text-centered">Espèce</th>
+                    <th className="has-text-centered">Âge</th>
+                    <th className="has-text-centered">Sexe</th>
+                    <th className="has-text-centered">Quantité</th>
+                    <th className="has-text-centered">Périmètre</th>
+                    <th className="has-text-right">Contrôle</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {user?.fosterlingProfiles?.map((profile) => (
+                    <FosterlingProfile key={profile.id} profile={profile} deleteFunction={deleteProfile} />
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <div className="notification is-info is-light has-text-centered">
+                <p>Aucun profil d'accueil pour le moment</p>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
     </main>
   );
 }

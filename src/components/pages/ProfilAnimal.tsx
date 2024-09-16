@@ -8,9 +8,10 @@ import computeAge from '../../utils/computeAge';
 import { useAuth } from '../../hooks/AuthContext'; // Importer le contexte d'authentification
 import { Animal } from 'src/@interfaces/animal';
 import { User } from 'src/@interfaces/user';
+import GeolocNotification from '../partials/GeolocNotification';
 
 const AnimalProfile = () => {
-  const { openModal } = useModal();
+  const { openModal, closeModal } = useModal();
   const { user: connectedUser } = useAuth(); 
   
   console.log('connectedUser:', connectedUser ,); // Pour vérifier le contenu de l'utilisateur connecté
@@ -48,7 +49,7 @@ const AnimalProfile = () => {
     if (id) {
       fetchAnimalData();
     }
-  }, [id, connectedUser]);
+  }, [id, connectedUser, closeModal]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -63,7 +64,7 @@ const AnimalProfile = () => {
       <div>
         <h1 className="title">{animal?.name}</h1>
       </div>
-
+<GeolocNotification />
       {/* Responsive Gallery and Info Sections */}
       <section className="container columns is-multiline">
         {/* Galerie d'images */}
@@ -112,7 +113,7 @@ const AnimalProfile = () => {
             </p>
             <button
               className="button is-pulled-right is-primary"
-              onClick={() => openModal('editAnimalProfile')}
+              onClick={() => openModal('editAnimalProfile', null, null, animal.id)}
             >
               Éditer
             </button>

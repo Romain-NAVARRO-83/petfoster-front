@@ -1,237 +1,311 @@
-import { useState } from 'react';
-import { Form, Button, Columns, Notification, Heading } from 'react-bulma-components';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useToast } from '../../hooks/ToastContext';
+import { User } from 'src/@interfaces/user'; // Ajustez le chemin d'importation selon votre projet
 
-const { Field, Control, Input, Label } = Form;
-
-// Définition de l'interface pour typer l'objet formData
+// Interface pour les données du formulaire
 interface FormData {
-  nom: string;
-  tel: string;
-  pays: string;
-  codePostal: string;
-  ville: string;
-  adresse: string;
+  name: string;
+  phone: string;
+  country: string;
+  zip: string | number;
+  city: string;
+  address: string;
+  description: string;
+  website: string;
 }
 
-const EditProfileForm = () => {
+// Interface pour les propriétés du formulaire d'édition
+interface EditProfileFormProps {
+  user?: User | null;
+}
+
+function EditProfileForm({ user }: EditProfileFormProps) {
+  const { showSuccessToast, showErrorToast } = useToast();
+  
+  // État pour stocker le token CSRF
+  const [csrfToken, setCsrfToken] = useState<string | null>(null);
+  
+  // État pour stocker la position (latitude, longitude)
+  const [position, setPosition] = useState<number[] | null>(null);
+  
+  // État pour les données du formulaire, initialisé avec les données de l'utilisateur
   const [formData, setFormData] = useState<FormData>({
-    nom: '',
-    tel: '',
-    pays: '',
-    codePostal: '',
-    ville: '',
-    adresse: ''
+    name: user?.name || '',
+    phone: user?.phone || '',
+    country: user?.country || '',
+    zip: user?.zip || '',
+    city: user?.city || '',
+    address: user?.address || '',
+    description: user?.description || '',
+    website: user?.website || ''
   });
 
-  // État pour gérer les erreurs de validation
-  const [errors, setErrors] = useState<Partial<FormData>>({});
+  const [loading, setLoading] = useState(false); // Pour indiquer le chargement lors de la soumission
+  const [cityOptions, setCityOptions] = useState<string[]>([]); // Liste des villes basées sur le code postal
 
-  // État pour savoir si le formulaire est en cours de soumission
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // Effet pour récupérer le token CSRF au chargement du composant
+  useEffect(() => {
+    const fetchCsrfToken = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/csrf-token');
+        setCsrfToken(response.data);
+      } catch (error) {
+        console.error('Erreur lors de la récupération du token CSRF:', error);
+        showErrorToast('Erreur lors de la récupération du token CSRF');
+      }
+    };
+    fetchCsrfToken();
+  }, [showErrorToast]);
 
-  // État pour afficher un message de succès après soumission
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-
-  // Fonction de validation pour les champs du formulaire
-  const validateForm = () => {
-    const newErrors: Partial<FormData> = {};
-
-    // Validation du champ nom
-    if (!formData.nom.trim()) {
-      newErrors.nom = 'Le nom est obligatoire';
+  // Effet pour pré-remplir le formulaire avec les données de l'utilisateur si elles sont disponibles
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        name: user.name || '',
+        phone: user.phone || '',
+        country: user.country || '',
+        zip: user.zip || '',
+        city: user.city || '',
+        address: user.address || '',
+        description: user?.description || '',
+        website: user?.website || ''
+      });
     }
+  }, [user]);
 
-    // Validation du champ téléphone
-    const phoneRegex = /^\+?[0-9]{7,15}$/;
-    if (!formData.tel.trim()) {
-      newErrors.tel = 'Le téléphone est obligatoire';
-    } else if (!phoneRegex.test(formData.tel)) {
-      newErrors.tel = 'Le numéro de téléphone n\'est pas valide';
-    }
-
-    // Validation du champ pays
-    if (!formData.pays.trim()) {
-      newErrors.pays = 'Le pays est obligatoire';
-    }
-
-    // Validation du champ code postal
-    if (!formData.codePostal.trim()) {
-      newErrors.codePostal = 'Le code postal est obligatoire';
-    } else if (isNaN(Number(formData.codePostal))) {
-      newErrors.codePostal = 'Le code postal doit être un nombre';
-    }
-
-    // Validation du champ ville
-    if (!formData.ville.trim()) {
-      newErrors.ville = 'La ville est obligatoire';
-    }
-
-    return newErrors;
-  };
-
-  // Fonction appelée à chaque changement de champ
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Fonction pour gérer les changements dans les champs du formulaire
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: value, // Met à jour le champ correspondant dans formData
     });
   };
 
-  // Fonction de soumission du formulaire
+  // Gère le changement de ville et récupère les coordonnées (latitude, longitude) pour la ville sélectionnée
+  const handleCityChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedCity = e.target.value;
+    setFormData((prevData) => ({ ...prevData, city: selectedCity }));
+
+    if (selectedCity && formData.country) {
+      try {
+        const response = await axios.get(`https://nominatim.openstreetmap.org/search?city=${selectedCity}&country=${formData.country}&format=json`);
+        if (response.data.length > 0) {
+          const { lat, lon } = response.data[0];
+          showSuccessToast(`Coordonnées de ${selectedCity}: Latitude: ${lat}, Longitude: ${lon}`);
+          setPosition([lat, lon]);
+        } else {
+          showErrorToast("Impossible de trouver les coordonnées de la ville.");
+        }
+      } catch (error) {
+        console.error("Erreur lors de la récupération des coordonnées:", error);
+        showErrorToast("Erreur lors de la récupération des coordonnées.");
+      }
+    }
+  };
+
+  // Récupère les villes associées à un code postal
+  const fetchCities = async (zip: string) => {
+    try {
+      const response = await axios.get(`https://api.zippopotam.us/fr/${zip}`);
+      const cities = response.data.places.map((place: any) => place['place name']);
+      setCityOptions(cities);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des villes:", error);
+      showErrorToast("Erreur lors de la récupération des villes.");
+      setCityOptions([]); // Réinitialise la liste des villes en cas d'erreur
+    }
+  };
+
+  // Gère le changement du code postal et appelle fetchCities pour récupérer les villes associées
+  const handlePostalCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newPostalCode = e.target.value;
+    setFormData((prevData) => ({ ...prevData, zip: newPostalCode }));
+
+    // Si le code postal a 5 chiffres, récupère les villes
+    if (newPostalCode.length === 5) {
+      fetchCities(newPostalCode);
+    } else {
+      setCityOptions([]); // Réinitialise les options si le code postal est trop court
+    }
+  };
+
+  // Gère la soumission du formulaire
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    const validationErrors = validateForm();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-
-    // Si tout est valide, on peut soumettre le formulaire
-    setIsSubmitting(true);
+    setLoading(true); // Affiche l'indicateur de chargement
 
     try {
-      // Simulation de l'envoi des données à une API
-      console.log('Données soumises : ', formData);
-
-      // Après la soumission, afficher un message de succès
-      setSuccessMessage('Profil mis à jour avec succès.');
-
-      // Réinitialiser le formulaire après la soumission
-      setFormData({
-        nom: '',
-        tel: '',
-        pays: '',
-        codePostal: '',
-        ville: '',
-        adresse: ''
+      const response = await axios.put(`http://localhost:3000/api/users/${user?.id}`, { 
+        ...formData, 
+        latitude: position ? position[0] : null, 
+        longitude: position ? position[1] : null 
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-xsrf-token': csrfToken || '',
+        },
+        withCredentials: true,
       });
-    } 
-    catch (error) {
-      console.error('Erreur lors de la soumission', error);
-    } 
-    finally {
-      setIsSubmitting(false);
+
+      if (response.status === 200) {
+        showSuccessToast('Profil mis à jour avec succès');
+      } else {
+        showErrorToast('Erreur lors de la mise à jour du profil');
+      }
+    } catch (error) {
+      console.error('Erreur lors de la soumission du profil', error);
+      showErrorToast('Erreur lors de la soumission du profil');
+    } finally {
+      setLoading(false); // Cache l'indicateur de chargement
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <Heading renderAs='h3'>Éditer votre profil</Heading>
-
-      {/* Message de succès après la soumission */}
-      {successMessage && (
-        <Notification color="success">
-          {successMessage}
-        </Notification>
-      )}
-
-      <Field>
-        <Label>Nom</Label>
-        <Control>
-          <Input
-            name="nom"
-            value={formData.nom}
+      {/* Champ Nom */}
+      <div className="field">
+        <label className="label">Nom</label>
+        <div className="control">
+          <input
+            className="input"
+            name="name"
+            value={formData.name}
             onChange={handleChange}
             placeholder="Votre nom"
             aria-label="Nom"
+            required
           />
-        </Control>
-        {errors.nom && <p className="help is-danger">{errors.nom}</p>}
-      </Field>
+        </div>
+      </div>
 
-      <Field>
-        <Label>Tél</Label>
-        <Control>
-          <Input
-            name="tel"
+      {/* Champ Téléphone */}
+      <div className="field">
+        <label className="label">Tél</label>
+        <div className="control">
+          <input
+            className="input"
+            name="phone"
             type="tel"
-            value={formData.tel}
+            value={formData.phone}
             onChange={handleChange}
             placeholder="Votre numéro de téléphone"
             aria-label="Téléphone"
+            required
           />
-        </Control>
-        {errors.tel && <p className="help is-danger">{errors.tel}</p>}
-      </Field>
+        </div>
+      </div>
 
-      <Field>
-        <Label>Pays</Label>
-        <Control>
-          <Input
-            name="pays"
-            value={formData.pays}
-            onChange={handleChange}
-            placeholder="Votre pays"
-            aria-label="Pays"
-          />
-        </Control>
-        {errors.pays && <p className="help is-danger">{errors.pays}</p>}
-      </Field>
+      {/* Champ Pays */}
+      <div className="field">
+        <label className="label">Pays</label>
+        <div className="control">
+          <div className="select">
+            <select name="country" value={formData.country} onChange={handleChange} required>
+              <option value="">Sélectionnez un pays</option>
+              <option value="france">France</option>
+              <option value="belgique">Belgique</option>
+              <option value="suisse">Suisse</option>
+            </select>
+          </div>
+        </div>
+      </div>
 
-      <Columns>
-        <Columns.Column>
-          <Field>
-            <Label>Code postal</Label>
-            <Control>
-              <Input
-                name="codePostal"
-                value={formData.codePostal}
-                onChange={handleChange}
+      {/* Champs Code postal et Ville */}
+      <div className="columns">
+        <div className="column">
+          <div className="field">
+            <label className="label">Code postal</label>
+            <div className="control">
+              <input
+                className="input"
+                name="zip"
+                type="number"
+                value={formData.zip}
+                onChange={handlePostalCodeChange}
                 placeholder="Votre code postal"
-                type="text"
                 aria-label="Code postal"
+                required
               />
-            </Control>
-            {errors.codePostal && <p className="help is-danger">{errors.codePostal}</p>}
-          </Field>
-        </Columns.Column>
+            </div>
+          </div>
+        </div>
 
-        <Columns.Column>
-          <Field>
-            <Label>Ville</Label>
-            <Control>
-              <Input
-                name="ville"
-                value={formData.ville}
-                onChange={handleChange}
-                placeholder="Votre ville"
-                aria-label="Ville"
-              />
-            </Control>
-            {errors.ville && <p className="help is-danger">{errors.ville}</p>}
-          </Field>
-        </Columns.Column>
-      </Columns>
+        <div className="column">
+          <div className="field">
+            <label className="label">Ville</label>
+            <div className="control">
+              <div className="select">
+                <select value={formData.city} onChange={handleCityChange} required>
+                  <option value="">Sélectionnez une ville</option>
+                  {cityOptions.map((cityOption, index) => (
+                    <option key={index} value={cityOption}>
+                      {cityOption}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <Notification color={'info'} light={true}>
-        <p>Cette information est nécessaire pour vous placer sur la carte et permettre aux utilisateurs de vous trouver.</p>
-      </Notification>
-
-      <Field>
-        <Label>Adresse</Label>
-        <Control>
-          <Input
-            name="adresse"
-            value={formData.adresse}
+      {/* Champ Adresse */}
+      <div className="field">
+        <label className="label">Adresse</label>
+        <div className="control">
+          <input
+            className="input"
+            name="address"
+            value={formData.address}
             onChange={handleChange}
             placeholder="Votre adresse (optionnel)"
             aria-label="Adresse"
           />
-        </Control>
-      </Field>
+        </div>
+      </div>
 
-      <Notification color={'info'} light={true}>
-        <p>Celle-ci n'est pas obligatoire, vous pouvez décider de la laisser vide</p>
-      </Notification>
+      {/* Champ Site web */}
+      <div className="field">
+        <label className="label">Site web</label>
+        <div className="control">
+          <input
+            className="input"
+            name="website"
+            value={formData.website}
+            onChange={handleChange}
+            placeholder="Votre site web (optionnel)"
+            aria-label="Site web"
+          />
+        </div>
+      </div>
+
+      {/* Champ Description */}
+      <div className="field">
+        <label className="label">Description</label>
+        <div className="control">
+          <input
+            className="input"
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            placeholder="Votre description (optionnel)"
+            aria-label="Description"
+          />
+        </div>
+      </div>
 
       {/* Bouton de soumission */}
-      <Button color="primary" type="submit" disabled={isSubmitting}>
-        {isSubmitting ? 'Envoi en cours...' : 'Enregistrer'}
-      </Button>
+      <div className="field">
+        <div className="control">
+          <button className={`button is-primary is-fullwidth ${loading ? 'is-loading' : ''}`} type="submit">
+            Enregistrer
+          </button>
+        </div>
+      </div>
     </form>
   );
-};
+}
 
 export default EditProfileForm;
