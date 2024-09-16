@@ -1,9 +1,6 @@
 import { useState } from 'react';
-import { Form, Button, Columns, Notification, Heading } from 'react-bulma-components';
 
-const { Field, Control, Input, Label } = Form;
-
-// Définition de l'interface pour typer l'objet formData
+// Define the FormData interface for typing formData object
 interface FormData {
   nom: string;
   tel: string;
@@ -23,25 +20,25 @@ const EditProfileForm = () => {
     adresse: ''
   });
 
-  // État pour gérer les erreurs de validation
+  // State to manage validation errors
   const [errors, setErrors] = useState<Partial<FormData>>({});
 
-  // État pour savoir si le formulaire est en cours de soumission
+  // State to handle form submission
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // État pour afficher un message de succès après soumission
+  // State to display success message after submission
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  // Fonction de validation pour les champs du formulaire
+  // Form validation function
   const validateForm = () => {
     const newErrors: Partial<FormData> = {};
 
-    // Validation du champ nom
+    // Validate 'nom' field
     if (!formData.nom.trim()) {
       newErrors.nom = 'Le nom est obligatoire';
     }
 
-    // Validation du champ téléphone
+    // Validate 'tel' field
     const phoneRegex = /^\+?[0-9]{7,15}$/;
     if (!formData.tel.trim()) {
       newErrors.tel = 'Le téléphone est obligatoire';
@@ -49,19 +46,19 @@ const EditProfileForm = () => {
       newErrors.tel = 'Le numéro de téléphone n\'est pas valide';
     }
 
-    // Validation du champ pays
+    // Validate 'pays' field
     if (!formData.pays.trim()) {
       newErrors.pays = 'Le pays est obligatoire';
     }
 
-    // Validation du champ code postal
+    // Validate 'codePostal' field
     if (!formData.codePostal.trim()) {
       newErrors.codePostal = 'Le code postal est obligatoire';
     } else if (isNaN(Number(formData.codePostal))) {
       newErrors.codePostal = 'Le code postal doit être un nombre';
     }
 
-    // Validation du champ ville
+    // Validate 'ville' field
     if (!formData.ville.trim()) {
       newErrors.ville = 'La ville est obligatoire';
     }
@@ -69,7 +66,7 @@ const EditProfileForm = () => {
     return newErrors;
   };
 
-  // Fonction appelée à chaque changement de champ
+  // Function to handle field change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
@@ -78,7 +75,7 @@ const EditProfileForm = () => {
     });
   };
 
-  // Fonction de soumission du formulaire
+  // Function to handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -88,17 +85,16 @@ const EditProfileForm = () => {
       return;
     }
 
-    // Si tout est valide, on peut soumettre le formulaire
+    
     setIsSubmitting(true);
 
     try {
-      // Simulation de l'envoi des données à une API
       console.log('Données soumises : ', formData);
 
-      // Après la soumission, afficher un message de succès
+      
       setSuccessMessage('Profil mis à jour avec succès.');
 
-      // Réinitialiser le formulaire après la soumission
+      // Reset 
       setFormData({
         nom: '',
         tel: '',
@@ -107,44 +103,45 @@ const EditProfileForm = () => {
         ville: '',
         adresse: ''
       });
-    } 
-    catch (error) {
+    } catch (error) {
       console.error('Erreur lors de la soumission', error);
-    } 
-    finally {
+    } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <Heading renderAs='h3'>Éditer votre profil</Heading>
 
-      {/* Message de succès après la soumission */}
+      {/* Succes*/}
       {successMessage && (
-        <Notification color="success">
+        <div className="notification is-success">
           {successMessage}
-        </Notification>
+        </div>
       )}
 
-      <Field>
-        <Label>Nom</Label>
-        <Control>
-          <Input
+      {/* Pseudo */}
+      <div className="field">
+        <label className="label">Pseudo</label>
+        <div className="control">
+          <input
+            className="input"
             name="nom"
             value={formData.nom}
             onChange={handleChange}
             placeholder="Votre nom"
             aria-label="Nom"
           />
-        </Control>
+        </div>
         {errors.nom && <p className="help is-danger">{errors.nom}</p>}
-      </Field>
+      </div>
 
-      <Field>
-        <Label>Tél</Label>
-        <Control>
-          <Input
+      {/* Tel*/}
+      <div className="field">
+        <label className="label">Tél</label>
+        <div className="control">
+          <input
+            className="input"
             name="tel"
             type="tel"
             value={formData.tel}
@@ -152,30 +149,34 @@ const EditProfileForm = () => {
             placeholder="Votre numéro de téléphone"
             aria-label="Téléphone"
           />
-        </Control>
+        </div>
         {errors.tel && <p className="help is-danger">{errors.tel}</p>}
-      </Field>
+      </div>
 
-      <Field>
-        <Label>Pays</Label>
-        <Control>
-          <Input
+      {/* Pays*/}
+      <div className="field">
+        <label className="label">Pays</label>
+        <div className="control">
+          <input
+            className="input"
             name="pays"
             value={formData.pays}
             onChange={handleChange}
             placeholder="Votre pays"
             aria-label="Pays"
           />
-        </Control>
+        </div>
         {errors.pays && <p className="help is-danger">{errors.pays}</p>}
-      </Field>
+      </div>
 
-      <Columns>
-        <Columns.Column>
-          <Field>
-            <Label>Code postal</Label>
-            <Control>
-              <Input
+      {/* Code postal*/}
+      <div className="columns">
+        <div className="column">
+          <div className="field">
+            <label className="label">Code postal</label>
+            <div className="control">
+              <input
+                className="input"
                 name="codePostal"
                 value={formData.codePostal}
                 onChange={handleChange}
@@ -183,53 +184,57 @@ const EditProfileForm = () => {
                 type="text"
                 aria-label="Code postal"
               />
-            </Control>
+            </div>
             {errors.codePostal && <p className="help is-danger">{errors.codePostal}</p>}
-          </Field>
-        </Columns.Column>
+          </div>
+        </div>
 
-        <Columns.Column>
-          <Field>
-            <Label>Ville</Label>
-            <Control>
-              <Input
+        <div className="column">
+          <div className="field">
+            <label className="label">Ville</label>
+            <div className="control">
+              <input
+                className="input"
                 name="ville"
                 value={formData.ville}
                 onChange={handleChange}
                 placeholder="Votre ville"
                 aria-label="Ville"
               />
-            </Control>
+            </div>
             {errors.ville && <p className="help is-danger">{errors.ville}</p>}
-          </Field>
-        </Columns.Column>
-      </Columns>
+          </div>
+        </div>
+      </div>
 
-      <Notification color={'info'} light={true}>
+      {/* Info */}
+      <div className="notification is-info">
         <p>Cette information est nécessaire pour vous placer sur la carte et permettre aux utilisateurs de vous trouver.</p>
-      </Notification>
+      </div>
 
-      <Field>
-        <Label>Adresse</Label>
-        <Control>
-          <Input
+      {/* Adresse*/}
+      <div className="field">
+        <label className="label">Adresse</label>
+        <div className="control">
+          <input
+            className="input"
             name="adresse"
             value={formData.adresse}
             onChange={handleChange}
             placeholder="Votre adresse (optionnel)"
             aria-label="Adresse"
           />
-        </Control>
-      </Field>
+        </div>
+      </div>
 
-      <Notification color={'info'} light={true}>
+      <div className="notification is-info">
         <p>Celle-ci n'est pas obligatoire, vous pouvez décider de la laisser vide</p>
-      </Notification>
+      </div>
 
-      {/* Bouton de soumission */}
-      <Button color="primary" type="submit" disabled={isSubmitting}>
+      {/* Submit button */}
+      <button className="button is-primary is-fullwidth" type="submit" disabled={isSubmitting}>
         {isSubmitting ? 'Envoi en cours...' : 'Enregistrer'}
-      </Button>
+      </button>
     </form>
   );
 };

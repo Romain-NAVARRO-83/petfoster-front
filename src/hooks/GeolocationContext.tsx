@@ -1,27 +1,23 @@
 import { createContext, useState, useEffect, useContext, ReactNode } from 'react';
 
-// Define the shape of the context data
 interface GeolocationContextType {
   location: { lat: number; lng: number } | null;
-  error: string | null;
+  errorGeoloc: string | null;
 }
 
-// Create the Geolocation context
 const GeolocationContext = createContext<GeolocationContextType | undefined>(undefined);
 
-// Define the props type for the provider, including children
 interface GeolocationProviderProps {
   children: ReactNode;
 }
 
-// GeolocationProvider component without React.FC
 export function GeolocationProvider({ children }: GeolocationProviderProps) {
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [errorGeoloc, setErrorGeoloc] = useState<string | null>(null);
 
   useEffect(() => {
     if (!navigator.geolocation) {
-      setError('Geolocation is not supported by your browser');
+      setErrorGeoloc('Geolocation is not supported by your browser');
       return;
     }
 
@@ -33,12 +29,27 @@ export function GeolocationProvider({ children }: GeolocationProviderProps) {
           lng: longitude,
         });
       },
-      (error) => setError(error.message)
+      (error) => {
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            setErrorGeoloc('Pour une meilleure expérience sur Pet Foster, merci d\'activer la géolocalisation de votre navigateur');
+            break;
+          case error.POSITION_UNAVAILABLE:
+            setErrorGeoloc('Le service de géolocalisation est injoignable.');
+            break;
+          case error.TIMEOUT:
+            setErrorGeoloc('La géolocalisation a pris trop de temps.');
+            break;
+          default:
+            setErrorGeoloc('Erreur de geolocalisation inconnue.');
+            break;
+        }
+      }
     );
   }, []);
 
   return (
-    <GeolocationContext.Provider value={{ location, error }}>
+    <GeolocationContext.Provider value={{ location, errorGeoloc }}>
       {children}
     </GeolocationContext.Provider>
   );
