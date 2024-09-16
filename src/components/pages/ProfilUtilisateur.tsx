@@ -130,7 +130,9 @@ function ProfilUtilisateur() {
             <button className="button is-primary is-pulled-right" onClick={() => openModal('editUserProfile')}>
               <Pencil /> Éditer
             </button>
+            
           )}
+          {/* {JSON.stringify(user)} */}
         </div>
       </section>
 {user?.type_user !== "association" &&(

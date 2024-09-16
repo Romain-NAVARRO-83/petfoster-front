@@ -1,72 +1,47 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { User } from 'src/@interfaces/user'; // Adjust the import path to your user interface
 
-// Define the FormData interface for typing formData object
+// Define the type for the form data
 interface FormData {
   nom: string;
   tel: string;
   pays: string;
-  codePostal: string;
+  codePostal: string | number;
   ville: string;
   adresse: string;
 }
 
-const EditProfileForm = () => {
+// Define the props type for the component
+interface EditProfileFormProps {
+  user?: User | null;
+}
+
+function EditProfileForm({ user }: EditProfileFormProps) {
   const [formData, setFormData] = useState<FormData>({
-    nom: '',
-    tel: '',
-    pays: '',
-    codePostal: '',
-    ville: '',
-    adresse: ''
+    nom: user?.name || '',
+    tel: user?.phone || '',
+    pays: user?.country || '',
+    codePostal: user?.zip || '',
+    ville: user?.city || '',
+    adresse: user?.address || '',
   });
 
-  // State to manage validation errors
-  const [errors, setErrors] = useState<Partial<FormData>>({});
-
-  // State to handle form submission
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // State to display success message after submission
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-
-  // Form validation function
-  const validateForm = () => {
-    const newErrors: Partial<FormData> = {};
-
-    // Validate 'nom' field
-    if (!formData.nom.trim()) {
-      newErrors.nom = 'Le nom est obligatoire';
+  // Prefill the form fields when the user data is available
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        nom: user.name || '',
+        tel: user.phone || '',
+        pays: user.country || '',
+        codePostal: user.zip || '',
+        ville: user.city || '',
+        adresse: user.address || '',
+      });
     }
+  }, [user]);
 
-    // Validate 'tel' field
-    const phoneRegex = /^\+?[0-9]{7,15}$/;
-    if (!formData.tel.trim()) {
-      newErrors.tel = 'Le téléphone est obligatoire';
-    } else if (!phoneRegex.test(formData.tel)) {
-      newErrors.tel = 'Le numéro de téléphone n\'est pas valide';
-    }
-
-    // Validate 'pays' field
-    if (!formData.pays.trim()) {
-      newErrors.pays = 'Le pays est obligatoire';
-    }
-
-    // Validate 'codePostal' field
-    if (!formData.codePostal.trim()) {
-      newErrors.codePostal = 'Le code postal est obligatoire';
-    } else if (isNaN(Number(formData.codePostal))) {
-      newErrors.codePostal = 'Le code postal doit être un nombre';
-    }
-
-    // Validate 'ville' field
-    if (!formData.ville.trim()) {
-      newErrors.ville = 'La ville est obligatoire';
-    }
-
-    return newErrors;
-  };
-
-  // Function to handle field change
+  console.log(user)
+  // Handle form field changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
@@ -75,54 +50,17 @@ const EditProfileForm = () => {
     });
   };
 
-  // Function to handle form submission
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  // Handle form submission
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    const validationErrors = validateForm();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-
-    
-    setIsSubmitting(true);
-
-    try {
-      console.log('Données soumises : ', formData);
-
-      
-      setSuccessMessage('Profil mis à jour avec succès.');
-
-      // Reset 
-      setFormData({
-        nom: '',
-        tel: '',
-        pays: '',
-        codePostal: '',
-        ville: '',
-        adresse: ''
-      });
-    } catch (error) {
-      console.error('Erreur lors de la soumission', error);
-    } finally {
-      setIsSubmitting(false);
-    }
+    console.log('Form submitted:', formData);
   };
 
   return (
     <form onSubmit={handleSubmit}>
-
-      {/* Succes*/}
-      {successMessage && (
-        <div className="notification is-success">
-          {successMessage}
-        </div>
-      )}
-
-      {/* Pseudo */}
+      {/* Name field */}
       <div className="field">
-        <label className="label">Pseudo</label>
+        <label className="label">Nom</label>
         <div className="control">
           <input
             className="input"
@@ -133,10 +71,9 @@ const EditProfileForm = () => {
             aria-label="Nom"
           />
         </div>
-        {errors.nom && <p className="help is-danger">{errors.nom}</p>}
       </div>
 
-      {/* Tel*/}
+      {/* Telephone field */}
       <div className="field">
         <label className="label">Tél</label>
         <div className="control">
@@ -150,10 +87,9 @@ const EditProfileForm = () => {
             aria-label="Téléphone"
           />
         </div>
-        {errors.tel && <p className="help is-danger">{errors.tel}</p>}
       </div>
 
-      {/* Pays*/}
+      {/* Country field */}
       <div className="field">
         <label className="label">Pays</label>
         <div className="control">
@@ -166,10 +102,9 @@ const EditProfileForm = () => {
             aria-label="Pays"
           />
         </div>
-        {errors.pays && <p className="help is-danger">{errors.pays}</p>}
       </div>
 
-      {/* Code postal*/}
+      {/* Postal code and city fields */}
       <div className="columns">
         <div className="column">
           <div className="field">
@@ -181,11 +116,9 @@ const EditProfileForm = () => {
                 value={formData.codePostal}
                 onChange={handleChange}
                 placeholder="Votre code postal"
-                type="text"
                 aria-label="Code postal"
               />
             </div>
-            {errors.codePostal && <p className="help is-danger">{errors.codePostal}</p>}
           </div>
         </div>
 
@@ -202,17 +135,11 @@ const EditProfileForm = () => {
                 aria-label="Ville"
               />
             </div>
-            {errors.ville && <p className="help is-danger">{errors.ville}</p>}
           </div>
         </div>
       </div>
 
-      {/* Info */}
-      <div className="notification is-info">
-        <p>Cette information est nécessaire pour vous placer sur la carte et permettre aux utilisateurs de vous trouver.</p>
-      </div>
-
-      {/* Adresse*/}
+      {/* Address field */}
       <div className="field">
         <label className="label">Adresse</label>
         <div className="control">
@@ -227,16 +154,12 @@ const EditProfileForm = () => {
         </div>
       </div>
 
-      <div className="notification is-info">
-        <p>Celle-ci n'est pas obligatoire, vous pouvez décider de la laisser vide</p>
-      </div>
-
       {/* Submit button */}
-      <button className="button is-primary is-fullwidth" type="submit" disabled={isSubmitting}>
-        {isSubmitting ? 'Envoi en cours...' : 'Enregistrer'}
+      <button className="button is-primary" type="submit">
+        Enregistrer
       </button>
     </form>
   );
-};
+}
 
 export default EditProfileForm;

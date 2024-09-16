@@ -7,7 +7,7 @@ import EditAnimalProfileForm from '../formulaires/EditAnimalProfileForm';
 import CreateAnimalProfileForm from '../formulaires/CreateAnimalProfileForm';
 
 function MainModal() {
-  const { modalContent, isActive, closeModal, senderId, receiverId,animalId } = useModal();
+  const { modalContent, isActive, closeModal, user, senderId, receiverId,animalId } = useModal();
 
   return (
     <div className={`modal ${isActive ? 'is-active' : ''}`}>
