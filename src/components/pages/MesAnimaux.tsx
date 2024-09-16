@@ -86,7 +86,7 @@ const MesAnimaux = () => {
                   myUser.createdAnimals.map((oneAnimal) => (
                     <>
                       {/* {JSON.stringify(oneAnimal)} */}
-                      <AnimalItemList animal={oneAnimal} />
+                      <AnimalItemList animal={oneAnimal} key={oneAnimal.id}/>
                       </>
                   ))
                 ) : (
@@ -106,7 +106,7 @@ const MesAnimaux = () => {
             )}</h2>
               {myUser?.userAnimals && myUser.userAnimals.length > 0 ? (
                 myUser.userAnimals.filter(animal => animal.date_end === null).map((sejour) => (
-                  <AnimalItemList animal={sejour.animal} />
+                  <AnimalItemList animal={sejour.animal} key={sejour.id}/>
                       
                     
                   

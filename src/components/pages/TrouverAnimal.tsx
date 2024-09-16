@@ -1,13 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import { Link } from 'react-router-dom';
 import computeAge from '../../utils/computeAgeTrouverAnimal'; 
 import axios from 'axios';
-import { Heading, Button, Section, Columns, Form } from "react-bulma-components";
-const { Field, Label } = Form;
 import AnimalItemList from "../partials/AnimalItemList";
 import MapComponent from '../partials/MapComponent';
 import { useGeolocation } from '../../hooks/GeolocationContext';
+import { useAuth } from '../../hooks/AuthContext';
 import { User } from 'src/@interfaces/user';
 import { Animal } from 'src/@interfaces/animal';
+import { Filter, FilterSlash } from 'react-flaticons';
+import { FosterlingProfileListItem } from 'src/@interfaces/fosterlingProfileListItem';
+import GenderIcon from '../partials/GenderIcon';
+import IdToSPecies from '../partials/IdToSpecies';
+
+type FormData = {
+  species: string;
+  age: string;
+  sexe: string;
+  search_area: number;
+};
 
 // Correspondance entre species_id et nom d'espèce
 const speciesMap: { [key: number]: string } = {
@@ -25,211 +36,226 @@ const speciesMap: { [key: number]: string } = {
   12: 'Rat',
 };
 
-function TrouverAnimal() {
-const{location} = useGeolocation();
-// console.log(location);
-  const [formData, setFormData] = useState({
+const TrouverAnimal: React.FC = () => {
+  const { user: connectedUser } = useAuth();
+  const { location } = useGeolocation();
+  const [formData, setFormData] = useState<FormData>({
     species: '',
     age: '',
     sexe: '',
     search_area: 30, 
   });
 
-  
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
     });
   };
-  const handleAnimalFIlterSubmit = (e: React.FormEvent) => {
+
+  const handleAnimalFilterSubmit = (e: FormEvent) => {
     e.preventDefault();
     console.log(formData);
-    // formData.species != "" && setAllAnimals
-  }
+  };
 
-  // Fetch users
   const [allUsers, setAllUsers] = useState<User[] | null>(null);
-  const [loadingUsers, setLoadingUsers] = useState(true);
+  const [loadingUsers, setLoadingUsers] = useState<boolean>(true);
   const [fetchUsersError, setFetchUsersError] = useState<string | null>(null);
-  const [foundUsersAnimals, setFoundUsersAnimals] = useState<Animal[] | null>(null)
+  const [foundUsersAnimals, setFoundUsersAnimals] = useState<Animal[] | null>(null);
+  const [foundUsersFosterlingProfiles, setFoundUsersFosterlingProfiles] = useState<FosterlingProfileListItem[] | null>(null);
 
+  // Fetch all user animals and fosterling profiles
   useEffect(() => {
     if (allUsers) {
       setFoundUsersAnimals(
         allUsers.flatMap(user => user.userAnimals?.map(userAnimal => userAnimal.animal) || [])
       );
+      setFoundUsersFosterlingProfiles(
+        allUsers.flatMap(user =>
+          (user.fosterlingProfiles || []).map(profile => ({
+            ...profile,
+            userName: user.name,
+            userType: user.type_user,
+          }))
+        )// Flatten fosterlingProfiles
+      );
     }
   }, [allUsers]);
 
+  // Fetch users data based on filters
   useEffect(() => {
-
     const speciesFilter = formData.species ? `&species=${formData.species}` : '';
     const apiUrl = `http://localhost:3000/api/users?perimeter=${formData.search_area}000&latitude=${location?.lat}&longitude=${location?.lng}${speciesFilter}`;
-  
-    console.log("API URL:", apiUrl); // Pour vérifier que l'URL est correcte
 
     axios
-      .get(`http://localhost:3000/api/users?perimeter=${formData.search_area}000&latitude=${location?.lat}&longitude=${location?.lng}`) 
+      .get(apiUrl)
       .then((response) => {
-        setAllUsers(response.data);  
-        setLoadingUsers(false);   
-        console.log("found user", response.data);     
+        setAllUsers(response.data);
+        setLoadingUsers(false);
       })
       .catch(() => {
-        setFetchUsersError('Error fetching data');  
+        setFetchUsersError('Error fetching data');
         setLoadingUsers(false);
       });
-  }, [formData]);
+  }, [formData, location]);
 
-
-
-  // Déploiement des filtres
   const [filterOpen, setFilterOpen] = useState<boolean>(false);
-  // Handler du toggle des filtres
   const handleFilterOpen = () => {
-    setFilterOpen(!filterOpen);  
+    setFilterOpen(!filterOpen);
   };
 
   return (
-    
     <main>
       <div>
-        <Heading>Trouver un animal</Heading>
-      </div>
-{/*JSON.stringify(foundUsersAnimals)*/}
-      <Section className="columns">
-        <Columns.Column mobile={{ size: 12 }} tablet={{ size: 12 }} desktop={{ size: 6 }} className="animal-list">
-        <h2 className='subtitle'>{foundUsersAnimals?.length} animaux trouvés dans un périmètre de {formData.search_area} Km</h2>
-        {foundUsersAnimals?.length === 0 && (
-          <p className='notification is-info is-light'>Essayez d'agrandir le périmètre de recherche.</p>
+        {connectedUser && connectedUser.userType === "association" ? (
+          <h1 className="title">Trouver un foyer pour vos animaux</h1>
+        ) : (
+          <h1 className="title">Trouver un animal</h1>
         )}
+      </div>
+      <div id="animal-filter" className={filterOpen ? "open" : ""}>
+        <button onClick={handleFilterOpen} className="button is-success">
+          <h2 className="title is-4">
+            {filterOpen ? <FilterSlash /> : <Filter />}
+          </h2>
+        </button>
 
-{foundUsersAnimals && foundUsersAnimals
-  .filter((animal: any) => {
-    const animalAge = computeAge(animal.date_of_birth); // Calculer l'âge en années
-
-    let ageMatches = true;
-    // Appliquer le filtre d'âge seulement si une option d'âge spécifique est sélectionnée
-    if (formData.age === "- de 1 an") {
-      ageMatches = animalAge < 1;
-    } else if (formData.age === "1-3 ans") {
-      ageMatches = animalAge >= 1 && animalAge <= 3;
-    } else if (formData.age === "3-5 ans") {
-      ageMatches = animalAge >= 3 && animalAge <= 5;
-    } else if (formData.age === "+ de 5 ans") {
-      ageMatches = animalAge > 5;
-    }
-
-    return ageMatches &&
-      (formData.species === "" || (animal.species_id && speciesMap[animal.species_id] === formData.species)) && 
-      (formData.sexe === "" || animal.sexe === formData.sexe);  // Filtrer par sexe et espèce
-  })
-  .map((animal: any) => (
-    <AnimalItemList animal={animal} key={animal.id} />
-  ))}
-  
-
-        </Columns.Column>
-
-        <Columns.Column
-          id="map"
-          mobile={{ size: 12 }}
-          tablet={{ size: 12 }}
-          desktop={{ size: 6 }}
-          
-        >
-          <MapComponent 
-            users={allUsers}
-            // searchRadius={formData.search_area * 1000} // Convertir en mètres
-            filters = {formData}
-            showSearchArea={true}  // Montre le cercle de périmètre de recherche
-          />
-        </Columns.Column>
-      </Section>
-      {/* {console.log(formData)} */}
-
-      <Section id="animal-filter" className={filterOpen ? "open" : ""}>
-        <Button onClick={handleFilterOpen} className='is-ghost is-fullwidth'>
-        <Heading renderAs="h2">
-          {filterOpen ? "Cacher les filtres" : "Afficher les filtres"}
-        </Heading>
-        </Button>
-        
-        <form >
-          <Columns className="container">
-            <Columns.Column>
-              <Field>
-                <Label htmlFor="species-dropdown">Espèce</Label>
+        <form onSubmit={handleAnimalFilterSubmit}>
+          <div className="field">
+            <label className="label" htmlFor="species-dropdown">Espèce</label>
+            <div className="control">
+              <div className="select">
                 <select name="species" value={formData.species} onChange={handleChange}>
                   <option value="">Toutes</option>
-                  {/* {allSpecies.map((species) => (
-                    <option value={species}>{species}</option>
-                  ))} */}
-                  <option value="Chat">Chat</option>
-                  <option value="Chien">Chien</option>
-                  <option value="Cheval">Cheval</option>
-                  <option value="Lapin">Lapin</option>
-                  <option value="Cochon d'Inde">Cochon d'Inde</option>
-                  <option value="Hamster">Hamster</option>
-                  <option value="Furet">Furet</option>
-                  <option value="Oiseau">Oiseau</option>
-                  <option value="Serpent">Serpent</option>
-                  <option value="Lézard">Lézard</option>
-                  <option value="Tortue">Tortue</option>
-                  <option value="Rat">Rat</option>
+                  {Object.values(speciesMap).map((species) => (
+                    <option key={species} value={species}>{species}</option>
+                  ))}
                 </select>
-              </Field>
-            </Columns.Column>
+              </div>
+            </div>
+          </div>
 
-            <Columns.Column>
-              <Field>
-                <Label htmlFor="age-dropdown">Age</Label>
+          <div className="field">
+            <label className="label" htmlFor="age-dropdown">Age</label>
+            <div className="control">
+              <div className="select">
                 <select name="age" value={formData.age} onChange={handleChange}>
-                  <option value="">Peu importe</option> {/* Option par défaut */}
+                  <option value="">Peu importe</option>
                   <option value="- de 1 an">- de 1 an</option>
                   <option value="1-3 ans">entre 1 et 3 ans</option>
                   <option value="3-5 ans">entre 3 et 5 ans</option>
                   <option value="+ de 5 ans">+ de 5 ans</option>
                 </select>
-              </Field>
-            </Columns.Column>
+              </div>
+            </div>
+          </div>
 
-            <Columns.Column>
-              <Field>
-                <Label htmlFor="sexe-dropdown">Sexe</Label>
+          <div className="field">
+            <label className="label" htmlFor="sexe-dropdown">Sexe</label>
+            <div className="control">
+              <div className="select">
                 <select name="sexe" value={formData.sexe} onChange={handleChange}>
                   <option value="">Indifférent</option>
                   <option value="M">Mâle</option>
                   <option value="F">Femelle</option>
                 </select>
-              </Field>
-            </Columns.Column>
+              </div>
+            </div>
+          </div>
 
-            <Columns.Column>
-              <Field>
-                <Label>Périmètre</Label>
-                <input
-                  type="range"
-                  name="search_area"
-                  value={formData.search_area}
-                  onChange={handleChange}
-                  min="30"
-                  max="1000"
-                />
-                <p>Périmètre : {formData.search_area} Km</p>
-              </Field>
-            </Columns.Column>
-            {/* <Columns.Column narrow>
-            <Button type="submit" color="primary" onClick={handleAnimalFIlterSubmit}>Ok</Button>
-            </Columns.Column> */}
-          </Columns>
-          
+          <div className="field">
+            <label className="label">Périmètre</label>
+            <div className="control">
+              <input
+                type="range"
+                name="search_area"
+                value={formData.search_area}
+                onChange={handleChange}
+                min="30"
+                max="1000"
+              />
+              <p>Périmètre : {formData.search_area} Km</p>
+            </div>
+          </div>
         </form>
-      </Section>
+      </div>
+
+      <div className='map-and-animals'>
+        <div className="animals-maplist">
+          <h2 className="subtitle">
+            {connectedUser && connectedUser.userType === "association" ? (
+              `${foundUsersFosterlingProfiles?.length} possibilité d'accueil dans un périmètre de ${formData.search_area} Km`
+            ) : (
+              `${foundUsersAnimals?.length} animaux trouvés dans un périmètre de ${formData.search_area} Km`
+            )}
+          </h2>
+          {(connectedUser?.userType !== "association" && foundUsersAnimals?.length === 0) || ((connectedUser?.userType === "association" && foundUsersFosterlingProfiles?.length === 0)) && (
+            <p className="notification is-info is-light">
+              Essayez d'agrandir le périmètre de recherche.
+            </p>
+          )}
+          
+          {!connectedUser || connectedUser.userType !== "association" ? (
+          <div className='animal-list'>
+            {foundUsersAnimals &&
+              foundUsersAnimals
+                .filter((animal) => {
+                  const animalAge = computeAge(animal.date_of_birth);
+                  let ageMatches = true;
+                  if (formData.age === "- de 1 an") {
+                    ageMatches = animalAge < 1;
+                  } else if (formData.age === "1-3 ans") {
+                    ageMatches = animalAge >= 1 && animalAge <= 3;
+                  } else if (formData.age === "3-5 ans") {
+                    ageMatches = animalAge >= 3 && animalAge <= 5;
+                  } else if (formData.age === "+ de 5 ans") {
+                    ageMatches = animalAge > 5;
+                  }
+
+                  return (
+                    ageMatches &&
+                    (formData.species === "" || (animal.species_id && speciesMap[animal.species_id] === formData.species)) &&
+                    (formData.sexe === "" || animal.sexe === formData.sexe)
+                  );
+                })
+                .map((animal) => <AnimalItemList animal={animal} key={animal.id} />)}
+          </div>
+          ) : (
+            
+              <div className='animal-list'>
+                {foundUsersFosterlingProfiles &&
+                  foundUsersFosterlingProfiles
+                    .filter((profile) => {
+                      const speciesMatches = profile.species_id && speciesMap[profile.species_id] === formData.species;
+                      const sexeMatches = formData.sexe === "" || profile.sexe === formData.sexe;
+
+                      return (!formData.species || speciesMatches) && sexeMatches;
+                    })
+                    .map((profile) => (
+                      <div key={profile.id} className='columns card is-vcentered'>
+                        <div className='column has-text-centered'><Link to={`/profil/${profile.users_id}`} ><strong className='is-size-7'>{profile.userName}</strong></Link><br/><span className='is-size-7'>{profile.userType}</span></div>
+                        <div className='column is-narrow'>{profile.quantity}</div>
+                        <div className='column'><IdToSPecies speciesId={profile.species_id}/></div>
+                        <div className='column is-narrow'><GenderIcon gender={profile.sexe} size={15}/></div>
+                        <div className='column'>{profile.age}</div>
+                      </div>
+                    ))}
+              </div>
+            
+          )}
+  </div>
+        <div className="map-column">
+          <MapComponent
+            users={allUsers}
+            filters={formData}
+            showSearchArea={true}
+          />
+        </div>
+        </div>
+
     </main>
   );
-}
+};
 
 export default TrouverAnimal;
