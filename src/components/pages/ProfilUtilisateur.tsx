@@ -3,8 +3,8 @@ import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Pencil, PlusSmall } from 'react-flaticons';
 import { useModal } from '../../hooks/ModalContext';
-import FosterlingProfile from '../partials/FosterlingProfile'; 
-import { useAuth } from '../../hooks/AuthContext'; 
+import FosterlingProfile from '../partials/FosterlingProfile';
+import { useAuth } from '../../hooks/AuthContext';
 import { useToast } from '../../hooks/ToastContext';
 import GalleryComponent from '../partials/GalleryComponent';
 import { User } from 'src/@interfaces/user';
@@ -14,13 +14,13 @@ function ProfilUtilisateur() {
   const { showSuccessToast, showErrorToast } = useToast();
   const [csrfToken, setCsrfToken] = useState<string | null>(null);
   const { openModal, closeModal } = useModal();
-  const { id } = useParams<{ id: string }>(); 
-  const [user, setUser] = useState<User | null>(null); 
-  const [loading, setLoading] = useState(true); 
-  const [error, setError] = useState<Error | null>(null); 
-  const { user: connectedUser } = useAuth(); 
+  const { id } = useParams<{ id: string }>();
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+  const { user: connectedUser } = useAuth(); // Obtenir l'utilisateur connecté
 
-  // Fetch CSRF token
+  // Récupération du token CSRF
   useEffect(() => {
     const fetchCsrfToken = async () => {
       try {
@@ -33,7 +33,7 @@ function ProfilUtilisateur() {
     fetchCsrfToken();
   }, []);
 
-  // Fetch user data
+  // Récupération des données de l'utilisateur
   const fetchUserData = useCallback(async () => {
     try {
       const userResponse = await axios.get(`http://localhost:3000/api/users/${id}`);
@@ -49,7 +49,7 @@ function ProfilUtilisateur() {
     fetchUserData();
   }, [fetchUserData]);
 
-  // Delete profile function
+  // Suppression d'un profil d'accueil
   const deleteProfile = async (profileId: number) => {
     try {
       await axios.delete(`http://localhost:3000/api/profiles/${profileId}`, {
@@ -58,19 +58,19 @@ function ProfilUtilisateur() {
         },
       });
       showSuccessToast("Profil supprimé avec succès");
-      await fetchUserData(); 
+      await fetchUserData();
     } catch (error) {
       showErrorToast("Erreur lors de la suppression du profil");
     }
   };
 
-  // Loading or error handling
+  // Affichage du loading ou des erreurs
   if (loading) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>; 
+    return <div>Error: {error.message}</div>;
   }
 
   return (
@@ -79,7 +79,7 @@ function ProfilUtilisateur() {
         <h1 className="title">{user?.name}</h1>
       </div>
 
-      <section className="section">
+      <section>
         <div className="container">
           {connectedUser && user && id && connectedUser.userId === parseInt(id) && (
             <p className="notification is-primary has-text-centered">
@@ -111,8 +111,8 @@ function ProfilUtilisateur() {
         </div>
       </section>
 
-      {/* Upload image form */}
-      <section className="section">
+      {/* Ajout du formulaire d'upload */}
+      <section>
         <div className="container">
           <h2 className="title">Changer l'image de profil</h2>
           {connectedUser && <UploadImageForm userId={connectedUser.userId} />}
@@ -120,7 +120,7 @@ function ProfilUtilisateur() {
       </section>
 
       {/* Section Description */}
-      <section className="section">
+      <section>
         <div className="container">
           <h2 className="title">Description</h2>
           {user && <p>{user.description}</p>}
@@ -146,7 +146,6 @@ function ProfilUtilisateur() {
         </div>
       </section>
 
-      {/* Fosterling Profiles Section */}
       {user?.type_user !== "association" && (
         <section className="section">
           <div className="container">
