@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 interface UploadImageFormProps {
-  userId: number | null; // Passer l'ID de l'utilisateur comme prop
+  userId: number | null; // L'ID de l'utilisateur connecté
+  fetchUserImages: () => void; // Fonction pour recharger les images après upload
 }
 
-function UploadImageForm({ userId }: UploadImageFormProps) {
+function UploadImageForm({ userId, fetchUserImages }: UploadImageFormProps) {
   const [csrfToken, setCsrfToken] = useState<string | null>(null);
   const [image, setImage] = useState<File | null>(null);
 
@@ -14,13 +15,11 @@ function UploadImageForm({ userId }: UploadImageFormProps) {
     const fetchCsrfToken = async () => {
       try {
         const response = await axios.get('http://localhost:3000/api/csrf-token');
-        console.log('Token CSRF:', response.data);
-        setCsrfToken(response.data.csrfToken);
+        setCsrfToken(response.data.csrfToken || response.data); 
       } catch (error) {
         console.error('Erreur lors de la récupération du token CSRF:', error);
       }
     };
-
     fetchCsrfToken();
   }, []);
 
@@ -33,13 +32,8 @@ function UploadImageForm({ userId }: UploadImageFormProps) {
   const handleUpload = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!image) {
-      alert('Veuillez sélectionner une image.');
-      return;
-    }
-
-    if (!userId) {
-      alert('Utilisateur non défini.');
+    if (!image || !userId || !csrfToken) {
+      alert('Tous les champs doivent être remplis.');
       return;
     }
 
@@ -47,15 +41,19 @@ function UploadImageForm({ userId }: UploadImageFormProps) {
     formData.append('image', image);
 
     try {
-      await axios.post(`http://localhost:3000/api/profiles/${userId}/upload-profile-picture`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'x-csrf-token': csrfToken || '',
-        },
-        withCredentials: true,
-      });
-
+      await axios.post(
+        `http://localhost:3000/api/profiles/${userId}/upload-profile-picture`,
+        formData,
+        {
+          headers: {
+            'x-csrf-token': csrfToken,
+            'Content-Type': 'multipart/form-data',
+          },
+          withCredentials: true,
+        }
+      );
       alert('Image téléchargée avec succès');
+      fetchUserImages(); // Recharger les images après l'upload
     } catch (error) {
       console.error('Erreur lors du téléchargement de l\'image', error);
       alert('Erreur lors du téléchargement de l\'image');
@@ -64,7 +62,6 @@ function UploadImageForm({ userId }: UploadImageFormProps) {
 
   return (
     <form onSubmit={handleUpload}>
-      <h3 className="title">Télécharger une image</h3>
       <input type="file" accept="image/*" onChange={handleImageChange} />
       <button type="submit" className="button is-primary is-fullwidth">Télécharger</button>
     </form>
@@ -72,3 +69,4 @@ function UploadImageForm({ userId }: UploadImageFormProps) {
 }
 
 export default UploadImageForm;
+

@@ -10,7 +10,7 @@ interface IGalleryComponentProps {
     created_at: string;
     updated_at: string | null; 
   }[] | null;
-  userPictures: {
+  userPictures?: {
     id: number;
     URL_picture: string;
     users_id: number;

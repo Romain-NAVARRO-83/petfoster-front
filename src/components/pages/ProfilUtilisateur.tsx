@@ -9,6 +9,7 @@ import { useToast } from '../../hooks/ToastContext';
 import GalleryComponent from '../partials/GalleryComponent';
 import { User } from 'src/@interfaces/user';
 import UploadImageForm from '../formulaires/UploadImageForm';
+import UserImages from '../partials/UserImages'
 
 function ProfilUtilisateur() {
   const { showSuccessToast, showErrorToast } = useToast();
@@ -88,7 +89,10 @@ function ProfilUtilisateur() {
           )}
           <div className="columns is-multiline">
             <div className="column is-6">
-              <GalleryComponent pictures={user?.pictures} userPictures={user?.pictures} />
+            <GalleryComponent 
+                pictures={user?.pictures ?? []} 
+                userPictures={user?.pictures ?? []} 
+              />
             </div>
 
             <div className="column is-6">
@@ -112,12 +116,12 @@ function ProfilUtilisateur() {
       </section>
 
       {/* Ajout du formulaire d'upload */}
-      <section>
-        <div className="container">
-          <h2 className="title">Changer l'image de profil</h2>
-          {connectedUser && <UploadImageForm userId={connectedUser.userId} />}
-        </div>
-      </section>
+      {connectedUser && 
+        <UploadImageForm 
+          userId={connectedUser.userId} 
+          fetchUserImages={fetchUserData} // Ajoutez cette ligne
+        />
+      }
 
       {/* Section Description */}
       <section>
@@ -139,7 +143,10 @@ function ProfilUtilisateur() {
           )}
 
           {connectedUser && user && id !== undefined && connectedUser.userId === parseInt(id) && (
-          <button className="button is-primary is-pulled-right" onClick={() => openModal('editUserProfile', null, null, null, user)}>
+          <button 
+          className="button is-primary is-pulled-right" 
+          onClick={() => openModal('editUserProfile', undefined, undefined, undefined, user)} 
+          >
           <Pencil /> Éditer
         </button>
           )}

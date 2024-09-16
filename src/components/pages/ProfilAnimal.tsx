@@ -113,7 +113,7 @@ const AnimalProfile = () => {
             </p>
             <button
               className="button is-pulled-right is-primary"
-              onClick={() => openModal('editAnimalProfile', null, null, animal.id)}
+              onClick={() => openModal('editAnimalProfile', undefined, undefined, animal?.id)}
             >
               Éditer
             </button>
@@ -134,10 +134,11 @@ const AnimalProfile = () => {
         <h2 className="title">Où se trouve {animal?.name} ?</h2>
         <div className="container columns is-vcentered is-fluid">
           <div className="column is-full-mobile is-half-tablet is-half-desktop">
-            <MapComponent
-              animal={animal}
-              users={animal?.creator ? [animal.creator] : []}
-            />
+          <MapComponent
+            animal={animal}
+            users={animal?.creator ? [animal.creator] : []}
+            filters={{ species: '', age: '', sexe: '', search_area: 30 }} // Valeurs par défaut pour filters
+          />
           </div>
           <div className="column is-full-mobile is-half-tablet is-half-desktop box">
             <p>
@@ -187,11 +188,11 @@ const AnimalProfile = () => {
               <div className="column is-full-mobile is-half-tablet">
               {userData && (userData.type_user === 'adoptant' || userData.type_user === 'famille d\'accueil') && animal?.id && (
     <button
-    className="button is-secondary is-fullwidth"
-    onClick={() => openModal('addFosterlingRequest', connectedUser?.userId, null, animal?.id)}
-  >
-    Faire une demande d'adoption (ou d'accueil)
-  </button>
+      className="button is-secondary is-fullwidth"
+      onClick={() => openModal('addFosterlingRequest', connectedUser?.userId, undefined, animal?.id)}
+      >
+        Faire une demande d'adoption (ou d'accueil)
+    </button>
   
   )}
                 {!connectedUser && (
