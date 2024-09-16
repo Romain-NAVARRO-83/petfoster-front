@@ -9,6 +9,7 @@ import { useAuth } from '../../hooks/AuthContext';
 import { useToast } from '../../hooks/ToastContext';
 import GalleryComponent from '../partials/GalleryComponent';
 import { User } from 'src/@interfaces/user';
+import UploadImageForm from '../formulaires/UploadImageForm'; 
 
 function ProfilUtilisateur() {
   const { showSuccessToast, showErrorToast } = useToast();
@@ -18,7 +19,6 @@ function ProfilUtilisateur() {
   const [user, setUser] = useState<User | null>(null); 
   const [loading, setLoading] = useState(true); 
   const [error, setError] = useState<Error | null>(null); 
-
   // Obtenir l'utilisateur connecté à partir du contexte d'authentification
   const { user: connectedUser } = useAuth();
 
@@ -113,6 +113,15 @@ function ProfilUtilisateur() {
           </div>
         </div>
       </section>
+
+            {/* Ajout du formulaire d'upload */}
+            <Section>
+              <Container>
+                <Heading size={2} renderAs="h2">Changer l'image de profil</Heading>
+                {/* Passer l'ID de l'utilisateur connecté */}
+                {connectedUser && <UploadImageForm userId={connectedUser.userId} />}
+              </Container>
+            </Section>
 
       <Section>
         <Container>
