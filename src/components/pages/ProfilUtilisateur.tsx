@@ -1,8 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Button, Heading, Section, Columns, Container } from 'react-bulma-components';
-import { Pencil, PlusSmall } from 'react-flaticons';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { Pencil, PlusSmall } from 'react-flaticons';
 import { useModal } from '../../hooks/ModalContext';
 import FosterlingProfile from '../partials/FosterlingProfile'; 
 import { useAuth } from '../../hooks/AuthContext'; 
@@ -19,10 +18,8 @@ function ProfilUtilisateur() {
   const [loading, setLoading] = useState(true); 
   const [error, setError] = useState<Error | null>(null); 
 
-  // Obtenir l'utilisateur connecté à partir du contexte d'authentification
   const { user: connectedUser } = useAuth();
 
-  // Fonction pour récupérer le token CSRF
   useEffect(() => {
     const fetchCsrfToken = async () => {
       try {
@@ -35,7 +32,6 @@ function ProfilUtilisateur() {
     fetchCsrfToken();
   }, []);
 
-  // Fonction pour récupérer les données de l'utilisateur
   const fetchUserData = useCallback(async () => {
     try {
       const userResponse = await axios.get(`http://localhost:3000/api/users/${id}`);
@@ -47,12 +43,10 @@ function ProfilUtilisateur() {
     }
   }, [id, showErrorToast, closeModal]);
 
-  // Appel de la fonction pour récupérer les données au montage du composant
   useEffect(() => {
     fetchUserData();
   }, [fetchUserData]);
 
-  // Fonction pour supprimer un profil
   const deleteProfile = async (profileId: number) => {
     try {
       await axios.delete(`http://localhost:3000/api/profiles/${profileId}`, {
@@ -89,12 +83,11 @@ function ProfilUtilisateur() {
             </p>
           )}
           <div className="columns is-multiline">
-            <Columns.Column mobile={{ size: 12 }} tablet={{ size: 12 }} desktop={{ size: 6 }}>
-              {/* Gallery component displaying pictures or userPictures */}
+            <div className="column is-6">
               <GalleryComponent pictures={user?.pictures} userPictures={user?.pictures} />
-            </Columns.Column>
+            </div>
 
-            <Columns.Column mobile={{ size: 12 }} tablet={{ size: 12 }} desktop={{ size: 6 }}>
+            <div className="column is-6">
               {user && (
                 <>
                   <h2 className="title">{user.type_user}</h2>
@@ -109,17 +102,17 @@ function ProfilUtilisateur() {
                   </ul>
                 </>
               )}
-            </Columns.Column>
+            </div>
           </div>
         </div>
       </section>
 
-      <Section>
-        <Container>
-          <Heading size={2} renderAs="h2">Description</Heading>
-          <Section>
+      <section className="section">
+        <div className="container">
+          <h2 className="title">Description</h2>
+          <section>
             {user && <p>{user.description}</p>}
-          </Section>
+          </section>
           {!connectedUser && (
             <div className="notification is-info is-light has-text-right is-pulled-right">
               <p>Connectez-vous à votre compte pour pouvoir contacter {user?.name}</p>
@@ -127,22 +120,22 @@ function ProfilUtilisateur() {
             </div>
           )}
 
-          {user && connectedUser && (
-            <Button color="primary" className="is-pulled-right" onClick={() => openModal('contactUser', connectedUser.userId, user.id)}>
+          {user && connectedUser && connectedUser.userId !== user.id && (
+            <button className="button is-primary is-pulled-right" onClick={() => openModal('contactUser', connectedUser.userId, user.id)}>
               Contacter
-            </Button>
+            </button>
           )}
 
           {connectedUser && user && id !== undefined && connectedUser.userId === parseInt(id) && (
-            <Button color="primary" className="is-pulled-right" onClick={() => openModal('editUserProfile')}>
+            <button className="button is-primary is-pulled-right" onClick={() => openModal('editUserProfile')}>
               <Pencil /> Éditer
-            </Button>
+            </button>
           )}
-        </Container>
-      </Section>
-
-      <Section>
-        <Container>
+        </div>
+      </section>
+{user?.type_user !== "association" &&(
+      <section className="section">
+        <div className="container">
           <h2 className="title">Profils d'accueil</h2>
           {connectedUser && user && id !== undefined && connectedUser.userId === parseInt(id) && (
             <div className="has-text-right">
@@ -174,8 +167,9 @@ function ProfilUtilisateur() {
               <p>Aucun profil d'accueil pour le moment</p>
             </div>
           )}
-        </Container>
-      </Section>
+        </div>
+      </section>
+      )}
     </main>
   );
 }

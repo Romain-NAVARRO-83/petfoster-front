@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { User } from 'src/@interfaces/user';
 import { Animal } from 'src/@interfaces/animal';
+import GenderIcon from './GenderIcon';
+import IdToSPecies from './IdToSpecies';
 
 // Position par défaut si la géolocalisation n'est pas disponible
 const defaultPosition: LatLngExpression = [43.3365, 1.3396];
@@ -145,13 +147,53 @@ function MapComponent({ users, animal, filters, showSearchArea = false }: MapCom
             position={[parseFloat(user.latitude), parseFloat(user.longitude)]}
           >
             <Popup>
-              {user.name}
-              <br />
-              <Link to={`/profil/${user.id}`}>Voir le profil</Link>
-              {/* Liste des animaux du user */}
-              {user.userAnimals && user.userAnimals.map((index) => (
-                <span key={index.animal.id}>{index.animal.name}</span>
+            <p className='mapopup-header'>
+            <Link to={`/profil/${user.id}`}>  {user.name}</Link>
+              </p>
+              <p className='mapopup-usertype'>{user.type_user}</p>
+              <div className='columns'>
+              {/* Liste des animaux du user (hebergement)*/}
+              {user.userAnimals && user.userAnimals.length > 0 && (
+                <div className='column'>
+                  <p className='mapopup-subheader'>Heberges</p>
+                <ul>
+                  {user.userAnimals.map((index) => (
+                <li key={index.animal.id}><Link to={`/animal/${index.animal.id}`}>{index.animal.name}</Link></li>
               ))}
+                </ul>
+                </div>
+              )}
+              {/* Liste des animaux du user (créés)*/}
+              {/* user.type_user === "association" &&  */}
+              {user.createdAnimals && user.createdAnimals.length > 0 && (
+                <div className='column'>
+                  <p className='mapopup-subheader'>à créé</p>
+                  {/* {JSON.stringify(user.createdAnimals)} */}
+                <ul>
+                  {user.createdAnimals.map((animal) => (
+                <li key={animal.id}><Link to={`/animal/${animal.id}`}>{animal.name}</Link></li>
+              ))}
+                </ul>
+                </div>
+                
+              )}
+              {/* Liste des recherches du user (profils d'accueil)*/}
+              {user.type_user !== "association" && user.fosterlingProfiles && user.fosterlingProfiles.length > 0 && (
+                <div className='column'>
+                  <p className='mapopup-subheader'>
+                    {user.type_user === "adoptant" ? "Recherche" :"Peut accueillir"}
+                  </p>
+                  
+                <ul>
+                  {user.fosterlingProfiles.map((profile) => (
+                <li key={profile.id}>{profile.quantity}x <IdToSPecies speciesId={profile.species_id} /> <GenderIcon gender={profile.sexe} size={12}/> {profile.age} </li>
+              ))}
+                </ul>
+                </div>
+                
+              )}
+              {/* {JSON.stringify(user)} */}
+              </div>
             </Popup>
           </Marker>
         ))}
