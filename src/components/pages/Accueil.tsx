@@ -114,6 +114,7 @@ function Accueil() {
 
           <div className="column is-full-mobile is-half-desktop">
             <div className="animal-list">
+              {/* {JSON.stringify(allAnimals)} */}
               {allAnimals &&
                 allAnimals.map((item: any) => (
                   <AnimalItemList animal={item} key={item.id} />

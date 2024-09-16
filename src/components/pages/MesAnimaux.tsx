@@ -84,10 +84,9 @@ const MesAnimaux = () => {
               {/* {JSON.stringify(myUser?.createdAnimals)} */}
                 {myUser?.createdAnimals && myUser.createdAnimals.length > 0 ? (
                   myUser.createdAnimals.map((oneAnimal) => (
-                    <>
-                      {/* {JSON.stringify(oneAnimal)} */}
+                  
                       <AnimalItemList animal={oneAnimal} key={oneAnimal.id}/>
-                      </>
+
                   ))
                 ) : (
                   <div className='notification is-info is-light '>

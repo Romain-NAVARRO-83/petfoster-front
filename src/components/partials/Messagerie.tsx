@@ -104,6 +104,7 @@ function Messagerie() {
             interlocutorsLastMessage.map((item) => (
               <InterlocutorItemList
                 interlocutorLastMessage={item}
+                key={item.id}
                 setCurrentInterlocutor={setCurrentInterlocutor}
                 fetchDisscussion={fetchDisscussion}
               />

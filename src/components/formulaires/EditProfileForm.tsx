@@ -147,7 +147,7 @@ function EditProfileForm({ user }: EditProfileFormProps) {
           'x-xsrf-token': csrfToken || '',
         }
       });
-
+      console.log(formData);
       if (response.status === 200) {
         showSuccessToast('Profil mis à jour avec succès');
       } else {
@@ -175,6 +175,7 @@ function EditProfileForm({ user }: EditProfileFormProps) {
             placeholder="Votre nom"
             aria-label="Nom"
             required
+            type="text"
           />
         </div>
       </div>
@@ -192,6 +193,7 @@ function EditProfileForm({ user }: EditProfileFormProps) {
             placeholder="Votre numéro de téléphone"
             aria-label="Téléphone"
             required
+            
           />
         </div>
       </div>
@@ -261,6 +263,7 @@ function EditProfileForm({ user }: EditProfileFormProps) {
             onChange={handleChange}
             placeholder="Votre adresse (optionnel)"
             aria-label="Adresse"
+            type="text"
           />
         </div>
       </div>
@@ -276,6 +279,7 @@ function EditProfileForm({ user }: EditProfileFormProps) {
             onChange={handleChange}
             placeholder="Votre site web (optionnel)"
             aria-label="Site web"
+            type="text"
           />
         </div>
       </div>
@@ -291,6 +295,7 @@ function EditProfileForm({ user }: EditProfileFormProps) {
             onChange={handleChange}
             placeholder="Votre description (optionnel)"
             aria-label="Description"
+            type="text"
           />
         </div>
       </div>
