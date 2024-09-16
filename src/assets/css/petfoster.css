@@ -390,7 +390,7 @@ footer {
 
 @font-face {
   font-family: 'GeoramaRoman';
-  src: url('/font/GeoramaRoman-ExtraCondensedThin.woff2') format('woff2');
+  src: url('../../../public/font/GeoramaRoman-ExtraCondensedThin.woff2') format('woff2');
   font-weight: 200;
   /* Light */
 }

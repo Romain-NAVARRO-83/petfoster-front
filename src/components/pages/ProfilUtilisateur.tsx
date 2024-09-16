@@ -8,6 +8,10 @@ import { useAuth } from '../../hooks/AuthContext';
 import { useToast } from '../../hooks/ToastContext';
 import GalleryComponent from '../partials/GalleryComponent';
 import { User } from 'src/@interfaces/user';
+import UploadImageForm from '../formulaires/UploadImageForm'; 
+
+// Ajout des imports pour Bulma ou autres composants
+import { Section, Container, Heading } from 'react-bulma-components';
 
 function ProfilUtilisateur() {
   const { showSuccessToast, showErrorToast } = useToast();
@@ -17,9 +21,9 @@ function ProfilUtilisateur() {
   const [user, setUser] = useState<User | null>(null); 
   const [loading, setLoading] = useState(true); 
   const [error, setError] = useState<Error | null>(null); 
+  const { user: connectedUser } = useAuth(); // Obtenir l'utilisateur connecté
 
-  const { user: connectedUser } = useAuth();
-
+  // Récupération du token CSRF
   useEffect(() => {
     const fetchCsrfToken = async () => {
       try {
@@ -32,6 +36,7 @@ function ProfilUtilisateur() {
     fetchCsrfToken();
   }, []);
 
+  // Récupération des données de l'utilisateur
   const fetchUserData = useCallback(async () => {
     try {
       const userResponse = await axios.get(`http://localhost:3000/api/users/${id}`);
@@ -47,6 +52,7 @@ function ProfilUtilisateur() {
     fetchUserData();
   }, [fetchUserData]);
 
+  // Suppression d'un profil d'accueil
   const deleteProfile = async (profileId: number) => {
     try {
       await axios.delete(`http://localhost:3000/api/profiles/${profileId}`, {
@@ -61,6 +67,7 @@ function ProfilUtilisateur() {
     }
   };
 
+  // Affichage du loading ou des erreurs
   if (loading) {
     return <div>Loading...</div>; 
   }
@@ -75,8 +82,8 @@ function ProfilUtilisateur() {
         <h1 className="title">{user?.name}</h1>
       </div>
 
-      <section className="section">
-        <div className="container">
+      <Section>
+        <Container>
           {connectedUser && user && id && connectedUser.userId === parseInt(id) && (
             <p className="notification is-primary has-text-centered">
               Ceci est votre profil, vous pouvez l'éditer grâce au bouton présent plus bas.
@@ -104,15 +111,23 @@ function ProfilUtilisateur() {
               )}
             </div>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      <section className="section">
-        <div className="container">
-          <h2 className="title">Description</h2>
-          <section>
-            {user && <p>{user.description}</p>}
-          </section>
+      {/* Ajout du formulaire d'upload */}
+      <Section>
+        <Container>
+          <Heading size={2} renderAs="h2">Changer l'image de profil</Heading>
+          {connectedUser && <UploadImageForm userId={connectedUser.userId} />}
+        </Container>
+      </Section>
+
+      {/* Section Description */}
+      <Section>
+        <Container>
+          <Heading size={2} renderAs="h2">Description</Heading>
+          {user && <p>{user.description}</p>}
+
           {!connectedUser && (
             <div className="notification is-info is-light has-text-right is-pulled-right">
               <p>Connectez-vous à votre compte pour pouvoir contacter {user?.name}</p>
@@ -177,3 +192,4 @@ function ProfilUtilisateur() {
 }
 
 export default ProfilUtilisateur;
+
