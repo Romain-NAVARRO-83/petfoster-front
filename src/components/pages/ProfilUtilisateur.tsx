@@ -139,9 +139,9 @@ function ProfilUtilisateur() {
           )}
 
           {connectedUser && user && id !== undefined && connectedUser.userId === parseInt(id) && (
-            <button className="button is-primary is-pulled-right" onClick={() => openModal('editUserProfile')}>
-              <Pencil /> Éditer
-            </button>
+          <button className="button is-primary is-pulled-right" onClick={() => openModal('editUserProfile', null, null, null, user)}>
+          <Pencil /> Éditer
+        </button>
           )}
         </div>
       </section>

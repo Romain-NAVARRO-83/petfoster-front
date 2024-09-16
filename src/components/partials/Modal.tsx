@@ -7,33 +7,31 @@ import EditAnimalProfileForm from '../formulaires/EditAnimalProfileForm';
 import CreateAnimalProfileForm from '../formulaires/CreateAnimalProfileForm';
 
 function MainModal() {
-  const { modalContent, isActive, closeModal, user, senderId, receiverId,animalId } = useModal();
+  const { modalContent, isActive, closeModal, fullUser, senderId, receiverId, animalId } = useModal();
 
   return (
     <div className={`modal ${isActive ? 'is-active' : ''}`}>
       <div className="modal-background" onClick={closeModal}></div>
       <div className="modal-card">
         <header className="modal-card-head">
-        {modalContent === 'contactUser' && (
-         <h3 className='title'>Envoyer un message</h3>
-        )}
-        {modalContent === 'addFosterlingProfile' && (
- <h3 className='title'>Ajouter profil d'accueil'</h3>
-        )}
-{modalContent === 'editUserProfile' && (
- <h3 className='title'>Editer votre profil</h3>
-        )}
-
-{modalContent === 'addFosterlingRequest' && (
- <h3 className='title'>Faire une demande sur un animal</h3>
-        )}
-        {modalContent === 'editAnimalProfile' && (
- <h3 className='title'>Editer le profil d'un animal</h3>
-        )}
-        {modalContent === 'createAnimal' && (
- <h3 className='title'>Enregistrer un animal</h3>
-        )}
-     
+          {modalContent === 'contactUser' && (
+            <h3 className="title">Envoyer un message</h3>
+          )}
+          {modalContent === 'addFosterlingProfile' && (
+            <h3 className="title">Ajouter un profil d'accueil</h3>
+          )}
+          {modalContent === 'editUserProfile' && (
+            <h3 className="title">Éditer votre profil</h3>
+          )}
+          {modalContent === 'addFosterlingRequest' && (
+            <h3 className="title">Faire une demande sur un animal</h3>
+          )}
+          {modalContent === 'editAnimalProfile' && (
+            <h3 className="title">Éditer le profil d'un animal</h3>
+          )}
+          {modalContent === 'createAnimal' && (
+            <h3 className="title">Enregistrer un animal</h3>
+          )}
           <button className="delete" onClick={closeModal} aria-label="close"></button>
         </header>
         <section className="modal-card-body">
@@ -41,15 +39,25 @@ function MainModal() {
             <ContactUserForm senderId={senderId} receiverId={receiverId} />
           )}
 
-          {modalContent === 'addFosterlingProfile' && <AddFosterlingProfileForm userId={senderId}/>}
+          {modalContent === 'addFosterlingProfile' && (
+            <AddFosterlingProfileForm userId={senderId} />
+          )}
 
-          {modalContent === 'editUserProfile' && <EditProfileForm />}
+          {modalContent === 'editUserProfile' && (
+            <EditProfileForm user={fullUser} />
+          )}
 
-          {modalContent === 'addFosterlingRequest' && (<AddFosterlingRequestForm senderId={senderId} animalId={animalId} />)}
+          {modalContent === 'addFosterlingRequest' && (
+            <AddFosterlingRequestForm senderId={senderId} animalId={animalId} />
+          )}
 
-          {modalContent === 'editAnimalProfile' && <EditAnimalProfileForm />}
+          {modalContent === 'editAnimalProfile' && (
+            <EditAnimalProfileForm />
+          )}
 
-          {modalContent === 'createAnimal' && <CreateAnimalProfileForm />}
+          {modalContent === 'createAnimal' && (
+            <CreateAnimalProfileForm />
+          )}
         </section>
         <footer className="modal-card-foot">
           <button className="button" onClick={closeModal}>Fermer</button>
