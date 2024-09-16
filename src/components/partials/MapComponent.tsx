@@ -8,6 +8,7 @@ import { User } from 'src/@interfaces/user';
 import { Animal } from 'src/@interfaces/animal';
 import GenderIcon from './GenderIcon';
 import IdToSPecies from './IdToSpecies';
+// import GeolocNotification from './GeolocNotification';
 
 // Position par défaut si la géolocalisation n'est pas disponible
 const defaultPosition: LatLngExpression = [43.3365, 1.3396];
@@ -98,6 +99,7 @@ function MapComponent({ users, animal, filters, showSearchArea = false }: MapCom
             &nbsp;Km </strong> de votre position
         </h3>
       )}
+      {/* <GeolocNotification/> */}
 
       <MapContainer
         center={mapCenter}  // Centrer la carte sur la position de l'utilisateur (ou position par défaut)

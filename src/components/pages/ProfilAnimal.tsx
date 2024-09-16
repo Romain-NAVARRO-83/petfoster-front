@@ -8,6 +8,7 @@ import computeAge from '../../utils/computeAge';
 import { useAuth } from '../../hooks/AuthContext'; // Importer le contexte d'authentification
 import { Animal } from 'src/@interfaces/animal';
 import { User } from 'src/@interfaces/user';
+import GeolocNotification from '../partials/GeolocNotification';
 
 const AnimalProfile = () => {
   const { openModal } = useModal();
@@ -63,7 +64,7 @@ const AnimalProfile = () => {
       <div>
         <h1 className="title">{animal?.name}</h1>
       </div>
-
+<GeolocNotification />
       {/* Responsive Gallery and Info Sections */}
       <section className="container columns is-multiline">
         {/* Galerie d'images */}
