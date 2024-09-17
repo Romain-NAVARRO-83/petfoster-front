@@ -84,7 +84,9 @@ const RegistrationPage = () => {
       );
       setActiveTab('login');
     } catch (error) {
-      showErrorToast('Erreur, veuillez recommencer');
+      showErrorToast(
+        'Erreur, veuillez recommencer ' + error.response.data.error
+      );
       console.log(error);
     }
 

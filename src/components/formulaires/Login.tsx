@@ -11,7 +11,6 @@ function LoginForm() {
   const [passwordLogin, setPasswordLogin] = useState<string>('');
   const [emailErrorLogin, setEmailErrorLogin] = useState<string>('');
   const [passwordErrorLogin, setPasswordErrorLogin] = useState<string>('');
-  const [submitErrorLogin, setSubmitErrorLogin] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false); // Gérer l'état de soumission
   const [csrfToken, setCsrfToken] = useState<string | null>(null);
 
@@ -46,7 +45,6 @@ function LoginForm() {
 
     setEmailErrorLogin('');
     setPasswordErrorLogin('');
-    setSubmitErrorLogin('');
 
     // Validation de l'email
     if (!validateEmailLogin(emailLogin)) {
@@ -85,14 +83,20 @@ function LoginForm() {
           showSuccessToast('Connexion réussie!');
           navigate('/'); // Redirection vers la page d'accueil
         } else {
-          setSubmitErrorLogin(
-            'Erreur de connexion: ' +
-              (response.data.message || 'Erreur inconnue.')
-          );
+          showErrorToast('Erreur lors de la connexion.');
         }
       } catch (error) {
-        setSubmitErrorLogin('Erreur, veuillez réessayer.');
-        showErrorToast('Erreur lors de la connexion, veuillez réessayer.');
+        console.log(error);
+
+        // Vérifier si l'erreur est une instance d'AxiosError
+        if (axios.isAxiosError(error)) {
+          showErrorToast(
+            'Erreur lors de la connexion : Utilisateur ou Mot de passe incorrect'
+          );
+        } else {
+          showErrorToast('Erreur lors de la connexion.');
+        }
+
         setIsSubmitting(false);
       }
     }
@@ -181,9 +185,6 @@ function LoginForm() {
           <li>hashed_password5</li>
         </ul>
       </div>
-
-      {/* Message d'erreur de soumission */}
-      {submitErrorLogin && <p className="help is-danger">{submitErrorLogin}</p>}
     </form>
   );
 }
