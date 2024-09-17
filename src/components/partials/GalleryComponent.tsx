@@ -20,7 +20,7 @@ interface IGalleryComponentProps {
 }
 
 const apiUrl = import.meta.env.VITE_API_URL;
-const placeholderImage = "https://placehold.co/600x400?text=Pas+d'image"; 
+const placeholderImage = "/img/defaults/ominpet-the-destructor.webp"; 
 
 const GalleryComponent = ({ pictures, userPictures }: IGalleryComponentProps) => {
   const [nav1, setNav1] = useState<Slider | null>(null);

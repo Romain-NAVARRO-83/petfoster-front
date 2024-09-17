@@ -18,7 +18,7 @@ export default function MiniatureAnimal({ animal }: IMiniatureAnimlProps) {
   // Fetch animal pictures
   useEffect(() => {
     const fetchAnimalData = async () => {
-      if (!animal?.id) return; // Ensure we have a valid animal id before making the request
+      if (!animal?.id) return; 
       try {
         const animalResponse = await axios.get(
           `http://localhost:3000/api/animals/${animal.id}`
@@ -33,7 +33,7 @@ export default function MiniatureAnimal({ animal }: IMiniatureAnimlProps) {
   }, [animal?.id]); 
 
 
-  const placeholderImage = "https://placehold.co/64x64?text=Pas+d'image";
+  const placeholderImage = "/img/defaults/omnipet-the-mini-destructor.webp";
 
   return (
     <div className="animal-miniature is-narrow column has-text-centered">
