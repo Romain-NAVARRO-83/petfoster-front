@@ -30,10 +30,15 @@ export function ModalProvider({ children }: ModalProviderProps) {
 
   const openModal = (content: string, senderId?: number, receiverId?: number, id?: number, fullUser?: User | null) => {
     setModalContent(content);
-    if (senderId !== null) setSenderId(senderId);
-    if (receiverId !== null) setReceiverId(receiverId);
-    if (id !== null) setAnimalId(id);
-    if (fullUser !== null) setFullUser(fullUser);
+    
+    setSenderId(senderId !== undefined ? senderId : null);
+    
+    setReceiverId(receiverId !== undefined ? receiverId : null);
+    
+    setAnimalId(id !== undefined ? id : null);
+    
+    setFullUser(fullUser !== undefined ? fullUser : null);
+    
     setIsActive(true);
   };
 
