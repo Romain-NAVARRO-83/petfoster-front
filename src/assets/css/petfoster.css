@@ -465,12 +465,15 @@ p {
 /*  menu burger */
 @media (max-width: 1023px) {
 .navbar-item {
-  color: rgb(0, 0, 0); /* Change la couleur des liens */
+  color: rgb(0, 0, 0); 
 }
 }
 
 @media (max-width: 1023px) {
   .user-icon {
-    filter: brightness(0) invert(0); /* Appliquez le filtre noir */
+    color: rgb(0, 0, 0); 
   }
 }
+
+/* home page */
+
