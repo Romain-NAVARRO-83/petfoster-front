@@ -1,9 +1,6 @@
 import { useModal } from '../../hooks/ModalContext';
-import { Button } from "react-bulma-components";
-import { Trash, Pencil } from "react-flaticons";
-import { Tooltip } from 'react-tooltip';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+// import { useEffect, useState } from 'react';
+// import axios from 'axios';
 
 // Définir le type des props pour le profil d'accueil
 interface FosterlingProfileProps {
@@ -12,22 +9,16 @@ interface FosterlingProfileProps {
     age: string | number;
     sexe: string;
     search_area: string | number;
-    quantity:number;
-    id:number;
+    quantity: number;
+    id: number;
   };
-  deleteFunction: (id: number) => Promise<void>; 
-
+  deleteFunction: (id: number) => Promise<void>;
 }
-
 
 function FosterlingProfile({ profile, deleteFunction }: FosterlingProfileProps) {
   const { openModal } = useModal();
   console.log(profile);
 
-
- 
-
-  
   return (
     <tr>
       <td>{profile.species_id}</td>
@@ -37,27 +28,24 @@ function FosterlingProfile({ profile, deleteFunction }: FosterlingProfileProps) 
       <td>{profile.search_area} Km</td>
       <td className='has-text-right'>
         <button
-        className='button is-small is-ghost has-text-success'
+          className='button is-small is-ghost has-text-success'
           onClick={() => openModal('updateFosterlingProfile')}
-          data-tooltip-id="edit-tooltip"
-          data-tooltip-content="Modifier le profil"
           aria-label='modifier le profil'
         >
-          <Pencil size={15} />
+          <span className="icon is-small">
+            <i className="fas fa-pencil-alt"></i> {/* Icône de crayon pour éditer */}
+          </span>
         </button>
 
         <button
           className='button is-small is-ghost has-text-danger'
-          data-tooltip-id="delete-tooltip"
-          data-tooltip-content="Supprimer"
           aria-label='Supprimer'
-          onClick={() => deleteFunction(profile.id)} 
+          onClick={() => deleteFunction(profile.id)}
         >
-          <Trash size={15} />
+          <span className="icon is-small">
+            <i className="fas fa-trash-alt"></i> {/* Icône de poubelle pour supprimer */}
+          </span>
         </button>
-        
-        <Tooltip id="edit-tooltip" />
-        <Tooltip id="delete-tooltip" />
       </td>
     </tr>
   );

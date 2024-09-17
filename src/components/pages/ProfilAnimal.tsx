@@ -5,7 +5,7 @@ import axios from 'axios';
 import MapComponent from '../partials/MapComponent';
 import GalleryComponent from '../partials/GalleryComponent';
 import computeAge from '../../utils/computeAge';
-import { useAuth } from '../../hooks/AuthContext'; // Importer le contexte d'authentification
+import { useAuth } from '../../hooks/AuthContext'; 
 import { Animal } from 'src/@interfaces/animal';
 import { User } from 'src/@interfaces/user';
 import GeolocNotification from '../partials/GeolocNotification';

@@ -116,7 +116,7 @@ function Messagerie() {
             // ref={scrollable}
           >
             {currentChat
-              ? currentChat.map((item) => <Message message={item} />)
+              ? currentChat.map((item) => <Message message={item} key={item.id}/>)
               : 'Selectionnez une discussion'}
           </div>
 

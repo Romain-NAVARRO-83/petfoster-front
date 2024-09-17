@@ -11,6 +11,7 @@ import { useToast } from '../../hooks/ToastContext';
 // Utilitaire pour calculer l'âge de l'animal
 import computeAge from '../../utils/computeAge'
 import { useState, useEffect } from 'react';
+import MiniatureAnimal from './Miniature';
 
 // Interface pour définir les propriétés passées au composant
 interface AnimalListItemProps {
@@ -64,14 +65,15 @@ function AnimalItemList({ animal }: AnimalListItemProps) {
       <div className="columns is-vcentered">
         
         {/* Affichage de l'image miniature de l'animal */}
-        <div className="animal-miniature is-narrow column has-text-centered">
+        {/* <div className="animal-miniature is-narrow column has-text-centered">
           <img
             src={`/img/animaux/${animal.id}-${animal.name}-1.webp`}  
             alt={animal.name}
             width="64"
             height="64"
           />
-        </div>
+        </div> */}
+        <MiniatureAnimal animal={animal}/>
 
         {/* Conteneur du texte avec les informations de l'animal */}
         <div className='column'>

@@ -456,3 +456,7 @@ p {
 .picture-uploader {
   padding-top: 50px;
 }
+
+.Toastify__toast-container--top-right {
+  top: 100px;
+}

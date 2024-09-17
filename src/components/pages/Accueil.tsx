@@ -80,19 +80,20 @@ function Accueil() {
 
       <section className="section">
         <div className="columns is-variable is-8">
-          <div className="column">
-            <h3 className="title is-4">Familles d'accueil</h3>
-            <p>Les familles d'accueil offrent un refuge temporaire aux animaux en attente d'adoption.</p>
-          </div>
+          
 
-          <div className="column">
+          <div className="column has-text-centered">
             <h3 className="title is-4">Associations</h3>
-            <p>Les associations jouent un rôle crucial dans la protection animale.</p>
+            <p className='is-size-5'>Trouvez des foyers d'accueil temporaires ou définitifs pour vos animaux</p>
+          </div>
+          <div className="column has-text-centered">
+            <h3 className="title is-4">Familles d'accueil</h3>
+            <p className='is-size-5'>Resneignez vos possibilités d'accueil et entrez en contact avec des associations.</p>
           </div>
 
-          <div className="column">
+          <div className="column has-text-centered">
             <h3 className="title is-4">Adoptants</h3>
-            <p>Les adoptants ouvrent leur foyer à des animaux pour la vie.</p>
+            <p className='is-size-5'>Adoptez l'animal de vos rêves en quelques clics.</p>
           </div>
         </div>
         < GeolocNotification />

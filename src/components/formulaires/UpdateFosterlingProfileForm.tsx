@@ -1,7 +1,4 @@
 import React, { useState } from 'react';
-import { Button, Form, Heading, Columns, Notification } from 'react-bulma-components';
-
-const { Field, Label, Select, Input } = Form;
 
 interface FormData {
   species: string;
@@ -96,100 +93,118 @@ const UpdateFosterlingProfileForm = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Heading renderAs="h3">Modifiez le profil d'accueil</Heading>
+      <h3 className="title is-3">Modifiez le profil d'accueil</h3>
 
-      <Notification color={'info'} light={true}>
+      <div className="notification is-info is-light">
         <p>
           Remplissez le formulaire ci-dessous pour mettre à jour le profil d'accueil.
         </p>
-      </Notification>
+      </div>
 
-      <Columns>
-        <Columns.Column>
+      <div className="columns">
+        <div className="column">
           {/* Select espèce */}
-          <Field>
-            <Label>Espèce</Label>
-            <Select name="species" value={formData.species} onChange={handleChange} aria-label="Espèce">
-              <option value="" disabled>Sélectionnez</option>
-              <option value="Chat">Chat</option>
-              <option value="Chien">Chien</option>
-              <option value="Cheval">Cheval</option>
-            </Select>
+          <div className="field">
+            <label className="label">Espèce</label>
+            <div className="control">
+              <div className="select">
+                <select name="species" value={formData.species} onChange={handleChange} aria-label="Espèce">
+                  <option value="" disabled>Sélectionnez</option>
+                  <option value="Chat">Chat</option>
+                  <option value="Chien">Chien</option>
+                  <option value="Cheval">Cheval</option>
+                </select>
+              </div>
+            </div>
             {errors.species && <p className="help is-danger" aria-live="polite">{errors.species}</p>}
-          </Field>
-        </Columns.Column>
+          </div>
+        </div>
 
-        <Columns.Column>
+        <div className="column">
           {/* Select sexe */}
-          <Field>
-            <Label>Sexe</Label>
-            <Select name="sexe" value={formData.sexe} onChange={handleChange} aria-label="Sexe">
-              <option value="" disabled>Sélectionnez</option>
-              <option value="Mâle">Mâle</option>
-              <option value="Femelle">Femelle</option>
-              <option value="Indifférent">Indifférent</option>
-            </Select>
+          <div className="field">
+            <label className="label">Sexe</label>
+            <div className="control">
+              <div className="select">
+                <select name="sexe" value={formData.sexe} onChange={handleChange} aria-label="Sexe">
+                  <option value="" disabled>Sélectionnez</option>
+                  <option value="Mâle">Mâle</option>
+                  <option value="Femelle">Femelle</option>
+                  <option value="Indifférent">Indifférent</option>
+                </select>
+              </div>
+            </div>
             {errors.sexe && <p className="help is-danger" aria-live="polite">{errors.sexe}</p>}
-          </Field>
-        </Columns.Column>
+          </div>
+        </div>
 
-        <Columns.Column>
+        <div className="column">
           {/* Select âge */}
-          <Field>
-            <Label>Âge</Label>
-            <Select name="age" value={formData.age} onChange={handleChange} aria-label="Âge">
-              <option value="" disabled>Sélectionnez</option>
-              <option value="- d'1 an">- d'1 an</option>
-              <option value="Entre 1 et 3 ans">Entre 1 et 3 ans</option>
-              <option value="Entre 3 et 5 ans">Entre 3 et 5 ans</option>
-              <option value="Plus de 5 ans">Plus de 5 ans</option>
-            </Select>
+          <div className="field">
+            <label className="label">Âge</label>
+            <div className="control">
+              <div className="select">
+                <select name="age" value={formData.age} onChange={handleChange} aria-label="Âge">
+                  <option value="" disabled>Sélectionnez</option>
+                  <option value="- d'1 an">- d'1 an</option>
+                  <option value="Entre 1 et 3 ans">Entre 1 et 3 ans</option>
+                  <option value="Entre 3 et 5 ans">Entre 3 et 5 ans</option>
+                  <option value="Plus de 5 ans">Plus de 5 ans</option>
+                </select>
+              </div>
+            </div>
             {errors.age && <p className="help is-danger" aria-live="polite">{errors.age}</p>}
-          </Field>
-        </Columns.Column>
-      </Columns>
+          </div>
+        </div>
+      </div>
 
-      <Columns>
-        <Columns.Column>
+      <div className="columns">
+        <div className="column">
           {/* Champ quantité */}
-          <Field>
-            <Label>Quantité</Label>
-            <Input
-              type="number"
-              name="quantity"
-              value={formData.quantity}
-              onChange={handleChange}
-              placeholder="Entrez la quantité"
-              aria-label="Quantité"
-            />
+          <div className="field">
+            <label className="label">Quantité</label>
+            <div className="control">
+              <input
+                className="input"
+                type="number"
+                name="quantity"
+                value={formData.quantity}
+                onChange={handleChange}
+                placeholder="Entrez la quantité"
+                aria-label="Quantité"
+              />
+            </div>
             {errors.quantity && <p className="help is-danger" aria-live="polite">{errors.quantity}</p>}
-          </Field>
-        </Columns.Column>
+          </div>
+        </div>
 
-        <Columns.Column>
+        <div className="column">
           {/* Champ Périmètre */}
-          <Field>
-            <Label>Périmètre</Label>
-            <Input
-              type="range"
-              name="search_area"
-              value={formData.search_area}
-              onChange={handleChange}
-              min="10"
-              max="200"
-              aria-label="Périmètre"
-            />
+          <div className="field">
+            <label className="label">Périmètre</label>
+            <div className="control">
+              <input
+                className="input"
+                type="range"
+                name="search_area"
+                value={formData.search_area}
+                onChange={handleChange}
+                min="10"
+                max="200"
+                aria-label="Périmètre"
+              />
+            </div>
             <p>Périmètre : {formData.search_area} Km</p>
-          </Field>
-        </Columns.Column>
-      </Columns>
+          </div>
+        </div>
+      </div>
 
       {/* Champ caché user_id */}
-      <Input type="hidden" name="user_id" value={formData.user_id} />
+      <input type="hidden" name="user_id" value={formData.user_id} />
 
-      <Button color="primary" type="submit" className="is-fullwidth" disabled={isSubmitting}>
+      <button className={`button is-primary is-fullwidth ${isSubmitting ? 'is-loading' : ''}`} type="submit" disabled={isSubmitting}>
         {isSubmitting ? 'Envoi en cours...' : 'Valider'}
-      </Button>
+      </button>
     </form>
   );
 };
