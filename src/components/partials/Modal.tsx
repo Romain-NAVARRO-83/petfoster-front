@@ -40,8 +40,9 @@ function MainModal() {
           )}
 
           {modalContent === 'addFosterlingProfile' && (
-            <AddFosterlingProfileForm userId={senderId} />
+            <AddFosterlingProfileForm userId={senderId ?? 0} />
           )}
+
 
           {modalContent === 'editUserProfile' && (
             <EditProfileForm user={fullUser} />

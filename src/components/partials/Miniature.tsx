@@ -6,10 +6,14 @@ interface IMiniatureAnimlProps {
   animal: Animal | null;
 }
 
+interface Picture {
+  URL_picture: string;
+}
+
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export default function MiniatureAnimal({ animal }: IMiniatureAnimlProps) {
-  const [pictures, setPictures] = useState(null);
+  const [pictures, setPictures] = useState<Picture[] | null>(null);
 
   // Fetch animal pictures
   useEffect(() => {
@@ -35,7 +39,7 @@ export default function MiniatureAnimal({ animal }: IMiniatureAnimlProps) {
     <div className="animal-miniature is-narrow column has-text-centered">
       {pictures && pictures.length > 0 ? (
         <img
-          src={`${apiUrl}/img/animaux/img-120/${pictures[0].URL_picture}`}  
+          src={`${apiUrl}/img/animaux/img-120/${pictures[0].URL_picture}`}
           alt={animal?.name}
           width="64"
           height="64"
