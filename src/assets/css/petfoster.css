@@ -457,6 +457,22 @@ p {
   padding-top: 50px;
 }
 
+.picture-uploader .file {
+  justify-content: center;
+}
+
 .Toastify__toast-container--top-right {
   top: 100px;
+}
+
+.single-image {
+  max-height: 50vh;
+  height: 50vh;
+  text-align: center;
+}
+
+.single-image img {
+  height: inherit;
+  object-fit: contain;
+  margin: auto;
 }

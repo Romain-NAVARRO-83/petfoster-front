@@ -99,7 +99,7 @@ function AnimalItemList({ animal }: AnimalListItemProps) {
           {/* {JSON.stringify(animal?.animalOwners[0]?.user.name)} */}
           {animal && animal.animalOwners && animal.animalOwners.length && (
            
-            <Link to={`/profiles/${animal?.animalOwners[0].user.id}`}>
+            <Link to={`/profil/${animal?.animalOwners[0].user.id}`}>
               {animal?.animalOwners[0]?.user.name}
             </Link>
             

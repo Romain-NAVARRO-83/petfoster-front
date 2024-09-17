@@ -1,15 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
+import {Upload} from 'react-flaticons'
 
 interface UploadImageFormProps {
   userId: number | null; // L'ID de l'utilisateur connecté
-  fetchUserImages: () => void; // Fonction pour recharger les images après upload
+  fetchUserImages: () => void | null; // Fonction pour recharger les images après upload
+  animalId: number | null;
+  fetchAnimalData: () => void | null;
 }
 
-function UploadImageForm({ userId, fetchUserImages }: UploadImageFormProps) {
+function UploadImageForm({ userId, fetchUserImages, animalId, fetchAnimalData }: UploadImageFormProps) {
   const [csrfToken, setCsrfToken] = useState<string | null>(null);
   const [image, setImage] = useState<File | null>(null);
-
+  let uploadRoute ="";
+  if (animalId){
+    uploadRoute = `http://localhost:3000/api/animals/${animalId}/upload-animal-picture`;
+  }else{
+    uploadRoute = `http://localhost:3000/api/profiles/${userId}/upload-profile-picture`
+  }
   // Récupérer le token CSRF
   useEffect(() => {
     const fetchCsrfToken = async () => {
@@ -32,27 +40,33 @@ function UploadImageForm({ userId, fetchUserImages }: UploadImageFormProps) {
   const handleUpload = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!image || !userId || !csrfToken) {
-      alert('Tous les champs doivent être remplis.');
-      return;
-    }
+    // if (!image || !userId || !csrfToken) {
+    //   alert('Tous les champs doivent être remplis.');
+    //   return;
+    // }
 
     const formData = new FormData();
     formData.append('image', image);
 
     try {
       await axios.post(
-        `http://localhost:3000/api/profiles/${userId}/upload-profile-picture`,
+        uploadRoute,
         formData,
         {
           headers: {
             'x-csrf-token': csrfToken,
-            'Content-Type': 'multipart/form-data',
+            // 'Content-Type': 'multipart/form-data',
           }
         }
       );
       alert('Image téléchargée avec succès');
-      fetchUserImages(); // Recharger les images après l'upload
+      if(fetchUserImages){
+        fetchUserImages();
+      }else{
+        fetchAnimalData(); 
+      } 
+      
+      // fetcAnimalImages()// Recharger les images après l'upload
     } catch (error) {
       console.error('Erreur lors du téléchargement de l\'image', error);
       alert('Erreur lors du téléchargement de l\'image');
@@ -60,10 +74,29 @@ function UploadImageForm({ userId, fetchUserImages }: UploadImageFormProps) {
   };
 
   return (
-    <form onSubmit={handleUpload}>
-      <input type="file" accept="image/*" onChange={handleImageChange} />
-      <button type="submit" className="button is-primary is-fullwidth">Télécharger</button>
-    </form>
+<form onSubmit={handleUpload} className='picture-uploader'>
+  <div className='file'>
+    <label className='file-label'>
+      <input
+        className='file-input'
+        type='file'
+        accept='image/*'
+        onChange={handleImageChange}
+        aria-label='Sélectionnez votre image'
+      />
+      <span className='file-cta'>
+        <span className='file-icon'>
+          <Upload />
+        </span>
+        <span className='file-label'>Sélectionnez une image…</span>
+      </span>
+    </label>
+  </div>
+  <button type='submit' className='button is-primary is-fullwidth is-small'>
+    Télécharger
+  </button>
+</form>
+
   );
 }
 
