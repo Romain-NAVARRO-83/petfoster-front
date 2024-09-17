@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 interface UserImagesProps {
@@ -46,7 +46,7 @@ function UserImages({ userId }: UserImagesProps) {
       <h3>Choisissez une image comme image de profil</h3>
       <div className="image-gallery">
         {images.map((image) => (
-          <div key={image} className="image-item">
+          <div key={image} className={`image-item ${selectedImage === image ? 'selected' : ''}`}>
             <img src={`/img/utilisateurs/${image}`} alt="User uploaded" />
             <button
               className="button is-primary"

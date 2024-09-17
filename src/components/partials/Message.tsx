@@ -1,9 +1,17 @@
 import { useAuth } from '../../hooks/AuthContext';
 import dayjs from 'dayjs';
 
+interface MessageType {
+  id: number;
+  sender_id: number;
+  receiver_id: number;
+  content: string;
+  created_at: string | Date;
+}
+
 // const connectedUser = { id: 1 };
 
-function Message({ message }) {
+function Message({ message }: { message: MessageType }) {
   const { user: connectedUser } = useAuth();
 
   const issueDate = dayjs(message.created_at).format('D MMM. YYYY - H:mm');

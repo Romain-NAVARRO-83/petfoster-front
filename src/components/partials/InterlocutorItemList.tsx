@@ -1,12 +1,26 @@
 import { useAuth } from '../../hooks/AuthContext';
 import dayjs from 'dayjs';
 
+interface InterlocutorLastMessage {
+  interlocutorId: number;
+  interlocutorName: string;
+  sender_id: number;
+  created_at: string | Date;
+}
+
+interface InterlocutorItemListProps {
+  interlocutorLastMessage: InterlocutorLastMessage;
+  setCurrentInterlocutor: (id: number) => void;
+  fetchDisscussion: (connectedUserId: number, interlocutorId: number) => void;
+}
+
 function InterlocutorItemList({
   interlocutorLastMessage,
   setCurrentInterlocutor,
   fetchDisscussion,
-}) {
+}: InterlocutorItemListProps) {
   const { user: connectedUser } = useAuth();
+
 
   return (
     <article
