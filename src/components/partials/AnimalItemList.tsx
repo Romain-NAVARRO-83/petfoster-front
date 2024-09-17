@@ -12,6 +12,7 @@ import { useToast } from '../../hooks/ToastContext';
 import computeAge from '../../utils/computeAge'
 import { useState, useEffect } from 'react';
 import MiniatureAnimal from './Miniature';
+import IdToSPecies from './IdToSpecies';
 
 // Interface pour définir les propriétés passées au composant
 interface AnimalListItemProps {
@@ -80,7 +81,7 @@ function AnimalItemList({ animal }: AnimalListItemProps) {
           <p className="has-text-weight-bold has-text-left">{animal.name} </p>
           <div className='columns'>
             {/* Espèce de l'animal */}
-            <div className='column'>Espèce: {/*{animal.species.name}*/}</div>
+            <div className='column'><IdToSPecies speciesId={animal.species_id}/></div>
             {/* Calcul et affichage de l'âge de l'animal */}
             <div className='column'>Age: {computeAge(animal.date_of_birth)}</div>
             {/* Sexe de l'animal */}

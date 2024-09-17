@@ -104,7 +104,7 @@ function Accueil() {
       <section className="section yellow-line">
         <div className="container info-block">
           <h2 className="title is-3">
-            {allAnimals?.length} animaux et {allUsers?.length} associations dans votre secteur
+            {allAnimals?.length} animaux et {allUsers?.length} associations dans toute la France
           </h2>
         </div>
 

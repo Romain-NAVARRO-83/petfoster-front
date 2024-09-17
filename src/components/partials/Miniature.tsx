@@ -26,22 +26,28 @@ export default function MiniatureAnimal({ animal }: IMiniatureAnimlProps) {
     };
 
     fetchAnimalData(); 
-  }, []); 
+  }, [animal?.id]); 
+
+
+  const placeholderImage = "https://placehold.co/64x64?text=Pas+d'image";
 
   return (
     <div className="animal-miniature is-narrow column has-text-centered">
       {pictures && pictures.length > 0 ? (
         <img
-          src={`${apiUrl}/img/animaux/${pictures[0].URL_picture}`}  
+          src={`${apiUrl}/img/animaux/img-120/${pictures[0].URL_picture}`}  
           alt={animal?.name}
           width="64"
           height="64"
           loading="lazy"
+          onError={(e) => {
+            // Replace image source with the placeholder when there's an error (e.g., 404)
+            (e.target as HTMLImageElement).src = placeholderImage;
+          }}
         />
       ) : (
-        <img src="https://placehold.co/64x64?text=Pas d'image" alt={`Image de ${animal?.name} manquante`}/>
+        <img src={placeholderImage} alt={`Image de ${animal?.name} manquante`} />
       )}
-      {/* {console.log(pictures)} */}
     </div>
   );
 }

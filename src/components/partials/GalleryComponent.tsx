@@ -58,7 +58,7 @@ const GalleryComponent = ({ pictures, userPictures }: IGalleryComponentProps) =>
     const image = images[0];
     const imageSrc = userPictures
       ? `${apiUrl}/img/utilisateurs/${image.URL_picture}` // Chemin pour les images des utilisateurs
-      : `${apiUrl}/img/animaux/${image.URL_picture}`; // Chemin pour les images des animaux
+      : `${apiUrl}/img/animaux/img750/${image.URL_picture}`; // Chemin pour les images des animaux
 
     return (
       <div className="single-image">
@@ -78,7 +78,7 @@ const GalleryComponent = ({ pictures, userPictures }: IGalleryComponentProps) =>
         {images?.map((image) => {
           const imageSrc = userPictures
             ? `${apiUrl}/img/utilisateurs/${image.URL_picture}` // Chemin pour les utilisateurs
-            : `${apiUrl}/img/animaux/${image.URL_picture}`; // Chemin pour les animaux
+            : `${apiUrl}/img/animaux/img750/${image.URL_picture}`; // Chemin pour les animaux
 
           return (
             <div key={image.id}>
@@ -101,7 +101,7 @@ const GalleryComponent = ({ pictures, userPictures }: IGalleryComponentProps) =>
         {images?.map((image) => {
           const imageSrc = userPictures
             ? `${apiUrl}/img/utilisateurs/${image.URL_picture}` // Chemin pour les utilisateurs
-            : `${apiUrl}/img/animaux/${image.URL_picture}`; // Chemin pour les animaux
+            : `${apiUrl}/img/animaux/img750/${image.URL_picture}`; // Chemin pour les animaux
 
           return (
             <div key={image.id} className="card">
