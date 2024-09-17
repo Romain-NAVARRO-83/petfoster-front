@@ -9,6 +9,7 @@ import { useAuth } from '../../hooks/AuthContext';
 import { Animal } from 'src/@interfaces/animal';
 import { User } from 'src/@interfaces/user';
 import GeolocNotification from '../partials/GeolocNotification';
+import UploadImageForm from '../formulaires/UploadImageForm';
 
 const AnimalProfile = () => {
   const { openModal, closeModal } = useModal();
@@ -22,29 +23,29 @@ const AnimalProfile = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null); // Typage de l'erreur
   const [userData, setUserData] = useState<User | null>(null);
+  const fetchAnimalData = async () => {
+    try {
+      // Récupérer les informations de l'animal
+      const animalResponse = await axios.get(
+        `http://localhost:3000/api/animals/${id}`
+      );
+      setAnimal(animalResponse.data);
 
-  useEffect(() => {
-    const fetchAnimalData = async () => {
-      try {
-        // Récupérer les informations de l'animal
-        const animalResponse = await axios.get(
-          `http://localhost:3000/api/animals/${id}`
+      if (connectedUser) {
+        const userResponse = await axios.get(
+          `http://localhost:3000/api/users/${connectedUser.userId}`
         );
-        setAnimal(animalResponse.data);
-
-        if (connectedUser) {
-          const userResponse = await axios.get(
-            `http://localhost:3000/api/users/${connectedUser.userId}`
-          );
-          setUserData(userResponse.data);
-        }
-
-        setLoading(false);
-      } catch (error: any) {
-        setError(error);
-        setLoading(false);
+        setUserData(userResponse.data);
       }
-    };
+
+      setLoading(false);
+    } catch (error: any) {
+      setError(error);
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    
 
     if (id) {
       fetchAnimalData();
@@ -74,6 +75,16 @@ const AnimalProfile = () => {
           ) : (
             <p>Aucune image disponible pour cet animal.</p>
           )}
+
+          {/* Formulaire d'upload */}
+          {connectedUser && connectedUser.userId === animal?.creator.id && 
+        <UploadImageForm 
+          userId={null} 
+          fetchUserImages={null} 
+          animalId={animal?.id}
+          fetchAnimalData={fetchAnimalData}
+        />
+      }
         </div>
 
         {/* Info animal */}
@@ -141,8 +152,13 @@ const AnimalProfile = () => {
           />
           </div>
           <div className="column is-full-mobile is-half-tablet is-half-desktop box">
-            <p>
-              {animal?.creator.name}
+            <div className='columns is-fullwidth has-text-centered'>
+              <div className='column'>
+                <h3 className='subtitle'>
+                  Association responsable
+                </h3>
+              <p>
+              <strong>{animal?.creator.name}</strong>
               <br />
               {animal?.creator.address}
               <br />
@@ -158,6 +174,19 @@ const AnimalProfile = () => {
                 <span>Pas de site web disponible</span>
               )}
             </p>
+              </div>
+              {/* {animal && animal.animalOwners? && ()} */}
+              {/* {JSON.stringify(animal.animalOwners[0].user.name)} */}
+              <div className='column'>
+              <h3 className='subtitle'>
+                  Hébergeur actuel
+                </h3>
+                <p>
+                <Link to={`/profil/${animal.animalOwners[0].user.id}`}>{animal.animalOwners[0].user.name}</Link><br/>
+                ({animal.animalOwners[0].user.type_user})
+                </p>
+              </div>
+            </div>
 
             {/* Action Buttons */}
             <div className="columns is-variable is-4">

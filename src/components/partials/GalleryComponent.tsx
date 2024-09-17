@@ -18,51 +18,53 @@ interface IGalleryComponentProps {
     updated_at: string | null;
   }[] | null;
 }
-const apiUrl = import.meta.env.VITE_API_URL;
-const GalleryComponent = ({ pictures, userPictures }: IGalleryComponentProps) => {
 
+const apiUrl = import.meta.env.VITE_API_URL;
+const placeholderImage = "/img/defaults/ominpet-the-destructor.webp"; 
+
+const GalleryComponent = ({ pictures, userPictures }: IGalleryComponentProps) => {
   const [nav1, setNav1] = useState<Slider | null>(null);
   const [nav2, setNav2] = useState<Slider | null>(null);
 
-  // const [animalPictures, setAnimalPictures] = useState(null);
-
+  // Paramètres du slider principal (affiche une seule image à la fois)
   const mainSliderSettings: Record<string, any> = {
     slidesToShow: 1,
     slidesToScroll: 1,
-    arrows: false,
-    fade: true,
+    arrows: false, 
+    fade: true, 
     asNavFor: nav2, 
   };
 
-
+  // Paramètres du slider de navigation (miniatures des images)
   const navSliderSettings: Record<string, any> = {
-    slidesToShow: 2,
+    slidesToShow: 2, 
     slidesToScroll: 1,
-    asNavFor: nav1,
-    dots: true,
-    centerMode: true,
-    focusOnSelect: true,
-    navigation: true,
-    arrows: true,
-    infinite:false,
-    // centerMode: true,
-    // centerPadding: '40%',  
-
+    asNavFor: nav1, 
+    dots: true, 
+    centerMode: true, 
+    focusOnSelect: true, 
+    arrows: true, 
+    infinite: true, 
   };
 
-  // Utiliser "pictures" si disponible, sinon utiliser "userPictures"
+  // Utilise "pictures" si disponible, sinon utilise "userPictures"
   const images = pictures ?? userPictures;
 
-  // Si une seule image, afficher l'image sans slider
+  // Si une seule image est disponible, l'affiche directement sans utiliser de slider
   if (images && images.length === 1) {
     const image = images[0];
     const imageSrc = userPictures
-      ? `${apiUrl}/img/utilisateurs/${image.URL_picture}` // Chemin pour les images des utilisateurs
-      : `${apiUrl}/img/animaux/img750/${image.URL_picture}`; // Chemin pour les images des animaux
+      ? `${apiUrl}/img/utilisateurs/${image.URL_picture}` 
+      : `${apiUrl}/img/animaux/img750/${image.URL_picture}`; 
 
     return (
       <div className="single-image">
-        <img src={imageSrc} alt={`Image ${image.id}`} loading="lazy" />
+        <img
+          src={imageSrc}
+          alt={`Image ${image.id}`}
+          loading="lazy" 
+          onError={(e) => (e.currentTarget.src = placeholderImage)} 
+        />
       </div>
     );
   }
@@ -73,19 +75,20 @@ const GalleryComponent = ({ pictures, userPictures }: IGalleryComponentProps) =>
       <Slider
         className="mainslider card"
         {...mainSliderSettings}
-        ref={(slider: Slider | null) => setNav1(slider)} // Référence du slider principal
+        ref={(slider: Slider | null) => setNav1(slider)}
       >
         {images?.map((image) => {
           const imageSrc = userPictures
-            ? `${apiUrl}/img/utilisateurs/${image.URL_picture}` // Chemin pour les utilisateurs
-            : `${apiUrl}/img/animaux/img750/${image.URL_picture}`; // Chemin pour les animaux
+            ? `${apiUrl}/img/utilisateurs/${image.URL_picture}` 
+            : `${apiUrl}/img/animaux/img750/${image.URL_picture}`; 
 
           return (
             <div key={image.id}>
               <img
                 src={imageSrc}
                 alt={`Image ${image.id}`}
-                loading="lazy"
+                loading="lazy" 
+                onError={(e) => (e.currentTarget.src = placeholderImage)} 
               />
             </div>
           );
@@ -96,19 +99,20 @@ const GalleryComponent = ({ pictures, userPictures }: IGalleryComponentProps) =>
       <Slider
         className="navslider"
         {...navSliderSettings}
-        ref={(slider: Slider | null) => setNav2(slider)} // Référence du slider de navigation
+        ref={(slider: Slider | null) => setNav2(slider)} // 
       >
         {images?.map((image) => {
           const imageSrc = userPictures
-            ? `${apiUrl}/img/utilisateurs/${image.URL_picture}` // Chemin pour les utilisateurs
-            : `${apiUrl}/img/animaux/img750/${image.URL_picture}`; // Chemin pour les animaux
+            ? `${apiUrl}/img/utilisateurs/${image.URL_picture}` 
+            : `${apiUrl}/img/animaux/img750/${image.URL_picture}`; 
 
           return (
             <div key={image.id} className="card">
               <img
                 src={imageSrc}
                 alt={`Thumbnail ${image.id}`}
-                loading="lazy"
+                loading="lazy" 
+                onError={(e) => (e.currentTarget.src = placeholderImage)} // Remplace par l'image de placeholder si l'image n'est pas trouvée
               />
             </div>
           );

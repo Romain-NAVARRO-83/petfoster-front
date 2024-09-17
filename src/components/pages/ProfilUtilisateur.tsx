@@ -94,12 +94,12 @@ function ProfilUtilisateur() {
                 userPictures={user?.pictures ?? []} 
               />
               {/* Ajout du formulaire d'upload */}
-      {/* {connectedUser && connectedUser.userId === user?.id &&
+      {connectedUser && connectedUser.userId === user?.id &&
         <UploadImageForm 
           userId={connectedUser.userId} 
-          fetchUserImages={fetchUserData} // Ajoutez cette ligne
+          fetchUserImages={fetchUserData} 
         />
-      } */}
+      }
             </div>
 
             <div className="column is-6">
