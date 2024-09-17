@@ -5,29 +5,6 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../../hooks/AuthContext';
 import axios from 'axios';
 
-// const interlocutors = [
-//   {
-//     id: 2,
-//     name: 'Marie Dubois',
-//     last_message: { user: 1, date: '2024-09-09T14:51:33.503Z' },
-//   },
-//   {
-//     id: 3,
-//     name: 'Jean Martin',
-//     last_message: { user: 3, date: '2024-09-09T15:51:33.503Z' },
-//   },
-//   {
-//     id: 4,
-//     name: 'John Snow',
-//     last_message: { user: 3, date: '2024-09-09T15:51:33.503Z' },
-//   },
-//   {
-//     id: 5,
-//     name: 'Clive Rosfield',
-//     last_message: { user: 3, date: '2024-09-09T15:51:33.503Z' },
-//   },
-// ];
-
 interface MessageType {
   id: number;
   sender_id: number;
@@ -100,6 +77,7 @@ function Messagerie() {
       <h2 className="title">Vos messages</h2>
       <div className="columns container">
         <div className="column is-one-third messenger-item-list">
+          {console.log(interlocutorsLastMessage)}
           {interlocutorsLastMessage &&
             interlocutorsLastMessage.map((item) => (
               <InterlocutorItemList
@@ -116,7 +94,9 @@ function Messagerie() {
             // ref={scrollable}
           >
             {currentChat
-              ? currentChat.map((item) => <Message message={item} key={item.id}/>)
+              ? currentChat.map((item) => (
+                  <Message message={item} key={item.id} />
+                ))
               : 'Selectionnez une discussion'}
           </div>
 
