@@ -84,11 +84,11 @@ function Header() {
                   </NavLink>
                 </>
               )}
-{user ? (
+              {user ? (
               
               <div className={`navbar-item has-dropdown ${isDropdownActive ? 'is-active' : ''}`}>
                 <a className="navbar-link" onClick={toggleDropdown}>
-                  <User size={24} /> 
+                  <User className="user-icon" size={24}/> 
                 </a>
 
                   <div className="navbar-dropdown is-right">
