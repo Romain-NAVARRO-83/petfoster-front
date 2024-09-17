@@ -18,12 +18,13 @@ interface IGalleryComponentProps {
     updated_at: string | null;
   }[] | null;
 }
-
+const apiUrl = import.meta.env.VITE_API_URL;
 const GalleryComponent = ({ pictures, userPictures }: IGalleryComponentProps) => {
 
   const [nav1, setNav1] = useState<Slider | null>(null);
   const [nav2, setNav2] = useState<Slider | null>(null);
 
+  // const [animalPictures, setAnimalPictures] = useState(null);
 
   const mainSliderSettings: Record<string, any> = {
     slidesToShow: 1,
@@ -56,8 +57,8 @@ const GalleryComponent = ({ pictures, userPictures }: IGalleryComponentProps) =>
   if (images && images.length === 1) {
     const image = images[0];
     const imageSrc = userPictures
-      ? `/img/utilisateurs/${image.URL_picture}` // Chemin pour les images des utilisateurs
-      : `/img/animaux/${image.URL_picture}`; // Chemin pour les images des animaux
+      ? `${apiUrl}/img/utilisateurs/${image.URL_picture}` // Chemin pour les images des utilisateurs
+      : `${apiUrl}/img/animaux/${image.URL_picture}`; // Chemin pour les images des animaux
 
     return (
       <div className="single-image">
@@ -76,8 +77,8 @@ const GalleryComponent = ({ pictures, userPictures }: IGalleryComponentProps) =>
       >
         {images?.map((image) => {
           const imageSrc = userPictures
-            ? `/img/utilisateurs/${image.URL_picture}` // Chemin pour les utilisateurs
-            : `/img/animaux/${image.URL_picture}`; // Chemin pour les animaux
+            ? `${apiUrl}/img/utilisateurs/${image.URL_picture}` // Chemin pour les utilisateurs
+            : `${apiUrl}/img/animaux/${image.URL_picture}`; // Chemin pour les animaux
 
           return (
             <div key={image.id}>
@@ -99,8 +100,8 @@ const GalleryComponent = ({ pictures, userPictures }: IGalleryComponentProps) =>
       >
         {images?.map((image) => {
           const imageSrc = userPictures
-            ? `/img/utilisateurs/${image.URL_picture}` // Chemin pour les utilisateurs
-            : `/img/animaux/${image.URL_picture}`; // Chemin pour les animaux
+            ? `${apiUrl}/img/utilisateurs/${image.URL_picture}` // Chemin pour les utilisateurs
+            : `${apiUrl}/img/animaux/${image.URL_picture}`; // Chemin pour les animaux
 
           return (
             <div key={image.id} className="card">
