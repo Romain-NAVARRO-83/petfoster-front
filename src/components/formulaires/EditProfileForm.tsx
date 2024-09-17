@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useToast } from '../../hooks/ToastContext';
-import { User } from 'src/@interfaces/user'; // Ajustez le chemin d'importation selon votre projet
+import { User } from 'src/@interfaces/user'; 
 
 // Interface pour les données du formulaire
 interface FormData {
