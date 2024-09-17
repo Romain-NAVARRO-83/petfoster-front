@@ -18,7 +18,7 @@ const RegistrationPage = () => {
   const [zip, setzip] = useState('');
   const [city, setcity] = useState('');
   const [citysOptions, setcitysOptions] = useState<string[]>([]); // Liste des citys
-  const [adresse, setAdresse] = useState('');
+  const [address, setAddress] = useState('');
   const [phone, setphone] = useState('');
   const [longitude, setLongitude] = useState<number | null>(null);
   const [latitude, setLatitude] = useState<number | null>(null);
@@ -57,7 +57,7 @@ const RegistrationPage = () => {
       country,
       zip,
       city,
-      adresse,
+      address,
       phone,
       description: '',
       longitude: longitude ?? 0, // Assurez-vous que les valeurs existent
@@ -67,23 +67,25 @@ const RegistrationPage = () => {
     console.log(JSON.stringify(formData));
 
     try {
-      const response = await fetch('http://localhost:3000/api/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-xsrf-token': csrfToken || '',
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await axios.post(
+        'http://localhost:3000/api/users',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'x-xsrf-token': csrfToken || '',
+          },
+        }
+      );
 
-      const result = await response.json();
-      console.log('Utilisateur créé avec succès :', result);
+      console.log('Utilisateur créé avec succès :', response);
       showSuccessToast(
         'Votre compte a bien été créé ! Vous pouvez maintenant vous connecter'
       );
       setActiveTab('login');
     } catch (error) {
       showErrorToast('Erreur, veuillez recommencer');
+      console.log(error);
     }
 
     setLoading(false);
@@ -349,8 +351,8 @@ const RegistrationPage = () => {
                     className="input"
                     type="text"
                     placeholder="Adresse"
-                    value={adresse}
-                    onChange={(e) => setAdresse(e.target.value)}
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
                   />
                 </div>
               </div>
