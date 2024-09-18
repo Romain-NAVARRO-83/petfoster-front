@@ -10,6 +10,7 @@ import { Animal } from 'src/@interfaces/animal';
 import { User } from 'src/@interfaces/user';
 import GeolocNotification from '../partials/GeolocNotification';
 import UploadImageForm from '../formulaires/UploadImageForm';
+import dayjs from 'dayjs';
 
 const AnimalProfile = () => {
   const fosterlingsTests = [
@@ -173,12 +174,18 @@ const AnimalProfile = () => {
                 </tr>
               </thead>
               <tbody>
-                {fosterlingsTests.map((e) => {
+                {animal.animalOwners.map((e) => {
                   return (
                     <tr>
-                      <td>{e.user}</td>
-                      <td>{e.entree}</td>
-                      <td>{e.sortie}</td>
+                      <td>
+                        <a href={`/profil/${e.user.id}`}>{e.user.name}</a>
+                      </td>
+                      <td>{dayjs(e.date_start).format('D MMM. YYYY')}</td>
+                      <td>
+                        {e.date_end
+                          ? dayjs(e.date_end).format('D MMM. YYYY')
+                          : '-'}
+                      </td>
                     </tr>
                   );
                 })}
