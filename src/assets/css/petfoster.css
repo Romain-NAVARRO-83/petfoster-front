@@ -4,6 +4,7 @@
   --orange: hsl(29, 100%, 69%);
 
   --darkgreen: hsl(152, 28%, 35%);
+  --light-yellow: hsl(48, 88%, 94%);
 
   --bulma-primary-h: 152;
   --bulma-primary-s: 36%;
@@ -544,4 +545,8 @@ p {
   .navbar-item.has-dropdown>a {
     display: none;
   }
+}
+
+.yellow-card {
+  background-color: var(--light-yellow)
 }
