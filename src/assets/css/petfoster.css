@@ -3,6 +3,8 @@
   --yellow: hsl(48, 100%, 84%);
   --orange: hsl(29, 100%, 69%);
 
+  --darkgreen: hsl(152, 28%, 35%);
+
   --bulma-primary-h: 152;
   --bulma-primary-s: 36%;
   --bulma-primary-l: 70%;
@@ -94,7 +96,7 @@ div:not(#splash-screen, #splash-screen > *):has(> h1)::before {
 }
 
 h1:not(#splash-screen h1) {
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.7);
   text-align: center;
   padding: 1rem;
 }
@@ -151,6 +153,15 @@ nav.navbar {
 */
 footer>div>ul {
   columns: 2;
+
+}
+
+footer li {
+  list-style-type: none;
+}
+
+a {
+  color: var(--darkgreen)
 }
 
 .button {
@@ -204,7 +215,7 @@ footer>div>ul {
   overflow: auto;
 }
 
-@media (width <=768px) {
+@media (width <=1024px) {
   .messenger-item-list {
     max-height: 20vh;
     overflow: auto;
@@ -223,7 +234,8 @@ footer>div>ul {
   }
 
   header:not(.scrolled) .navbar-burger {
-    background-color: rgba(255, 255, 255, .5)
+    background-color: rgba(255, 255, 255, .7);
+    color: #000;
   }
 }
 
@@ -369,6 +381,7 @@ footer>div>ul {
   transform: translateX(-100%);
   transition: all ease-out 0.3s;
   margin-bottom: 10px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 #animal-filter.open>button {
@@ -383,6 +396,7 @@ footer>div>ul {
   background-color: rgba(255, 255, 255, .8);
   border-radius: 10px;
   border: solid 2px #ddd;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 #animal-filter.open {
@@ -510,4 +524,20 @@ p {
 .button.is-extra-small {
   font-size: 0.7rem;
   padding: 0.25rem 0.5rem;
+}
+
+@media(width > 1024px) {
+  a.navbar-item:hover {
+    color: #000;
+  }
+}
+
+@media(width <1024px) {
+  .navbar-item {
+    text-align: center;
+  }
+
+  .navbar-item.has-dropdown>a {
+    display: none;
+  }
 }

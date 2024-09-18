@@ -6,6 +6,7 @@ import { Animal } from '../../@interfaces/animal';
 import { FRequest } from '../../@interfaces/frequest';
 import { useNavigate } from 'react-router-dom';
 import { Check, Cross } from 'react-flaticons';
+import MiniatureAnimal from '../partials/Miniature';
 
 const FilterPage = () => {
   // Gestion du token CSRF
@@ -234,14 +235,15 @@ const FilterPage = () => {
                     return (
                       <tr key={request.id}>
                         <td>
-                          <div className="animal-miniature">
+                          {/* <div className="animal-miniature">
                             <img
                               src={`/img/animaux/${request.animal.pictures[0].URL_picture}`}
                               alt={request.animal.name}
                               width="64"
                               height="64"
                             />
-                          </div>
+                          </div> */}
+                          <MiniatureAnimal animal={animal}/>
                         </td>
                         <td>{animal.name}</td>
                         <td>
@@ -265,7 +267,7 @@ const FilterPage = () => {
                           )}
                         </td>
                         <td>
-                          {request.request_status === 'pending' && (
+                          {request.request_status.toLowerCase() === 'pending'  && (
                             <>
                               <button
                                 className="button is-small is-success"
@@ -298,20 +300,8 @@ const FilterPage = () => {
               {myUser?.fosterlingRequests?.map((item: any, index: number) => (
                 <tr key={index}>
                   <td>
-                    <figure className="image animal-miniature ">
-                      <img
-                        src={`/img/animaux/${
-                          requestAnimalDetails[item.animals_id]?.pictures[0]
-                            ?.URL_picture
-                        }`}
-                        alt={
-                          requestAnimalDetails[item.animals_id]?.name ||
-                          'Animal'
-                        }
-                        width="64"
-                        height="64"
-                      />
-                    </figure>
+                    <MiniatureAnimal animal={requestAnimalDetails[item.animals_id]}/>
+                    {/* {JSON.stringify(item)} */}
                   </td>
                   <td>
                     <a

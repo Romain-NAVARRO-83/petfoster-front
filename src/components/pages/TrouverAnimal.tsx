@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent, FormEvent, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import computeAge from '../../utils/computeAgeTrouverAnimal';
 import axios from 'axios';
@@ -12,6 +12,7 @@ import { Filter, FilterSlash } from 'react-flaticons';
 import { FosterlingProfileListItem } from 'src/@interfaces/fosterlingProfileListItem';
 import GenderIcon from '../partials/GenderIcon';
 import IdToSPecies from '../partials/IdToSpecies';
+import UserTypeInfo from '../partials/UserTypeInfo';
 
 type FormData = {
   species: string;
@@ -37,6 +38,14 @@ const speciesMap: { [key: number]: string } = {
 };
 
 const TrouverAnimal: React.FC = () => {
+  const divRef = React.useRef(null);
+  const getNumberOfChildren = () => {
+    if (divRef.current) {
+      return divRef.current.children.length;
+    }
+    return 0;
+  };
+
   const { user: connectedUser } = useAuth();
   const { location } = useGeolocation();
   const [formData, setFormData] = useState<FormData>({
@@ -91,6 +100,8 @@ const TrouverAnimal: React.FC = () => {
     }
   }, [allUsers]);
 
+
+
   // Fetch users data based on filters
   useEffect(() => {
     const speciesFilter = formData.species
@@ -124,11 +135,11 @@ const TrouverAnimal: React.FC = () => {
           <h1 className="title">Trouver un animal</h1>
         )}
       </div>
+      
+      {/* {JSON.stringify(filteredAnimals?.length || '0')} */}
       <div id="animal-filter" className={filterOpen ? 'open' : ''}>
-        <button onClick={handleFilterOpen} className="button is-success">
-          <h2 className="title is-4">
+        <button onClick={handleFilterOpen} className="button is-success" title="Filtrer">        
             {filterOpen ? <FilterSlash /> : <Filter />}
-          </h2>
         </button>
 
         <form onSubmit={handleAnimalFilterSubmit}>
@@ -211,20 +222,21 @@ const TrouverAnimal: React.FC = () => {
         <div className="animals-maplist">
           <h2 className="subtitle">
             {connectedUser && connectedUser.userType === 'association'
-              ? `${foundUsersFosterlingProfiles?.length} possibilité d'accueil dans un périmètre de ${formData.search_area} Km`
-              : `${foundUsersAnimals?.length} animaux trouvés dans un périmètre de ${formData.search_area} Km`}
+              ? `${getNumberOfChildren()} possibilité d'accueil dans un périmètre de ${formData.search_area} Km`
+              : `${getNumberOfChildren()} animaux trouvés dans un périmètre de ${formData.search_area} Km`}
           </h2>
           {(connectedUser?.userType !== 'association' &&
-            foundUsersAnimals?.length === 0) ||
+            getNumberOfChildren() === 0) ||
             (connectedUser?.userType === 'association' &&
               foundUsersFosterlingProfiles?.length === 0 && (
                 <p className="notification is-info is-light">
                   Essayez d'agrandir le périmètre de recherche.
                 </p>
               ))}
+              
 
           {!connectedUser || connectedUser.userType !== 'association' ? (
-            <div className="animal-list">
+            <div ref={divRef} className="animal-list">
               {foundUsersAnimals &&
                 foundUsersAnimals
                   .filter((animal) => {
@@ -254,7 +266,7 @@ const TrouverAnimal: React.FC = () => {
                   ))}
             </div>
           ) : (
-            <div className="animal-list">
+            <div ref={divRef} className="animal-list">
               {foundUsersFosterlingProfiles &&
                 foundUsersFosterlingProfiles
                   .filter((profile) => {
@@ -302,6 +314,7 @@ const TrouverAnimal: React.FC = () => {
             filters={formData}
             showSearchArea={true}
           />
+          <UserTypeInfo />
         </div>
       </div>
     </main>
