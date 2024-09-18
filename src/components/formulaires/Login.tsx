@@ -172,17 +172,17 @@ function LoginForm() {
         <ul className="column">
           <li>Adoptant</li>
           <li>marie.dubois@example.com</li>
-          <li>hashed_password3</li>
+          <li>P@ssword123456!</li>
         </ul>
         <ul className="column">
           <li>Famille d'accueil</li>
           <li>jean.martin@example.com</li>
-          <li>hashed_password2</li>
+          <li>P@ssword123456!</li>
         </ul>
         <ul className="column">
           <li>Association</li>
           <li>contact@spa-example.com</li>
-          <li>hashed_password5</li>
+          <li>P@ssword123456!</li>
         </ul>
       </div>
     </form>

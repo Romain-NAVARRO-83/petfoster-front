@@ -7,6 +7,7 @@ import { useAuth } from '../../hooks/AuthContext';
 import { PlusSmall } from 'react-flaticons';
 import { User } from 'src/@interfaces/user';
 import { UserAnimal } from 'src/@interfaces/userAnimals';
+import { Helmet } from 'react-helmet';
 
 const MesAnimaux = () => {
   // State pour stocker les animaux (du user)
@@ -52,6 +53,10 @@ const MesAnimaux = () => {
 
   return (
     <>
+    <Helmet>
+        <title>Pet Foster : Mes animaux</title>
+        <meta name="description" content="Liste de vos animaux sur Pet Foster." />
+      </Helmet>
       <main>
         <div>
           <h1 className="title">Mes animaux</h1>
