@@ -29,7 +29,7 @@ body {
 div:not(#splash-screen, #splash-screen > *):has(> h1) {
   padding-top: 20vh;
   background-color: #96ceb4;
-  background-image: url('/img/main-background-2.jpg');
+  background-image: url('/img/main-background-2.webp');
   background-size: cover;
   background-blend-mode: luminosity;
   background-position: center;
@@ -38,7 +38,7 @@ div:not(#splash-screen, #splash-screen > *):has(> h1) {
 #splash-screen {
   min-height: 50vh;
   background-color: #96ceb4;
-  background-image: url('/img/main-background-2.jpg');
+  background-image: url('/img/main-background-2.webp');
   background-size: cover;
   background-blend-mode: luminosity;
   background-position: center;
