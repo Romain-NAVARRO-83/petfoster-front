@@ -88,30 +88,30 @@ const AnimalProfile = () => {
         </div>
 
         {/* Info animal */}
-        <div className="column columns is-multiline is-full-mobile is-full-tablet is-half-desktop">
-          <div className="column is-full-mobile is-half-tablet is-half-desktop">
-            Espèce : <strong>{animal?.species.name}</strong>
-          </div>
-          <div className="column is-full-mobile is-half-tablet is-half-desktop">
-            Race : <strong>{animal?.race}</strong>
-          </div>
-          <div className="column is-full-mobile is-half-tablet is-half-desktop">
-            Sexe : <strong>{animal?.sexe === 'F' ? 'Femelle' : 'Mâle'}</strong>
-          </div>
-          <div className="column is-full-mobile is-half-tablet is-half-desktop">
-            Age :{' '}
-            <strong>
-              {animal?.date_of_birth
-                ? computeAge(animal.date_of_birth)
-                : 'Inconnue'}
-            </strong>
-          </div>
-          <div className="column is-full">
-            <Link to="#localisation">Localisation</Link>
-          </div>
-          <div className="column is-full">
-            <h2 className="subtitle">En quelques mots</h2>
-            <p>{animal?.short_story}</p>
+        <div className="column is-full-mobile is-half-tablet is-half-desktop">
+          <div className="columns is-multiline">
+            <div className="column is-full-mobile is-half-tablet is-half-desktop">
+              Espèce : <strong>{animal?.species.name}</strong>
+            </div>
+            <div className="column is-full-mobile is-half-tablet is-half-desktop">
+              Race : <strong>{animal?.race}</strong>
+            </div>
+            <div className="column is-full-mobile is-half-tablet is-half-desktop">
+              Sexe : <strong>{animal?.sexe === 'F' ? 'Femelle' : 'Mâle'}</strong>
+            </div>
+            <div className="column is-full-mobile is-half-tablet is-half-desktop">
+              Age :{' '}
+              <strong>
+                {animal?.date_of_birth ? computeAge(animal.date_of_birth) : 'Inconnue'}
+              </strong>
+            </div>
+            <div className="column is-full">
+              <Link to="#localisation">Localisation</Link>
+            </div>
+            <div className="column is-full">
+              <h2 className="subtitle">En quelques mots</h2>
+              <p>{animal?.short_story}</p>
+            </div>
           </div>
         </div>
 
