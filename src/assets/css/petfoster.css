@@ -493,8 +493,12 @@ p {
   }
 }
 
-/* home page */
+/* footer */
 
+.footer {
+  padding-top: 48px;
+  padding-bottom: 48px;
+}
 
 /* animal/#  */
 

@@ -273,13 +273,12 @@ const TrouverAnimal: React.FC = () => {
                     );
                   })
                   .map((profile) => (
-                    <div key={profile.id} className="columns card is-vcentered">
+                    <Link to={`/profil/${profile.users_id}`} key={profile.id}>
+                    <div className="columns card is-vcentered m-4" style={{ backgroundColor: 'hsl(48, 100%, 89%)' }}>
                       <div className="column has-text-centered">
-                        <Link to={`/profil/${profile.users_id}`}>
-                          <strong className="is-size-7">
-                            {profile.userName}
-                          </strong>
-                        </Link>
+                        <strong className="is-size-7">
+                          {profile.userName}
+                        </strong>
                         <br />
                         <span className="is-size-7">{profile.userType}</span>
                       </div>
@@ -292,6 +291,7 @@ const TrouverAnimal: React.FC = () => {
                       </div>
                       <div className="column">{profile.age}</div>
                     </div>
+                  </Link>
                   ))}
             </div>
           )}
