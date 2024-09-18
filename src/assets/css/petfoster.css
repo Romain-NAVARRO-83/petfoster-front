@@ -496,3 +496,8 @@ p {
 
 
 /* animal/#  */
+
+.button.is-secondary.is-fullwidth {
+  white-space: normal;
+  text-align: center;
+}

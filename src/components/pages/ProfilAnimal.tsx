@@ -119,15 +119,16 @@ const AnimalProfile = () => {
         {connectedUser && connectedUser.userId === animal?.creator.id && (
           <div className="notification is-info is-light is-fullwidth column">
             <p>
-              En tant que créateur du profil de cet animal, vous pouvez en
-              éditer le contenu.
+              En tant que créateur du profil de cet animal, vous pouvez en éditer le contenu.
             </p>
-            <button
-              className="button is-pulled-right is-primary"
-              onClick={() => openModal('editAnimalProfile', undefined, undefined, animal?.id)}
-            >
-              Éditer
-            </button>
+            <div className="is-flex is-justify-content-flex-end">
+              <button
+                className="button is-primary"
+                onClick={() => openModal('editAnimalProfile', undefined, undefined, animal?.id)}
+              >
+                Éditer
+              </button>
+            </div>
           </div>
         )}
       </section>
