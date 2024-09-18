@@ -72,6 +72,8 @@ const AddFosterlingProfileForm = ({
 
     if (!validateForm()) return;
 
+    console.log(formData);
+
     setIsSubmitting(true);
     try {
       await axios.post('http://localhost:3000/api/profiles', formData, {
@@ -178,7 +180,7 @@ const AddFosterlingProfileForm = ({
                   <option value="-1">- d'1 an</option>
                   <option value="1-3">Entre 1 et 3 ans</option>
                   <option value="3-5">Entre 3 et 5 ans</option>
-                  <option value="5+">Plus de 5 ans</option>
+                  <option value="+5">Plus de 5 ans</option>
                   <option value="">Indifférent</option>
                 </select>
               </div>
