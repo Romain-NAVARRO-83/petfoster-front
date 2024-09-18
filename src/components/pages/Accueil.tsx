@@ -71,10 +71,14 @@ function Accueil() {
           <h1 className="title">Bienvenue sur Pet Foster !</h1>
           <h2 className="subtitle">Cette phrase vous va comme un slogan</h2>
         </div>
+
         <div className="column is-full-mobile is-half-desktop">
-          <Link className="button is-primary is-large" to="/connexion">
-            Créer mon compte
-          </Link>
+          {/* N'afficher le bouton que si l'utilisateur n'est pas connecté */}
+          {!connectedUser && (
+            <Link className="button is-primary is-large" to="/connexion">
+              Créer mon compte
+            </Link>
+          )}
         </div>
       </div>
 
@@ -88,7 +92,7 @@ function Accueil() {
           </div>
           <div className="column has-text-centered">
             <h3 className="title is-4">Familles d'accueil</h3>
-            <p className='is-size-5'>Resneignez vos possibilités d'accueil et entrez en contact avec des associations.</p>
+            <p className='is-size-5'>Renseignez vos possibilités d'accueil et entrez en contact avec des associations.</p>
           </div>
 
           <div className="column has-text-centered">
