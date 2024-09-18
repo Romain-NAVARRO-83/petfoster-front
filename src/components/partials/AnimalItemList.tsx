@@ -87,10 +87,10 @@ function AnimalItemList({ animal }: AnimalListItemProps) {
             {/* Sexe de l'animal */}
             <div className='column'>
             {animal.sexe === "F" ? (
-    <img src="/img/vector/femelle.svg" width="25" height="25" alt="Female" />
-  ) : (
-    <img src="/img/vector/male.svg" width="25" height="25" alt="Male" />
-  )}
+              <img src="/img/vector/femelle.svg" width="25" height="25" alt="Female" />
+            ) : (
+              <img src="/img/vector/male.svg" width="25" height="25" alt="Male" />
+            )}
             </div>
           </div>
         </div>

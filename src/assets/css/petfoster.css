@@ -457,38 +457,26 @@ p {
   padding-top: 50px;
 }
 
-.picture-uploader .file {
-  justify-content: center;
-}
-
 .Toastify__toast-container--top-right {
   top: 100px;
-}
-
-.single-image {
-  max-height: 50vh;
-  height: 50vh;
-  text-align: center;
-}
-
-.single-image img {
-  height: inherit;
-  object-fit: contain;
-  margin: auto;
 }
 
 
 /*  menu burger */
 @media (max-width: 1023px) {
-  .navbar-item {
-    color: rgb(0, 0, 0);
-    /* Change la couleur des liens */
-  }
+.navbar-item {
+  color: rgb(0, 0, 0); 
+}
 }
 
 @media (max-width: 1023px) {
   .user-icon {
-    filter: brightness(0) invert(0);
-    /* Appliquez le filtre noir */
+    color: rgb(0, 0, 0); 
   }
 }
+
+/* home page */
+
+
+/* animal/#  */
+

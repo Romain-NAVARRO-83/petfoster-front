@@ -7,7 +7,9 @@ interface IAddFosterlingProfileFormProps {
   userId: number;
 }
 
-const AddFosterlingProfileForm = ({ userId }: IAddFosterlingProfileFormProps) => {
+const AddFosterlingProfileForm = ({
+  userId,
+}: IAddFosterlingProfileFormProps) => {
   const [formData, setFormData] = useState({
     species_id: '',
     sexe: '',
@@ -16,15 +18,17 @@ const AddFosterlingProfileForm = ({ userId }: IAddFosterlingProfileFormProps) =>
     search_area: 30,
     users_id: userId,
   });
- // Toasts de submit
- const { showSuccessToast } = useToast();
- const { closeModal } = useModal();
+  // Toasts de submit
+  const { showSuccessToast } = useToast();
+  const { closeModal } = useModal();
   const [csrfToken, setCsrfToken] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchCsrfToken = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/csrf-token');
+        const response = await axios.get(
+          'http://localhost:3000/api/csrf-token'
+        );
         setCsrfToken(response.data);
       } catch (error) {
         console.error('Erreur lors de la récupération du token CSRF:', error);
@@ -36,7 +40,9 @@ const AddFosterlingProfileForm = ({ userId }: IAddFosterlingProfileFormProps) =>
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -45,7 +51,11 @@ const AddFosterlingProfileForm = ({ userId }: IAddFosterlingProfileFormProps) =>
   };
 
   const validateForm = () => {
-    if (formData.species_id === '' || formData.sexe === '' || formData.age === '') {
+    if (
+      formData.species_id === '' ||
+      formData.sexe === '' ||
+      formData.age === ''
+    ) {
       setError('Veuillez remplir tous les champs requis.');
       return false;
     }
@@ -62,6 +72,8 @@ const AddFosterlingProfileForm = ({ userId }: IAddFosterlingProfileFormProps) =>
 
     if (!validateForm()) return;
 
+    console.log(formData);
+
     setIsSubmitting(true);
     try {
       await axios.post('http://localhost:3000/api/profiles', formData, {
@@ -70,10 +82,12 @@ const AddFosterlingProfileForm = ({ userId }: IAddFosterlingProfileFormProps) =>
           'x-xsrf-token': csrfToken || '',
         },
       });
-      showSuccessToast('Votre profil d\'accueil à été créé !');
+      showSuccessToast("Votre profil d'accueil à été créé !");
       closeModal(); // Fermer la modal après succès
     } catch (error) {
-      setError("Une erreur s'est produite lors de la soumission. Veuillez réessayer.");
+      setError(
+        "Une erreur s'est produite lors de la soumission. Veuillez réessayer."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -87,7 +101,9 @@ const AddFosterlingProfileForm = ({ userId }: IAddFosterlingProfileFormProps) =>
       <div className="columns">
         <div className="column">
           <div className="field">
-            <label className="label" htmlFor="species_id">Espèce</label>
+            <label className="label" htmlFor="species_id">
+              Espèce
+            </label>
             <div className="control">
               <div className="select">
                 <select
@@ -97,10 +113,21 @@ const AddFosterlingProfileForm = ({ userId }: IAddFosterlingProfileFormProps) =>
                   aria-label="Sélectionnez une espèce"
                   id="species_id"
                 >
-                  <option value="" disabled>Sélectionnez</option>
+                  <option value="" disabled>
+                    Sélectionnez
+                  </option>
                   <option value="1">Chat</option>
                   <option value="2">Chien</option>
                   <option value="3">Cheval</option>
+                  <option value="4">Lapin</option>
+                  <option value="5">Cochon d'Inde</option>
+                  <option value="6">Hamster</option>
+                  <option value="7">Furet</option>
+                  <option value="8">Oiseau</option>
+                  <option value="9">Serpent</option>
+                  <option value="10">Lézard</option>
+                  <option value="11">Tortue</option>
+                  <option value="12">Rat</option>
                 </select>
               </div>
             </div>
@@ -109,7 +136,9 @@ const AddFosterlingProfileForm = ({ userId }: IAddFosterlingProfileFormProps) =>
 
         <div className="column">
           <div className="field">
-            <label className="label" htmlFor="sexe">Sexe</label>
+            <label className="label" htmlFor="sexe">
+              Sexe
+            </label>
             <div className="control">
               <div className="select">
                 <select
@@ -119,7 +148,9 @@ const AddFosterlingProfileForm = ({ userId }: IAddFosterlingProfileFormProps) =>
                   aria-label="Sélectionnez un sexe"
                   id="sexe"
                 >
-                  <option value="" disabled>Sélectionnez</option>
+                  <option value="" disabled>
+                    Sélectionnez
+                  </option>
                   <option value="M">Mâle</option>
                   <option value="F">Femelle</option>
                   <option value="">Indifférent</option>
@@ -131,7 +162,9 @@ const AddFosterlingProfileForm = ({ userId }: IAddFosterlingProfileFormProps) =>
 
         <div className="column">
           <div className="field">
-            <label className="label" htmlFor="age">Âge</label>
+            <label className="label" htmlFor="age">
+              Âge
+            </label>
             <div className="control">
               <div className="select">
                 <select
@@ -141,11 +174,14 @@ const AddFosterlingProfileForm = ({ userId }: IAddFosterlingProfileFormProps) =>
                   aria-label="Sélectionnez un âge"
                   id="age"
                 >
-                  <option value="" disabled>Sélectionnez</option>
-                  <option value="1">- d'1 an</option>
-                  <option value="3">Entre 1 et 3 ans</option>
-                  <option value="5">Entre 3 et 5 ans</option>
-                  <option value="7">Plus de 5 ans</option>
+                  <option value="" disabled>
+                    Sélectionnez
+                  </option>
+                  <option value="-1">- d'1 an</option>
+                  <option value="1-3">Entre 1 et 3 ans</option>
+                  <option value="3-5">Entre 3 et 5 ans</option>
+                  <option value="+5">Plus de 5 ans</option>
+                  <option value="">Indifférent</option>
                 </select>
               </div>
             </div>
@@ -156,7 +192,9 @@ const AddFosterlingProfileForm = ({ userId }: IAddFosterlingProfileFormProps) =>
       <div className="columns">
         <div className="column">
           <div className="field">
-            <label className="label" htmlFor="quantity">Quantité</label>
+            <label className="label" htmlFor="quantity">
+              Quantité
+            </label>
             <div className="control">
               <input
                 className="input"
@@ -174,7 +212,9 @@ const AddFosterlingProfileForm = ({ userId }: IAddFosterlingProfileFormProps) =>
 
         <div className="column">
           <div className="field">
-            <label className="label" htmlFor="search_area">Périmètre</label>
+            <label className="label" htmlFor="search_area">
+              Périmètre
+            </label>
             <div className="control">
               <input
                 className="input"
@@ -187,14 +227,20 @@ const AddFosterlingProfileForm = ({ userId }: IAddFosterlingProfileFormProps) =>
                 aria-label="Sélectionnez le périmètre de recherche"
                 id="search_area"
               />
-              <p>Périmètre : <strong>{formData.search_area}</strong> Km</p>
+              <p>
+                Périmètre : <strong>{formData.search_area}</strong> Km
+              </p>
             </div>
           </div>
         </div>
       </div>
 
       <div className="control">
-        <button className="button is-primary is-fullwidth" type="submit" disabled={isSubmitting}>
+        <button
+          className="button is-primary is-fullwidth"
+          type="submit"
+          disabled={isSubmitting}
+        >
           {isSubmitting ? 'Envoi en cours...' : 'Valider'}
         </button>
       </div>
