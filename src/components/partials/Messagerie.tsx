@@ -17,15 +17,13 @@ interface MessageType {
 
 function Messagerie() {
   const { user: connectedUser } = useAuth();
-  const [interlocutorsLastMessage, setInterlocutorsLastMessage] =
-    useState<any>(null); // TODO Typage
+  const [interlocutorsLastMessage, setInterlocutorsLastMessage] = useState<any>(null); // TODO Typage
 
-  const [currentInterlocutor, setCurrentInterlocutor] = useState<number | null>(
-    null
-  ); // TODO Typage
+  const [currentInterlocutor, setCurrentInterlocutor] = useState<number | null>(null); // TODO Typage
 
   const [currentChat, setCurrentChat] = useState<MessageType[] | null>(null); // TODO Typage
 
+  // Récupération des interlocuteurs et de leurs derniers messages
   useEffect(() => {
     if (connectedUser) {
       async function fetchInterlocutors() {
@@ -46,10 +44,8 @@ function Messagerie() {
     }
   }, [connectedUser]);
 
-  async function fetchDisscussion(
-    connectedUserId: number,
-    interlocutorId: number
-  ) {
+  // Récupération des discussions avec un interlocuteur spécifique
+  async function fetchDisscussion(connectedUserId: number, interlocutorId: number) {
     try {
       const response = await axios.get(
         `http://localhost:3000/api/connectedUser/${connectedUserId}/messages/interlocutor/${interlocutorId}`
@@ -76,9 +72,10 @@ function Messagerie() {
     <section className="section yellow-line">
       <h2 className="title">Vos messages</h2>
       <div className="columns container">
+        {/* Colonne des interlocuteurs */}
         <div className="column is-one-third messenger-item-list">
           {console.log(interlocutorsLastMessage)}
-          {interlocutorsLastMessage &&
+          {interlocutorsLastMessage && interlocutorsLastMessage.length > 0 ? (
             interlocutorsLastMessage.map((item) => (
               <InterlocutorItemList
                 interlocutorLastMessage={item}
@@ -86,20 +83,27 @@ function Messagerie() {
                 setCurrentInterlocutor={setCurrentInterlocutor}
                 fetchDisscussion={fetchDisscussion}
               />
-            ))}
+            ))
+          ) : (
+            <div>
+              
+            </div>
+          )}
         </div>
+
+        {/* Fenêtre de discussion */}
         <div className="column">
-          <div
-            className="chat-window box is-flex is-flex-direction-column-reverse"
-            // ref={scrollable}
-          >
-            {currentChat
-              ? currentChat.map((item) => (
-                  <Message message={item} key={item.id} />
-                ))
-              : 'Selectionnez une discussion'}
+          <div className="chat-window box is-flex is-flex-direction-column-reverse">
+            {interlocutorsLastMessage && interlocutorsLastMessage.length === 0 ? (
+              <p>Vous n'avez pas de message</p>
+            ) : currentChat ? (
+              currentChat.map((item) => <Message message={item} key={item.id} />)
+            ) : (
+              <p>Sélectionnez une discussion</p>
+            )}
           </div>
 
+          {/* Formulaire d'envoi de message */}
           {currentInterlocutor && (
             <div className="box">
               <ContactUserMessagerieForm
