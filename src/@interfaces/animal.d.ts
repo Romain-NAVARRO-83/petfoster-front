@@ -14,8 +14,19 @@ export interface Animal {
   species_id: number;
   creator_id: number;
   created_at: string;
-  updated_at: any;
+  updated_at: string;
+  animalOwners: AnimalOwner[];
   creator: User;
   species: Species;
   pictures: Pictures[];
+}
+interface AnimalOwner {
+  id: number;
+  animals_id: number;
+  users_id: number;
+  date_start: string;
+  date_end?: string;
+  created_at: string;
+  updated_at: any;
+  user: User;
 }
