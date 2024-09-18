@@ -1,5 +1,5 @@
 import { useModal } from '../../hooks/ModalContext';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import MapComponent from '../partials/MapComponent';
@@ -10,8 +10,15 @@ import { Animal } from 'src/@interfaces/animal';
 import { User } from 'src/@interfaces/user';
 import GeolocNotification from '../partials/GeolocNotification';
 import UploadImageForm from '../formulaires/UploadImageForm';
+import { MapMarker } from 'react-flaticons';
 
 const AnimalProfile = () => {
+  const sectionRef = useRef(null);
+
+  const scrollToSection = () => {
+    sectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   const { openModal, closeModal } = useModal();
   const { user: connectedUser } = useAuth(); 
   
@@ -106,7 +113,7 @@ const AnimalProfile = () => {
               </strong>
             </div>
             <div className="column is-full">
-              <Link to="#localisation">Localisation</Link>
+            <button className="is-fullwidth button" onClick={scrollToSection}><MapMarker/> Trouver {animal?.name}</button>
             </div>
             <div className="column is-full">
               <h2 className="subtitle">En quelques mots</h2>
@@ -142,7 +149,7 @@ const AnimalProfile = () => {
       </section>
 
       {/* Localisation */}
-      <section id="localisation" className="yellow-line">
+      <section ref={sectionRef} id="localisation" className="yellow-line">
         <h2 className="title">Où se trouve {animal?.name} ?</h2>
         <div className="container columns is-vcentered is-fluid">
           <div className="column is-full-mobile is-half-tablet is-half-desktop">

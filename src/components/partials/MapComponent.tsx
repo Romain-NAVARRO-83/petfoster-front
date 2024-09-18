@@ -188,7 +188,7 @@ function MapComponent({ users, animal, filters, showSearchArea = false }: MapCom
               {/* Liste des animaux du user (hebergement)*/}
               {user.userAnimals && user.userAnimals.length > 0 && (
                 <div className='column'>
-                  <p className='mapopup-subheader'>Heberges</p>
+                  <p className='mapopup-subheader'>Héberges</p>
                 <ul>
                   {user.userAnimals.map((index) => (
                 <li key={index.animal.id}><Link to={`/animal/${index.animal.id}`}>{index.animal.name}</Link></li>
