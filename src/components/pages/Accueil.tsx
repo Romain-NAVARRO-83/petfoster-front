@@ -146,8 +146,8 @@ function Accueil() {
           <div className="columns is-variable is-8">
             <div className="column is-full-mobile is-half-desktop">
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis facere iure similique cum ab maiores
-                iste quod. Temporibus facilis facere enim ad voluptatum! Nihil recusandae, iure soluta nam cum explicabo.
+              Vous pouvez affiner votre recherche pour trouver l'animal idéal. 
+              Utilisez nos filtres par espèce, âge, sexe et distance pour faciliter votre adoption ou accueil.
               </p>
             </div>
             <div className="column is-full-mobile is-half-desktop has-text-centered">

@@ -85,8 +85,8 @@ function ContactUserMessagerieForm({
   const { showSuccessToast, showErrorToast } = useToast();
   return (
     <form onSubmit={handleSubmit}>
-      <p>Expéditeur : {senderId}</p>
-      <p>Destinataire : {receiverId}</p>
+      {/* <p>Expéditeur : {senderId}</p>
+      <p>Destinataire : {receiverId}</p> */}
       <textarea
         name="content"
         id="content"
