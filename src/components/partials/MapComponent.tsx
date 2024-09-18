@@ -15,10 +15,37 @@ const defaultPosition: LatLngExpression = [43.3365, 1.3396];
 
 // Icône personnalisée pour la position de l'utilisateur
 const userIcon = new LeafletIcon({
-  iconUrl: '/img/vector/your-position-marker.svg',
+  iconUrl: '/img/vector/marker-round3.svg',
   iconSize: [25, 41],
   iconAnchor: [12, 41], // Point d'ancrage pour l'icône
   popupAnchor: [1, -34], // Position du popup par rapport au marqueur
+});
+const assoIcon = new LeafletIcon({
+  iconUrl: '/img/vector/marker-losange.svg', // Your custom icon
+  iconSize: [30, 30], // Size of the icon
+  iconAnchor: [15, 30], // Point d'ancrage pour l'icône
+  popupAnchor: [1, -34], // Position du popup par rapport au marqueur
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png', // Default Leaflet shadow
+  shadowSize: [30, 30], // Default shadow size
+  shadowAnchor: [13, 30] // Default shadow anchor
+});
+const fosterIcon = new LeafletIcon({
+  iconUrl: '/img/vector/marker-triangle2.svg', // Your custom icon
+  iconSize: [30, 30], // Size of the icon
+  iconAnchor: [15, 30], // Point d'ancrage pour l'icône
+  popupAnchor: [1, -34], // Position du popup par rapport au marqueur
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png', // Default Leaflet shadow
+  shadowSize: [30, 30], // Default shadow size
+  shadowAnchor: [13, 30] // Default shadow anchor
+});
+const adoptIcon = new LeafletIcon({
+  iconUrl: '/img/vector/marker-round2.svg', // Your custom icon
+  iconSize: [30, 30], // Size of the icon
+  iconAnchor: [15, 30], // Point d'ancrage pour l'icône
+  popupAnchor: [1, -34], // Position du popup par rapport au marqueur
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png', // Default Leaflet shadow
+  shadowSize: [30, 30], // Default shadow size
+  shadowAnchor: [15, 30] // Default shadow anchor
 });
 
 interface IFitMapToBoundsProps {
@@ -147,6 +174,9 @@ function MapComponent({ users, animal, filters, showSearchArea = false }: MapCom
           <Marker
             key={user.id}
             position={[parseFloat(user.latitude), parseFloat(user.longitude)]}
+            {...(user.type_user === "association" && { icon: assoIcon })} 
+            {...(user.type_user === "famille d'accueil" && { icon: fosterIcon })}
+            {...(user.type_user === "adoptant" && { icon: adoptIcon })}
           >
             <Popup>
             <p className='mapopup-header'>
