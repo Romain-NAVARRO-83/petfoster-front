@@ -3,9 +3,9 @@ import axios from 'axios';
 import { useAuth } from '../../hooks/AuthContext';
 import { User } from '../../@interfaces/user';
 import { Animal } from '../../@interfaces/animal';
+import { FRequest } from '../../@interfaces/frequest';
 import { useNavigate } from 'react-router-dom';
 import { Check, Cross } from 'react-flaticons';
-import { request } from 'node_modules/axios/index.d.cts';
 
 const FilterPage = () => {
   // Gestion du token CSRF
@@ -22,18 +22,25 @@ const FilterPage = () => {
   const [requestAnimalDetails, setRequestAnimalDetails] = useState<
     Record<number, Animal>
   >({});
-  const [allFosterlingRequests, setAllFosterlingRequests] = useState([]);
+  const [allFosterlingRequests, setAllFosterlingRequests] = useState<
+    FRequest[]
+  >([]);
 
-  function sortRequests(requestsList: []) {
+  function sortRequests(requestsList: FRequest[]) {
+    type Etats = 'pending' | 'approved' | 'rejected';
+
     // Fonction de comparaison pour le tri
     const ordreDesEtats = {
-      pending: 1, // On met pending en premier
-      approved: 2, // approved en second
-      rejected: 3, // rejected en dernier
+      pending: 1 as number, // On met pending en premier
+      approved: 2 as number, // approved en second
+      rejected: 3 as number, // rejected en dernier
     };
 
     const orderedList = [...requestsList].sort((a, b) => {
-      return ordreDesEtats[a.request_status] - ordreDesEtats[b.request_status];
+      return (
+        ordreDesEtats[a.request_status as Etats] -
+        ordreDesEtats[b.request_status as Etats]
+      );
     });
 
     console.log('TRI !');
@@ -226,14 +233,14 @@ const FilterPage = () => {
                   if (animal) {
                     return (
                       <tr key={request.id}>
-                        <td >
-                          <div className='animal-miniature'>
-                          <img
-                            src={`/img/animaux/${request.animal.pictures[0].URL_picture}`}
-                            alt={request.animal.name}
-                            width="64"
-            height="64"
-                          />
+                        <td>
+                          <div className="animal-miniature">
+                            <img
+                              src={`/img/animaux/${request.animal.pictures[0].URL_picture}`}
+                              alt={request.animal.name}
+                              width="64"
+                              height="64"
+                            />
                           </div>
                         </td>
                         <td>{animal.name}</td>
@@ -293,8 +300,10 @@ const FilterPage = () => {
                   <td>
                     <figure className="image animal-miniature ">
                       <img
-                        src={`/img/animaux/${requestAnimalDetails[item.animals_id]?.pictures[0]
-                          ?.URL_picture}`}
+                        src={`/img/animaux/${
+                          requestAnimalDetails[item.animals_id]?.pictures[0]
+                            ?.URL_picture
+                        }`}
                         alt={
                           requestAnimalDetails[item.animals_id]?.name ||
                           'Animal'
@@ -314,20 +323,23 @@ const FilterPage = () => {
                   </td>
                   {connectedUser?.userType === 'association' ? (
                     <td>
-                      <a href={`/profil/${requestUserDetails[item.users_id]?.id}`}>
+                      <a
+                        href={`/profil/${requestUserDetails[item.users_id]?.id}`}
+                      >
                         {requestUserDetails[item.users_id]?.name ||
                           'Chargement...'}
                       </a>
                     </td>
                   ) : (
                     <>
-                    
-                    <td>
-                      <a href={`/profil/${requestAnimalDetails[item.animals_id]?.creator.id}`}>
-                     {requestAnimalDetails[item.animals_id]?.creator.name}
-                     </a>
-                    </td>
-                    <td>{item.content_request}</td>
+                      <td>
+                        <a
+                          href={`/profil/${requestAnimalDetails[item.animals_id]?.creator.id}`}
+                        >
+                          {requestAnimalDetails[item.animals_id]?.creator.name}
+                        </a>
+                      </td>
+                      <td>{item.content_request}</td>
                     </>
                   )}
                   <td>
