@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-import { Pencil, Eye } from 'react-flaticons';
+import { Pencil, Eye, Home } from 'react-flaticons';
 import { useModal } from '../../hooks/ModalContext';
 import { Animal } from 'src/@interfaces/animal';
 import { useAuth } from '../../hooks/AuthContext';
@@ -13,6 +13,7 @@ import computeAge from '../../utils/computeAge'
 import { useState, useEffect } from 'react';
 import MiniatureAnimal from './Miniature';
 import IdToSPecies from './IdToSpecies';
+import GenderIcon from './GenderIcon';
 
 // Interface pour définir les propriétés passées au composant
 interface AnimalListItemProps {
@@ -62,68 +63,45 @@ function AnimalItemList({ animal }: AnimalListItemProps) {
     fetchAnimalData();
   }, [animal.id, showErrorToast]);
   return (
-    <article className='box'>
-      <div className="columns is-vcentered">
-        
-        {/* Affichage de l'image miniature de l'animal */}
-        {/* <div className="animal-miniature is-narrow column has-text-centered">
-          <img
-            src={`/img/animaux/${animal.id}-${animal.name}-1.webp`}  
-            alt={animal.name}
-            width="64"
-            height="64"
-          />
-        </div> */}
-        <MiniatureAnimal animal={animal}/>
-
-        {/* Conteneur du texte avec les informations de l'animal */}
-        <div className='column'>
-          <p className="has-text-weight-bold has-text-left">{animal.name} </p>
-          <div className='columns'>
-            {/* Espèce de l'animal */}
-            <div className='column'><IdToSPecies speciesId={animal.species_id}/></div>
-            {/* Calcul et affichage de l'âge de l'animal */}
-            <div className='column'>Age: {computeAge(animal.date_of_birth)}</div>
-            {/* Sexe de l'animal */}
-            <div className='column'>
-            {animal.sexe === "F" ? (
-              <img src="/img/vector/femelle.svg" width="25" height="25" alt="Female" />
-            ) : (
-              <img src="/img/vector/male.svg" width="25" height="25" alt="Male" />
-            )}
-            </div>
-          </div>
+    <article className='box animal-item'>
+      <div className='columns is-vcentered is-mobile is-multiline'>
+      <div className='column columns is-vcentered is-half-mobile is-mobile is-half-tablet is-narrow-desktop'>
+      <MiniatureAnimal animal={animal}/>
+      <div>
+      <p className="has-text-weight-bold has-text-left">{animal.name} </p><IdToSPecies speciesId={animal.species_id}/>
         </div>
-
-        <div className='column is-narrow is-size-7'>
-          {/* {JSON.stringify(animal?.animalOwners[0]?.user.name)} */}
-          {animal && animal.animalOwners && animal.animalOwners.length && (
-           
-            <Link to={`/profil/${animal?.animalOwners[0].user.id}`}>
-              {animal?.animalOwners[0]?.user.name}
-            </Link>
-            
-          )}
+      </div>
+      <div className='column has-text-centered is-half-mobile is-half-tablet'>
+      <GenderIcon gender={animal.sexe} size={20}/> {computeAge(animal.date_of_birth)}
+      
+      </div>
+      <div className='column has-text-right'>
+  {/* edit, see, fosterer */}
+  {connectedUser && connectedUser.userId === animal.creator?.id && (
+    <>
+      {animal && animal.animalOwners && animal.animalOwners.length > 0 && (
+        <Link to={`/profil/${animal?.animalOwners[0]?.user?.id}`} className='has-text-info button is-extra-small' title={animal?.animalOwners[0]?.user?.name}>
           
-        </div>
+          <Home/>
+        </Link>
+      )}
+      
+      <button
+        className="has-text-success button is-extra-small"
+        onClick={() => openModal('editAnimalProfile', null, null, animal.id)} 
+        title="éditer l'animal"
+      >
+        <Pencil />
+      </button>
+    </>
+  )}
 
-        {/* Colonne avec les boutons d'actions (édition et visualisation) */}
-        <div className='column is-narrow has-text-centered'>
-        
-          {/* Bouton d'édition visible uniquement si l'utilisateur connecté est le créateur de l'animal */}
-          {connectedUser && connectedUser.userId === animal.creator?.id && (
-            <button
-              className="has-text-success button"
-              onClick={() => openModal('editAnimalProfile', null, null, animal.id)} // Ouvre le modal pour modifier le profil de l'animal
-            >
-              <Pencil />
-            </button>)}
+  {/* Lien pour voir le profil détaillé de l'animal */}
+  <Link to={`/animal/${animal.id}`} className='button has-text-info is-extra-small'>
+    <Eye />
+  </Link>
+</div>
 
-          {/* Lien pour voir le profil détaillé de l'animal */}
-          <Link to={`/animal/${animal.id}`} className='button has-text-info'>
-            <Eye />
-          </Link>
-        </div>
       </div>
     </article>
   );

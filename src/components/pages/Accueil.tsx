@@ -123,13 +123,13 @@ function Accueil() {
         </div>
 
         <div className="columns is-align-items-start">
-          <div className="column is-full-mobile is-half-desktop" id="home-map-container">
+          <div className="column is-full-mobile is-half-tablet is-half-desktop" id="home-map-container">
             <MapComponent users={allUsers} />
             <UserTypeInfo/>
           </div>
 
           <div className="column is-full-mobile is-half-desktop">
-            <div className="animal-list">
+            <div className="animal-list ">
               {/* {JSON.stringify(allAnimals)} */}
               {allAnimals &&
                 allAnimals.map((item: any) => (
