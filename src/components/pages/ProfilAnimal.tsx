@@ -5,17 +5,40 @@ import axios from 'axios';
 import MapComponent from '../partials/MapComponent';
 import GalleryComponent from '../partials/GalleryComponent';
 import computeAge from '../../utils/computeAge';
-import { useAuth } from '../../hooks/AuthContext'; 
+import { useAuth } from '../../hooks/AuthContext';
 import { Animal } from 'src/@interfaces/animal';
 import { User } from 'src/@interfaces/user';
 import GeolocNotification from '../partials/GeolocNotification';
 import UploadImageForm from '../formulaires/UploadImageForm';
 
 const AnimalProfile = () => {
+  const fosterlingsTests = [
+    {
+      user: 'Jean',
+      entree: '01',
+      sortie: '02',
+    },
+    {
+      user: 'Jean',
+      entree: '01',
+      sortie: '02',
+    },
+    {
+      user: 'Jean',
+      entree: '01',
+      sortie: '02',
+    },
+    {
+      user: 'Jean',
+      entree: '01',
+      sortie: '02',
+    },
+  ];
+
   const { openModal, closeModal } = useModal();
-  const { user: connectedUser } = useAuth(); 
-  
-  console.log('connectedUser:', connectedUser ,); // Pour vérifier le contenu de l'utilisateur connecté
+  const { user: connectedUser } = useAuth();
+
+  console.log('connectedUser:', connectedUser); // Pour vérifier le contenu de l'utilisateur connecté
 
   // Typage pour animal
   const { id } = useParams<{ id: string }>();
@@ -45,8 +68,6 @@ const AnimalProfile = () => {
     }
   };
   useEffect(() => {
-    
-
     if (id) {
       fetchAnimalData();
     }
@@ -65,7 +86,7 @@ const AnimalProfile = () => {
       <div>
         <h1 className="title">{animal?.name}</h1>
       </div>
-<GeolocNotification />
+      <GeolocNotification />
       {/* Responsive Gallery and Info Sections */}
       <section className="container columns is-multiline">
         {/* Galerie d'images */}
@@ -77,14 +98,14 @@ const AnimalProfile = () => {
           )}
 
           {/* Formulaire d'upload */}
-          {connectedUser && connectedUser.userId === animal?.creator.id && 
-        <UploadImageForm 
-          userId={null} 
-          fetchUserImages={null} 
-          animalId={animal?.id}
-          fetchAnimalData={fetchAnimalData}
-        />
-      }
+          {connectedUser && connectedUser.userId === animal?.creator.id && (
+            <UploadImageForm
+              userId={null}
+              fetchUserImages={null}
+              animalId={animal?.id}
+              fetchAnimalData={fetchAnimalData}
+            />
+          )}
         </div>
 
         {/* Info animal */}
@@ -124,7 +145,9 @@ const AnimalProfile = () => {
             </p>
             <button
               className="button is-pulled-right is-primary"
-              onClick={() => openModal('editAnimalProfile', undefined, undefined, animal?.id)}
+              onClick={() =>
+                openModal('editAnimalProfile', undefined, undefined, animal?.id)
+              }
             >
               Éditer
             </button>
@@ -138,6 +161,31 @@ const AnimalProfile = () => {
         <div>{animal?.long_story}</div>
         <h3 className="subtitle">Santé</h3>
         <div>{animal?.health}</div>
+        {connectedUser && connectedUser.userId === animal?.creator.id && (
+          <>
+            <h3 className="subtitle">Hebergements</h3>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Hebergeur</th>
+                  <th>Date d'entrée</th>
+                  <th>Date de sortie</th>
+                </tr>
+              </thead>
+              <tbody>
+                {fosterlingsTests.map((e) => {
+                  return (
+                    <tr>
+                      <td>{e.user}</td>
+                      <td>{e.entree}</td>
+                      <td>{e.sortie}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </>
+        )}
       </section>
 
       {/* Localisation */}
@@ -145,45 +193,43 @@ const AnimalProfile = () => {
         <h2 className="title">Où se trouve {animal?.name} ?</h2>
         <div className="container columns is-vcentered is-fluid">
           <div className="column is-full-mobile is-half-tablet is-half-desktop">
-          <MapComponent
-            animal={animal}
-            users={animal?.creator ? [animal.creator] : []}
-            filters={{ species: '', age: '', sexe: '', search_area: 30 }} // Valeurs par défaut pour filters
-          />
+            <MapComponent
+              animal={animal}
+              users={animal?.creator ? [animal.creator] : []}
+              filters={{ species: '', age: '', sexe: '', search_area: 30 }} // Valeurs par défaut pour filters
+            />
           </div>
           <div className="column is-full-mobile is-half-tablet is-half-desktop box">
-            <div className='columns is-fullwidth has-text-centered'>
-              <div className='column'>
-                <h3 className='subtitle'>
-                  Association responsable
-                </h3>
-              <p>
-              <strong>{animal?.creator.name}</strong>
-              <br />
-              {animal?.creator.address}
-              <br />
-              {animal?.creator.city}
-              <br />
-              {animal?.creator.country}
-              <br />
-              {animal?.creator.website ? (
-                <Link to={animal.creator.website}>
-                  {animal.creator.website}
-                </Link>
-              ) : (
-                <span>Pas de site web disponible</span>
-              )}
-            </p>
+            <div className="columns is-fullwidth has-text-centered">
+              <div className="column">
+                <h3 className="subtitle">Association responsable</h3>
+                <p>
+                  <strong>{animal?.creator.name}</strong>
+                  <br />
+                  {animal?.creator.address}
+                  <br />
+                  {animal?.creator.city}
+                  <br />
+                  {animal?.creator.country}
+                  <br />
+                  {animal?.creator.website ? (
+                    <Link to={animal.creator.website}>
+                      {animal.creator.website}
+                    </Link>
+                  ) : (
+                    <span>Pas de site web disponible</span>
+                  )}
+                </p>
               </div>
               {/* {animal && animal.animalOwners? && ()} */}
               {/* {JSON.stringify(animal.animalOwners[0].user.name)} */}
-              <div className='column'>
-              <h3 className='subtitle'>
-                  Hébergeur actuel
-                </h3>
+              <div className="column">
+                <h3 className="subtitle">Hébergeur actuel</h3>
                 <p>
-                <Link to={`/profil/${animal.animalOwners[0].user.id}`}>{animal.animalOwners[0].user.name}</Link><br/>
-                ({animal.animalOwners[0].user.type_user})
+                  <Link to={`/profil/${animal.animalOwners[0].user.id}`}>
+                    {animal.animalOwners[0].user.name}
+                  </Link>
+                  <br />({animal.animalOwners[0].user.type_user})
                 </p>
               </div>
             </div>
@@ -215,15 +261,24 @@ const AnimalProfile = () => {
               </div>
 
               <div className="column is-full-mobile is-half-tablet">
-              {userData && (userData.type_user === 'adoptant' || userData.type_user === 'famille d\'accueil') && animal?.id && (
-    <button
-      className="button is-secondary is-fullwidth"
-      onClick={() => openModal('addFosterlingRequest', connectedUser?.userId, undefined, animal?.id)}
-      >
-        Faire une demande d'adoption (ou d'accueil)
-    </button>
-  
-  )}
+                {userData &&
+                  (userData.type_user === 'adoptant' ||
+                    userData.type_user === "famille d'accueil") &&
+                  animal?.id && (
+                    <button
+                      className="button is-secondary is-fullwidth"
+                      onClick={() =>
+                        openModal(
+                          'addFosterlingRequest',
+                          connectedUser?.userId,
+                          undefined,
+                          animal?.id
+                        )
+                      }
+                    >
+                      Faire une demande d'adoption (ou d'accueil)
+                    </button>
+                  )}
                 {!connectedUser && (
                   <div className="notification is-info is-light">
                     <p>
