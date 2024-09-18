@@ -7,6 +7,7 @@ import Messagerie from '../partials/Messagerie';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext';
 import GeolocNotification from '../partials/GeolocNotification';
+import { Helmet } from 'react-helmet';
 // import { useGeolocation } from '../../hooks/GeolocationContext';
 
 // const defaultPosition: LatLngExpression = [43.3365, 1.3396];
@@ -65,6 +66,11 @@ function Accueil() {
   }, []);
 
   return (
+    <>
+<Helmet>
+        <title>Pet Foster : Bienvenue!</title>
+        <meta name="description" content="Pet Foster est une application web qui permet aux associations de protections des animaux, aux familles d'accueil et aux adoptants d'échanger et de trouver ensemble un foyer pour chaque animal." />
+      </Helmet>
     <main>
       <div id="splash-screen" className="columns is-vcentered has-text-centered">
         <div className="column is-full-mobile is-half-desktop">
@@ -144,6 +150,7 @@ function Accueil() {
         </div>
       </section>
     </main>
+    </>
   );
 }
 
