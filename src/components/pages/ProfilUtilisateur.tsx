@@ -76,11 +76,11 @@ function ProfilUtilisateur() {
 
   return (
     <main>
-      <div>
-        <h1 className="title">{user?.name}</h1>
+      <div className="section">
+        <h1 className="title has-text-centered">{user?.name}</h1>
       </div>
 
-      <section>
+      <section className="section">
         <div className="container">
           {connectedUser && user && id && connectedUser.userId === parseInt(id) && (
             <p className="notification is-primary has-text-centered">
@@ -88,25 +88,25 @@ function ProfilUtilisateur() {
             </p>
           )}
           <div className="columns is-multiline">
-            <div className="column is-6">
-            <GalleryComponent 
+            <div className="column is-half">
+              <GalleryComponent 
                 pictures={user?.pictures ?? []} 
                 userPictures={user?.pictures ?? []} 
               />
               {/* Ajout du formulaire d'upload */}
-      {connectedUser && connectedUser.userId === user?.id &&
-        <UploadImageForm 
-          userId={connectedUser.userId} 
-          fetchUserImages={fetchUserData} 
-        />
-      }
+              {connectedUser && connectedUser.userId === user?.id &&
+                <UploadImageForm 
+                  userId={connectedUser.userId} 
+                  fetchUserImages={fetchUserData} 
+                />
+              }
             </div>
 
-            <div className="column is-6">
+            <div className="column is-half">
               {user && (
                 <>
                   <h2 className="title">{user.type_user}</h2>
-                  <ul>
+                  <ul className="list is-hoverable">
                     <li><strong>Nom:</strong> {user.name}</li>
                     <li><strong>Email:</strong> {user.email}</li>
                     <li><strong>Tél:</strong> {user.phone}</li>
@@ -122,34 +122,40 @@ function ProfilUtilisateur() {
         </div>
       </section>
 
-      
-
       {/* Section Description */}
-      <section>
+      <section className="section">
         <div className="container">
           <h2 className="title">Description</h2>
           {user && <p>{user.description}</p>}
 
           {!connectedUser && (
-            <div className="notification is-info is-light has-text-right is-pulled-right">
-              <p>Connectez-vous à votre compte pour pouvoir contacter {user?.name}</p>
-              <Link to="/connexion" className="button is-primary">Se connecter</Link>
+            <div className="notification is-info is-light mt-4">
+              <p className="has-text-centered">
+                Connectez-vous à votre compte pour pouvoir contacter {user?.name}
+              </p>
+              <div className="has-text-centered">
+                <Link to="/connexion" className="button is-primary">Se connecter</Link>
+              </div>
             </div>
           )}
 
           {user && connectedUser && connectedUser.userId !== user.id && (
-            <button className="button is-primary is-pulled-right" onClick={() => openModal('contactUser', connectedUser.userId, user.id)}>
-              Contacter
-            </button>
+            <div className="has-text-right mt-4">
+              <button className="button is-primary" onClick={() => openModal('contactUser', connectedUser.userId, user.id)}>
+                Contacter
+              </button>
+            </div>
           )}
 
           {connectedUser && user && id !== undefined && connectedUser.userId === parseInt(id) && (
-          <button 
-          className="button is-primary is-pulled-right" 
-          onClick={() => openModal('editUserProfile', undefined, undefined, undefined, user)} 
-          >
-          <Pencil /> Éditer
-        </button>
+            <div className="has-text-right mt-4">
+              <button 
+                className="button is-primary" 
+                onClick={() => openModal('editUserProfile', undefined, undefined, undefined, user)} 
+              >
+                <Pencil /> Éditer
+              </button>
+            </div>
           )}
         </div>
       </section>
@@ -159,7 +165,7 @@ function ProfilUtilisateur() {
           <div className="container">
             <h2 className="title">Profils d'accueil</h2>
             {connectedUser && user && id !== undefined && connectedUser.userId === parseInt(id) && (
-              <div className="has-text-right">
+              <div className="has-text-right mb-4">
                 <button className="button is-primary" onClick={() => openModal('addFosterlingProfile', connectedUser.userId)}>
                   <PlusSmall /> Ajouter
                 </button>

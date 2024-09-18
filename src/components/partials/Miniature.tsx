@@ -36,7 +36,7 @@ export default function MiniatureAnimal({ animal }: IMiniatureAnimlProps) {
   const placeholderImage = "/img/defaults/omnipet-the-mini-destructor.webp";
 
   return (
-    <div className="animal-miniature is-narrow column has-text-centered">
+    <div className="animal-miniature has-text-centered">
       {pictures && pictures.length > 0 ? (
         <img
           src={`${apiUrl}/img/animaux/img-120/${pictures[0].URL_picture}`}

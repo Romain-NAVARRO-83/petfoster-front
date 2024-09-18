@@ -29,7 +29,7 @@ body {
 div:not(#splash-screen, #splash-screen > *):has(> h1) {
   padding-top: 20vh;
   background-color: #96ceb4;
-  background-image: url('/img/main-background-2.jpg');
+  background-image: url('/img/main-background-2.webp');
   background-size: cover;
   background-blend-mode: luminosity;
   background-position: center;
@@ -38,7 +38,7 @@ div:not(#splash-screen, #splash-screen > *):has(> h1) {
 #splash-screen {
   min-height: 50vh;
   background-color: #96ceb4;
-  background-image: url('/img/main-background-2.jpg');
+  background-image: url('/img/main-background-2.webp');
   background-size: cover;
   background-blend-mode: luminosity;
   background-position: center;
@@ -46,7 +46,9 @@ div:not(#splash-screen, #splash-screen > *):has(> h1) {
 }
 
 #splash-screen>div:nth-child(1) {
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+  ;
 }
 
 #splash-screen .button {
@@ -165,13 +167,28 @@ footer>div>ul {
   padding-top: 75px;
 }
 
-#home-map-container>* {
+#home-map-container>*:not(#user-type-info) {
   width: 500px;
   height: 500px;
   max-width: 100%;
   aspect-ratio: 1/1;
   margin: auto;
   z-index: 1;
+}
+
+#user-type-info {
+  margin-top: 50px;
+}
+
+#user-type-info p {
+  background-color: rgba(255, 255, 255, .7);
+  border-radius: 10px;
+  padding: 5px;
+}
+
+#user-type-info img {
+  /* margin-top: -20%; */
+  vertical-align: middle;
 }
 
 .animal-list {
@@ -263,6 +280,7 @@ footer>div>ul {
   overflow: hidden;
   border-radius: 50%;
   padding: 0;
+  margin-right: 5px;
 }
 
 .animal-miniature img {
@@ -457,24 +475,8 @@ p {
   padding-top: 50px;
 }
 
-.picture-uploader .file {
-  justify-content: center;
-}
-
 .Toastify__toast-container--top-right {
   top: 100px;
-}
-
-.single-image {
-  max-height: 50vh;
-  height: 50vh;
-  text-align: center;
-}
-
-.single-image img {
-  height: inherit;
-  object-fit: contain;
-  margin: auto;
 }
 
 
@@ -482,13 +484,34 @@ p {
 @media (max-width: 1023px) {
   .navbar-item {
     color: rgb(0, 0, 0);
-    /* Change la couleur des liens */
   }
 }
 
 @media (max-width: 1023px) {
   .user-icon {
-    filter: brightness(0) invert(0);
-    /* Appliquez le filtre noir */
+    color: rgb(0, 0, 0);
   }
+}
+
+/* footer */
+
+.footer {
+  padding-top: 48px;
+  padding-bottom: 48px;
+}
+
+/* animal/#  */
+
+.button.is-secondary.is-fullwidth {
+  white-space: normal;
+  text-align: center;
+}
+
+.animal-item .column {
+  margin: 0;
+}
+
+.button.is-extra-small {
+  font-size: 0.7rem;
+  padding: 0.25rem 0.5rem;
 }

@@ -1,4 +1,4 @@
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/AuthContext';
 import { User } from 'react-flaticons'; 
@@ -42,7 +42,13 @@ function Header() {
   const toggleDropdown = () => {
     setIsDropdownActive(!isDropdownActive);
   };
+  // Location handling to close the burger menu on page change
+  const location = useLocation();
 
+  useEffect(() => {
+    // Close the burger menu when the location (route) changes
+    setIsActive(false);
+  }, [location]);
   return (
     <>
       {/* Lien "Jump to content" */}
