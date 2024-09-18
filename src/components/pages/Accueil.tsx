@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext';
 import GeolocNotification from '../partials/GeolocNotification';
 import { Helmet } from 'react-helmet';
+import UserTypeInfo from '../partials/UserTypeInfo';
 // import { useGeolocation } from '../../hooks/GeolocationContext';
 
 // const defaultPosition: LatLngExpression = [43.3365, 1.3396];
@@ -72,20 +73,23 @@ function Accueil() {
         <meta name="description" content="Pet Foster est une application web qui permet aux associations de protections des animaux, aux familles d'accueil et aux adoptants d'échanger et de trouver ensemble un foyer pour chaque animal." />
       </Helmet>
     <main>
-      <div id="splash-screen" className="columns is-vcentered has-text-centered">
-        <div className="column is-full-mobile is-half-desktop">
-          <h1 className="title">Bienvenue sur Pet Foster !</h1>
-          <h2 className="subtitle">Cette phrase vous va comme un slogan</h2>
+      <div id="splash-screen" className="columns is-vcentered has-text-centered is-multiline is-centered">
+        <div className="column is-full-mobile is-half-desktop ">
+          <h1 className="title">
+            {connectedUser ? `Bienvenue ${connectedUser.userName}`:"Bienvenue sur Pet Foster !"}
+            </h1>
+          <h2 className="subtitle">Un foyer pour chaque animal</h2>
         </div>
-
+{/* N'afficher le bouton que si l'utilisateur n'est pas connecté */}
+{!connectedUser && (
         <div className="column is-full-mobile is-half-desktop">
-          {/* N'afficher le bouton que si l'utilisateur n'est pas connecté */}
-          {!connectedUser && (
+          
             <Link className="button is-primary is-large" to="/connexion">
               Créer mon compte
             </Link>
-          )}
+          
         </div>
+        )}
       </div>
 
       <section className="section">
@@ -93,16 +97,16 @@ function Accueil() {
           
 
           <div className="column has-text-centered">
-            <h3 className="title is-4">Associations</h3>
+            <h3 className="title is-4"><img src="/img/vector/marker-losange.svg" width="50" height="50" alt="Icône association"/><br/>Associations</h3>
             <p className='is-size-5'>Trouvez des foyers d'accueil temporaires ou définitifs pour vos animaux</p>
           </div>
           <div className="column has-text-centered">
-            <h3 className="title is-4">Familles d'accueil</h3>
+            <h3 className="title is-4"><img src="/img/vector/marker-triangle2.svg" width="50" height="50" alt="Icône famille d'accueil"/><br/>Familles d'accueil</h3>
             <p className='is-size-5'>Renseignez vos possibilités d'accueil et entrez en contact avec des associations.</p>
           </div>
 
           <div className="column has-text-centered">
-            <h3 className="title is-4">Adoptants</h3>
+            <h3 className="title is-4"><img src="/img/vector/marker-round2.svg" width="50" height="50" alt="Icône adoptant"/><br/>Adoptants</h3>
             <p className='is-size-5'>Adoptez l'animal de vos rêves en quelques clics.</p>
           </div>
         </div>
@@ -121,6 +125,7 @@ function Accueil() {
         <div className="columns is-align-items-start">
           <div className="column is-full-mobile is-half-desktop" id="home-map-container">
             <MapComponent users={allUsers} />
+            <UserTypeInfo/>
           </div>
 
           <div className="column is-full-mobile is-half-desktop">

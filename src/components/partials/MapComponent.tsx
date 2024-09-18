@@ -8,6 +8,7 @@ import { User } from 'src/@interfaces/user';
 import { Animal } from 'src/@interfaces/animal';
 import GenderIcon from './GenderIcon';
 import IdToSPecies from './IdToSpecies';
+import UserTypeInfo from './UserTypeInfo';
 // import GeolocNotification from './GeolocNotification';
 
 // Position par défaut si la géolocalisation n'est pas disponible
@@ -233,6 +234,7 @@ function MapComponent({ users, animal, filters, showSearchArea = false }: MapCom
         {/* Composant pour ajuster la vue de la carte afin d'inclure tous les marqueurs */}
         <FitMapToBounds users={filteredUsers} animal={animal} location={location} />
       </MapContainer>
+      
     </>
   );
 }

@@ -46,7 +46,9 @@ div:not(#splash-screen, #splash-screen > *):has(> h1) {
 }
 
 #splash-screen>div:nth-child(1) {
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+  ;
 }
 
 #splash-screen .button {
@@ -165,13 +167,28 @@ footer>div>ul {
   padding-top: 75px;
 }
 
-#home-map-container>* {
+#home-map-container>*:not(#user-type-info) {
   width: 500px;
   height: 500px;
   max-width: 100%;
   aspect-ratio: 1/1;
   margin: auto;
   z-index: 1;
+}
+
+#user-type-info {
+  margin-top: 50px;
+}
+
+#user-type-info p {
+  background-color: rgba(255, 255, 255, .7);
+  border-radius: 10px;
+  padding: 5px;
+}
+
+#user-type-info img {
+  /* margin-top: -20%; */
+  vertical-align: middle;
 }
 
 .animal-list {
@@ -464,14 +481,14 @@ p {
 
 /*  menu burger */
 @media (max-width: 1023px) {
-.navbar-item {
-  color: rgb(0, 0, 0); 
-}
+  .navbar-item {
+    color: rgb(0, 0, 0);
+  }
 }
 
 @media (max-width: 1023px) {
   .user-icon {
-    color: rgb(0, 0, 0); 
+    color: rgb(0, 0, 0);
   }
 }
 
@@ -479,4 +496,3 @@ p {
 
 
 /* animal/#  */
-
