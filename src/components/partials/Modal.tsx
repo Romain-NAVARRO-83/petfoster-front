@@ -60,9 +60,9 @@ function MainModal() {
             <CreateAnimalProfileForm />
           )}
         </section>
-        <footer className="modal-card-foot">
+        {/* <footer className="modal-card-foot">
           <button className="button" onClick={closeModal}>Fermer</button>
-        </footer>
+        </footer> */}
       </div>
     </div>
   );

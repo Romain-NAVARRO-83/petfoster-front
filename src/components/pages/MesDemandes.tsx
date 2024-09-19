@@ -32,9 +32,9 @@ const FilterPage = () => {
 
     // Fonction de comparaison pour le tri
     const ordreDesEtats = {
-      pending: 1 as number, // On met pending en premier
-      approved: 2 as number, // approved en second
-      rejected: 3 as number, // rejected en dernier
+      Pending: 1 as number, // On met pending en premier
+      Approved: 2 as number, // approved en second
+      Rejected: 3 as number, // rejected en dernier
     };
 
     const orderedList = [...requestsList].sort((a, b) => {
@@ -206,7 +206,7 @@ const FilterPage = () => {
           </div>
         </div>
         <div className="container">
-          <table className="table is-fullwidth">
+          <table id="request-table" className="table is-fullwidth">
             <thead>
               <tr>
                 <th colSpan={2} className="has-text-centered">
@@ -243,7 +243,7 @@ const FilterPage = () => {
                               height="64"
                             />
                           </div> */}
-                          <MiniatureAnimal animal={animal}/>
+                          <MiniatureAnimal animal={animal} />
                         </td>
                         <td>{animal.name}</td>
                         <td>
@@ -252,7 +252,7 @@ const FilterPage = () => {
                           </a>
                         </td>
                         <td>{request.content_request}</td>
-                        <td>
+                        <td className='request-status'>
                           {request.request_status.toLowerCase() ===
                             'pending' && (
                             <span className="tag is-warning">En attente</span>
@@ -266,7 +266,7 @@ const FilterPage = () => {
                             <span className="tag is-success">Validée</span>
                           )}
                         </td>
-                        <td>
+                        <td className='validator'>
                           {request.request_status.toLowerCase() === 'pending'  && (
                             <>
                               <button
@@ -300,7 +300,9 @@ const FilterPage = () => {
               {myUser?.fosterlingRequests?.map((item: any, index: number) => (
                 <tr key={index}>
                   <td>
-                    <MiniatureAnimal animal={requestAnimalDetails[item.animals_id]}/>
+                    <MiniatureAnimal
+                      animal={requestAnimalDetails[item.animals_id]}
+                    />
                     {/* {JSON.stringify(item)} */}
                   </td>
                   <td>

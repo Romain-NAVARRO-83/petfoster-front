@@ -4,19 +4,24 @@ import { useModal } from '../../hooks/ModalContext';
 import axios from 'axios';
 
 interface AddFosterlingRequestFormProps {
-  senderId: number | null;    // ID de l'expéditeur
-  animalId: number | null;    // ID de l'animal
+  senderId: number | null; // ID de l'expéditeur
+  animalId: number | null; // ID de l'animal
 }
 
-function AddFosterlingRequestForm({ senderId, animalId }: AddFosterlingRequestFormProps) {
+function AddFosterlingRequestForm({
+  senderId,
+  animalId,
+}: AddFosterlingRequestFormProps) {
   console.log('animalId:', animalId);
   // Récupérer le token CSRF pour la requête sécurisée
   const [csrfToken, setCsrfToken] = useState<string | null>(null);
-  
+
   useEffect(() => {
     const fetchCsrfToken = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/csrf-token');
+        const response = await axios.get(
+          'http://localhost:3000/api/csrf-token'
+        );
         setCsrfToken(response.data);
       } catch (error) {
         console.error('Erreur lors de la récupération du token CSRF:', error);
@@ -29,8 +34,8 @@ function AddFosterlingRequestForm({ senderId, animalId }: AddFosterlingRequestFo
   const [formData, setFormData] = useState({
     content_request: '',
     users_id: senderId || null,
-    animals_id: animalId || null,    
-    request_status: "pending"
+    animals_id: animalId || null,
+    request_status: 'pending',
   });
 
   // Gestion des changements dans le champ texte
@@ -38,14 +43,14 @@ function AddFosterlingRequestForm({ senderId, animalId }: AddFosterlingRequestFo
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value, 
+      [name]: value,
     });
   };
 
   // Soumission du formulaire
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       await axios.post('http://localhost:3000/api/requests', formData, {
         headers: {
@@ -55,9 +60,9 @@ function AddFosterlingRequestForm({ senderId, animalId }: AddFosterlingRequestFo
       showSuccessToast('Message envoyé avec succès!');
       closeModal(); // Fermer la modal après succès
     } catch (error) {
-      console.error('Erreur lors de l\'envoi du message', error);
-      showErrorToast('Erreur lors de l\'envoi du message.');
-      console.log(formData)
+      console.error("Erreur lors de l'envoi du message", error);
+      showErrorToast("Erreur lors de l'envoi du message.");
+      console.log(formData);
     }
   };
 
@@ -68,20 +73,32 @@ function AddFosterlingRequestForm({ senderId, animalId }: AddFosterlingRequestFo
   return (
     <form onSubmit={handleSubmit}>
       {/* <h3 className='title'>Demander à accueillir l'animal</h3> */}
-      <p>Demandeur : {senderId}</p>
-      <p>Animal : {animalId}</p>
+      {/* <p>Demandeur : {senderId}</p>
+      <p>Animal : {animalId}</p> */}
       <textarea
         name="content_request"
         id="content_request"
         value={formData.content_request}
         onChange={handleChange}
         placeholder="Tapez votre message"
-        className='textarea'
+        className="textarea"
       />
       {/* Champs cachés pour l'expéditeur et le destinataire */}
-      <input type="hidden" value={senderId || ''} name="users_id" id="users_id"/>
-      <input type="hidden" value={animalId || ''} name="animals_id" id="animals_id"/>
-      <button type="submit" className='button is-primary is-fullwidth'>Envoyer le message</button>
+      <input
+        type="hidden"
+        value={senderId || ''}
+        name="users_id"
+        id="users_id"
+      />
+      <input
+        type="hidden"
+        value={animalId || ''}
+        name="animals_id"
+        id="animals_id"
+      />
+      <button type="submit" className="button is-primary is-fullwidth">
+        Envoyer le message
+      </button>
     </form>
   );
 }

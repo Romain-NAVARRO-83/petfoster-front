@@ -4,18 +4,20 @@ import { useModal } from '../../hooks/ModalContext';
 import axios from 'axios';
 
 interface ContactUserFormProps {
-  senderId: number | null;    // ID de l'expéditeur
-  receiverId: number | null;  // ID du destinataire
+  senderId: number | null; // ID de l'expéditeur
+  receiverId: number | null; // ID du destinataire
 }
 
 function ContactUserForm({ senderId, receiverId }: ContactUserFormProps) {
   // Récupérer le token CSRF pour la requête sécurisée
   const [csrfToken, setCsrfToken] = useState<string | null>(null);
-  
+
   useEffect(() => {
     const fetchCsrfToken = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/csrf-token');
+        const response = await axios.get(
+          'http://localhost:3000/api/csrf-token'
+        );
         setCsrfToken(response.data);
       } catch (error) {
         console.error('Erreur lors de la récupération du token CSRF:', error);
@@ -27,8 +29,8 @@ function ContactUserForm({ senderId, receiverId }: ContactUserFormProps) {
 
   const [formData, setFormData] = useState({
     content: '',
-    sender_id: senderId,    // Expéditeur
-    receiver_id: receiverId,  // Destinataire
+    sender_id: senderId, // Expéditeur
+    receiver_id: receiverId, // Destinataire
   });
 
   // Gestion des changements dans le champ texte
@@ -36,13 +38,13 @@ function ContactUserForm({ senderId, receiverId }: ContactUserFormProps) {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value, 
+      [name]: value,
     });
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     try {
       await axios.post('http://localhost:3000/api/messages', formData, {
         headers: {
@@ -52,35 +54,43 @@ function ContactUserForm({ senderId, receiverId }: ContactUserFormProps) {
       showSuccessToast('Message envoyé avec succès!');
       closeModal();
     } catch (error) {
-      console.error('Erreur lors de l\'envoi du message', error);
-      showErrorToast('Erreur lors de l\'envoi du message.');
+      console.error("Erreur lors de l'envoi du message", error);
+      showErrorToast("Erreur lors de l'envoi du message.");
     }
   };
 
   // Toasts de submit
   const { showSuccessToast, showErrorToast } = useToast();
   const { closeModal } = useModal();
-  
+
   return (
     <form onSubmit={handleSubmit}>
-      <h3 className='title'>Envoyer un message</h3>
-      <p>Expéditeur : {senderId}</p>
-      <p>Destinataire : {receiverId}</p>
+      <h3 className="title">Envoyer un message</h3>
       <textarea
         name="content"
         id="content"
         value={formData.content}
         onChange={handleChange}
         placeholder="Tapez votre message"
-        className='textarea'
+        className="textarea"
       />
-      <input type="hidden" value={senderId || ''} name="sender_id" id="sender_id"/>
-      <input type="hidden" value={receiverId || ''} name="receiver_id" id="receiver_id"/>
-      <button type="submit" className='button is-primary is-fullwidth'>Envoyer le message</button>
+      <input
+        type="hidden"
+        value={senderId || ''}
+        name="sender_id"
+        id="sender_id"
+      />
+      <input
+        type="hidden"
+        value={receiverId || ''}
+        name="receiver_id"
+        id="receiver_id"
+      />
+      <button type="submit" className="button is-primary is-fullwidth">
+        Envoyer le message
+      </button>
     </form>
   );
 }
 
 export default ContactUserForm;
-
-

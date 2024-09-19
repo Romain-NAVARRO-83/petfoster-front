@@ -4,20 +4,24 @@
   --orange: hsl(29, 100%, 69%);
 
   --darkgreen: hsl(152, 28%, 35%);
+  --light-yellow: hsl(48, 88%, 94%);
 
   --bulma-primary-h: 152;
   --bulma-primary-s: 36%;
   --bulma-primary-l: 70%;
 }
 
-/* .navbar-brand {
-    height: 100px;
-    margin-bottom: -50px
-} */
 
 body {
-  font-family: 'Georama', Arial, sans-serif;
+  min-height: 100vh;
 }
+
+/* #root {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+} */
 
 .navbar-brand a img:first-child {
   margin: 10px 20px -30px 20px;
@@ -50,7 +54,6 @@ div:not(#splash-screen, #splash-screen > *):has(> h1) {
 #splash-screen>div:nth-child(1) {
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 10px;
-  ;
 }
 
 #splash-screen .button {
@@ -153,7 +156,6 @@ nav.navbar {
 */
 footer>div>ul {
   columns: 2;
-
 }
 
 footer li {
@@ -161,7 +163,7 @@ footer li {
 }
 
 a {
-  color: var(--darkgreen)
+  color: var(--darkgreen);
 }
 
 .button {
@@ -192,7 +194,7 @@ a {
 }
 
 #user-type-info p {
-  background-color: rgba(255, 255, 255, .7);
+  background-color: rgba(255, 255, 255, 0.7);
   border-radius: 10px;
   padding: 5px;
 }
@@ -225,16 +227,16 @@ a {
     padding-top: 100px;
   }
 
-  header img[alt="Logo"] {
+  header img[alt='Logo'] {
     width: 40px;
   }
 
-  header img[alt="Pet Foster"] {
+  header img[alt='Pet Foster'] {
     width: 120px;
   }
 
   header:not(.scrolled) .navbar-burger {
-    background-color: rgba(255, 255, 255, .7);
+    background-color: rgba(255, 255, 255, 0.7);
     color: #000;
   }
 }
@@ -308,7 +310,6 @@ a {
   flex-wrap: wrap;
   width: 100%;
   padding: 20px;
-
 }
 
 .map-and-animals>* {
@@ -372,10 +373,7 @@ a {
   transform: translateX(100%) translateY(-50%);
   transition: all ease-out 0.3s;
   /* border-radius: 10px 0 0 10px; */
-
 }
-
-
 
 #animal-filter>button {
   transform: translateX(-100%);
@@ -393,7 +391,7 @@ a {
   /* transform: translateX(100%); */
   padding: 20px;
 
-  background-color: rgba(255, 255, 255, .8);
+  background-color: rgba(255, 255, 255, 0.8);
   border-radius: 10px;
   border: solid 2px #ddd;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -411,6 +409,7 @@ a {
 
 footer {
   border-top: solid 2px var(--green);
+  margin-top: 250px;
 }
 
 .modal-body {
@@ -418,45 +417,41 @@ footer {
   overflow-y: auto;
 }
 
+.modal.is-active {
+  z-index: 99;
+}
+
 /* georama*/
 
-@font-face {
+/* @font-face {
   font-family: 'GeoramaRoman';
   src: url('../../../public/font/GeoramaRoman-ExtraCondensedThin.woff2') format('woff2');
   font-weight: 200;
-  /* Light */
-}
 
-@font-face {
+} */
+
+/* @font-face {
   font-family: 'GeoramaRoman';
   src: url('/font/GeoramaRoman-ExtraCondensedRegular.woff2') format('woff2');
   font-weight: 400;
-  /* Regular */
-}
+
+} */
 
 @font-face {
   font-family: 'GeoramaRoman';
-  src: url('/font/GeoramaRoman-ExtraCondensedBold.woff2') format('woff2');
+  src: url('/font/Georama-Regular.woff2') format('woff2');
   font-weight: 700;
-  /* Bold */
+
 }
 
-
-h1 {
+h1,
+h2,
+h3 {
   font-family: 'GeoramaRoman', sans-serif;
-  font-weight: 700;
-  /* Bold */
 }
 
-p {
-  /* font-family: 'GeoramaRoman', sans-serif; */
-  font-weight: 400;
-  /* Regular */
-}
 
-/* .leaflet-popup-content {
-  width: 300px !important
-} */
+
 
 .leaflet-popup-content .mapopup-header {
   font-weight: bold;
@@ -464,7 +459,7 @@ p {
   margin: 0;
   padding-bottom: 5px;
   font-size: 1em;
-  text-align: center
+  text-align: center;
 }
 
 .leaflet-popup .mapopup-subheader {
@@ -492,7 +487,6 @@ p {
 .Toastify__toast-container--top-right {
   top: 100px;
 }
-
 
 /*  menu burger */
 @media (max-width: 1023px) {
@@ -530,19 +524,67 @@ p {
   padding: 0.25rem 0.5rem;
 }
 
-@media(width > 1024px) {
+@media (width > 1024px) {
   a.navbar-item:hover {
     color: #000;
   }
 }
 
-@media(width <1024px) {
+@media (width <1024px) {
   .navbar-item {
     text-align: center;
   }
 
   .navbar-item.has-dropdown>a {
     display: none;
+  }
+}
+
+.yellow-card {
+  background-color: var(--light-yellow);
+}
+
+h1::first-letter,
+h2::first-letter,
+h3::first-letter {
+  text-transform: uppercase;
+}
+
+
+@media(width <1024px) {
+  #request-table th {
+    display: none;
+  }
+
+  #request-table tbody tr {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background-color: var(--bulma-box-background-color);
+    border-radius: 10px;
+    margin-top: 10px;
+    box-shadow: var(--bulma-box-shadow);
+    padding: var(--bulma-box-padding);
+    border: solid 1px #ddd;
+    align-items: center;
+  }
+
+  #request-table tbody td {
+    flex-grow: 3;
+    border-bottom: 0;
+  }
+
+  #request-table .validator {
+    text-align: right;
+  }
+
+  #request-table .validator:has(.button)::before {
+    content: "Valider ou refuser la demande : ";
+    font-size: 0.8em;
+  }
+
+  #request-table .request-status {
+    text-align: right;
   }
 }
 
