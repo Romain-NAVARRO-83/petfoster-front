@@ -737,6 +737,12 @@ h3::first-letter {
       justify-content: center;
     }
 
+/* home page */
 
+@media(width <769px) {
 
-  
+  .button.is-primary.is-large {
+
+    font-size: 1rem;
+  }
+}
