@@ -161,7 +161,7 @@ const AnimalProfile = () => {
         {connectedUser && connectedUser.userId === animal?.creator.id && (
           <>
             <h3 className="subtitle">Hebergements</h3>
-            <table className="table">
+            <table className="table is-fullwidth">
               <thead>
                 <tr>
                   <th>Hebergeur</th>

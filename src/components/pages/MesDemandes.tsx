@@ -32,9 +32,9 @@ const FilterPage = () => {
 
     // Fonction de comparaison pour le tri
     const ordreDesEtats = {
-      pending: 1 as number, // On met pending en premier
-      approved: 2 as number, // approved en second
-      rejected: 3 as number, // rejected en dernier
+      Pending: 1 as number, // On met pending en premier
+      Approved: 2 as number, // approved en second
+      Rejected: 3 as number, // rejected en dernier
     };
 
     const orderedList = [...requestsList].sort((a, b) => {
@@ -243,7 +243,7 @@ const FilterPage = () => {
                               height="64"
                             />
                           </div> */}
-                          <MiniatureAnimal animal={animal}/>
+                          <MiniatureAnimal animal={animal} />
                         </td>
                         <td>{animal.name}</td>
                         <td>
@@ -300,7 +300,9 @@ const FilterPage = () => {
               {myUser?.fosterlingRequests?.map((item: any, index: number) => (
                 <tr key={index}>
                   <td>
-                    <MiniatureAnimal animal={requestAnimalDetails[item.animals_id]}/>
+                    <MiniatureAnimal
+                      animal={requestAnimalDetails[item.animals_id]}
+                    />
                     {/* {JSON.stringify(item)} */}
                   </td>
                   <td>
