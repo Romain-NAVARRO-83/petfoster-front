@@ -34,13 +34,13 @@ function FosterlingProfile({
       <td aria-label="Qté">{profile.quantity}</td>
       <td aria-label="Perim.">{profile.search_area} Km</td>
       <td className="has-text-right">
-        <button
+        {/* <button
           className="button is-small is-ghost has-text-success"
           onClick={() => openModal('updateFosterlingProfile')}
           aria-label="modifier le profil"
         >
           <Pencil/>
-        </button>
+        </button> */}
 
         <button
           className="button is-small is-ghost has-text-danger"
