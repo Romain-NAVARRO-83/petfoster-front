@@ -12,6 +12,8 @@ import GeolocNotification from '../partials/GeolocNotification';
 import UploadImageForm from '../formulaires/UploadImageForm';
 import { MapMarker } from 'react-flaticons';
 import dayjs from 'dayjs';
+import { Helmet } from 'react-helmet';
+
 
 const AnimalProfile = () => {
   const sectionRef = useRef(null);
@@ -68,6 +70,10 @@ const AnimalProfile = () => {
 
   return (
     <>
+    <Helmet>
+        <title>Adoptez {animal?.name} ({animal?.species.name})</title>
+        <meta name="description" content={`Adoptez ${animal?.name} (${animal?.species.name}) sur Pet Foster. ${animal?.species.name}, ${animal?.short_story}`} />
+      </Helmet>
       <div>
         <h1 className="title">{animal?.name}</h1>
       </div>
@@ -79,7 +85,7 @@ const AnimalProfile = () => {
           {animal?.pictures && animal.pictures.length > 0 ? (
             <GalleryComponent pictures={animal.pictures} />
           ) : (
-            <p>Aucune image disponible pour cet animal.</p>
+            <img src="https://placehold.co/600x400?text=Pas+d'images+pour+le+moment" alt="aucune image" width="300"/>
           )}
 
           {/* Formulaire d'upload */}
@@ -279,7 +285,7 @@ const AnimalProfile = () => {
                         )
                       }
                     >
-                      Faire une demande d'adoption (ou d'accueil)
+                      Faire une demande {connectedUser?.userType === "adoptant" ? "d'adoption" : "d'accueil"}
                     </button>
                   )}
                 {!connectedUser && (

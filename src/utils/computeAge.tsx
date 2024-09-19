@@ -13,7 +13,7 @@ export default function computeAge(dateOfBirth: string): string {
   }
 
   if (ageInYears > 0) {
-    return `${ageInYears} ans`;
+    return `${ageInYears} an${ageInYears > 1 ? 's' : ''}`;
   } else {
     // Si l'âge est inférieur à un an, calcule les mois
     let ageInMonths = monthsDifference;
@@ -22,6 +22,6 @@ export default function computeAge(dateOfBirth: string): string {
     }
     ageInMonths += (ageInYears * 12); // Ajuste les mois en cas d'âge proche de l'année
     
-    return `${ageInMonths} mois`;
+    return `${ageInMonths} moi${ageInMonths > 1 ? 's' : ''}`;
   }
 }
