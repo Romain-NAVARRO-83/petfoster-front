@@ -15,7 +15,7 @@ const AboutUs = () => {
       </section>
       
       {/* Notre identité */}
-      <section className="yellow-line">
+      <section className="yellow-line px-5">
         <div className="container">
           <h2 className="title">Notre identité</h2>
           <p>

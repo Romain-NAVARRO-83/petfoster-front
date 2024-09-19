@@ -107,7 +107,8 @@ function AnimalItemList({ animal }: AnimalListItemProps) {
           {connectedUser && connectedUser.userId === animal.creator?.id && (
             <button
               className="has-text-success button"
-              onClick={() => openModal('editAnimalProfile', null, null, animal.id)} // Ouvre le modal pour modifier le profil de l'animal
+              onClick={() => openModal('editAnimalProfile', null, null, animal.id)} 
+              aria-label="éditer cet animal"
             >
               <Pencil />
             </button>)}

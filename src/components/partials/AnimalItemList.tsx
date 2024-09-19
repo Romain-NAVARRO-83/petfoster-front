@@ -65,13 +65,13 @@ function AnimalItemList({ animal }: AnimalListItemProps) {
   return (
     <article className='box animal-item'>
       <div className='columns is-vcentered is-mobile is-multiline'>
-      <div className='column columns is-vcentered is-half-mobile is-mobile is-half-tablet is-narrow-desktop'>
+      <div className='column columns is-vcentered is-half-mobile is-mobile is-half-tablet is-3-desktop is-multiline'>
       <MiniatureAnimal animal={animal}/>
       <div>
       <p className="has-text-weight-bold has-text-left">{animal.name} </p><IdToSPecies speciesId={animal.species_id}/>
         </div>
       </div>
-      <div className='column has-text-centered is-half-mobile is-half-tablet'>
+      <div className='column is-half-mobile is-half-tablet is-narrow-desktop'>
       <GenderIcon gender={animal.sexe} size={20}/> {computeAge(animal.date_of_birth)}
       
       </div>

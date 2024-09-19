@@ -206,7 +206,7 @@ const FilterPage = () => {
           </div>
         </div>
         <div className="container">
-          <table className="table is-fullwidth">
+          <table id="request-table" className="table is-fullwidth">
             <thead>
               <tr>
                 <th colSpan={2} className="has-text-centered">
@@ -252,7 +252,7 @@ const FilterPage = () => {
                           </a>
                         </td>
                         <td>{request.content_request}</td>
-                        <td>
+                        <td className='request-status'>
                           {request.request_status.toLowerCase() ===
                             'pending' && (
                             <span className="tag is-warning">En attente</span>
@@ -266,9 +266,8 @@ const FilterPage = () => {
                             <span className="tag is-success">Validée</span>
                           )}
                         </td>
-                        <td>
-                          {request.request_status.toLowerCase() ===
-                            'pending' && (
+                        <td className='validator'>
+                          {request.request_status.toLowerCase() === 'pending'  && (
                             <>
                               <button
                                 className="button is-small is-success"
