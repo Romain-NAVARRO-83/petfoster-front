@@ -419,6 +419,10 @@ footer {
   overflow-y: auto;
 }
 
+.modal.is-active {
+  z-index: 99;
+}
+
 /* georama*/
 
 @font-face {
@@ -549,4 +553,41 @@ p {
 
 .yellow-card {
   background-color: var(--light-yellow)
+}
+
+@media(width <1024px) {
+  #request-table th {
+    display: none;
+  }
+
+  #request-table tbody tr {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background-color: var(--bulma-box-background-color);
+    border-radius: 10px;
+    margin-top: 10px;
+    box-shadow: var(--bulma-box-shadow);
+    padding: var(--bulma-box-padding);
+    border: solid 1px #ddd;
+    align-items: center;
+  }
+
+  #request-table tbody td {
+    flex-grow: 3;
+    border-bottom: 0;
+  }
+
+  #request-table .validator {
+    text-align: right;
+  }
+
+  #request-table .validator:has(.button)::before {
+    content: "Valider ou refuser la demande : ";
+    font-size: 0.8em;
+  }
+
+  #request-table .request-status {
+    text-align: right;
+  }
 }
