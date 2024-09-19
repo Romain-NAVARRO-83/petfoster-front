@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { LatLngExpression, Icon } from 'leaflet';
+// import { LatLngExpression, Icon } from 'leaflet';
 import AnimalItemList from '../partials/AnimalItemList';
 import MapComponent from '../partials/MapComponent';
 import Messagerie from '../partials/Messagerie';
@@ -9,6 +9,7 @@ import { useAuth } from '../../hooks/AuthContext';
 import GeolocNotification from '../partials/GeolocNotification';
 import { Helmet } from 'react-helmet';
 import UserTypeInfo from '../partials/UserTypeInfo';
+import { useModal } from '../../hooks/ModalContext';
 // import { useGeolocation } from '../../hooks/GeolocationContext';
 
 // const defaultPosition: LatLngExpression = [43.3365, 1.3396];
@@ -22,6 +23,7 @@ import UserTypeInfo from '../partials/UserTypeInfo';
 // });
 
 function Accueil() {
+  const { closeModal } = useModal();
   const { user: connectedUser } = useAuth();
   // const { location, error } = useGeolocation();
 
@@ -50,7 +52,7 @@ function Accueil() {
         setFetchError('Erreur lors de la récupération des données');
         setLoading(false);
       });
-  }, []);
+  }, [closeModal]);
 
   // Fetch users data
   useEffect(() => {
@@ -64,7 +66,7 @@ function Accueil() {
         setFetchUsersError('Erreur lors de la récupération des données');
         setLoadingUsers(false);
       });
-  }, []);
+  }, [closeModal]);
 
   return (
     <>
@@ -123,12 +125,12 @@ function Accueil() {
         </div>
 
         <div className="columns is-align-items-start">
-          <div className="column is-full-mobile is-half-tablet is-half-desktop" id="home-map-container">
+          <div className="column is-full-mobile is-half-tablet is-7-desktop" id="home-map-container">
             <MapComponent users={allUsers} />
             <UserTypeInfo/>
           </div>
 
-          <div className="column is-full-mobile is-half-desktop">
+          <div className="column is-full-mobile is-5-desktop">
             <div className="animal-list ">
               {/* {JSON.stringify(allAnimals)} */}
               {allAnimals &&

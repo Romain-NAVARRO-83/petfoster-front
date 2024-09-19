@@ -48,7 +48,9 @@ function Header() {
   useEffect(() => {
     // Close the burger menu when the location (route) changes
     setIsActive(false);
+    setIsDropdownActive(false); // Ferme également le dropdown si ouvert
   }, [location]);
+  
   return (
     <>
       {/* Lien "Jump to content" */}

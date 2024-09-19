@@ -1,21 +1,29 @@
 import { useModal } from '../../hooks/ModalContext';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import MapComponent from '../partials/MapComponent';
 import GalleryComponent from '../partials/GalleryComponent';
 import computeAge from '../../utils/computeAge';
-import { useAuth } from '../../hooks/AuthContext'; 
+import { useAuth } from '../../hooks/AuthContext';
 import { Animal } from 'src/@interfaces/animal';
 import { User } from 'src/@interfaces/user';
 import GeolocNotification from '../partials/GeolocNotification';
 import UploadImageForm from '../formulaires/UploadImageForm';
+import { MapMarker } from 'react-flaticons';
+import dayjs from 'dayjs';
 
 const AnimalProfile = () => {
+  const sectionRef = useRef(null);
+
+  const scrollToSection = () => {
+    sectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   const { openModal, closeModal } = useModal();
-  const { user: connectedUser } = useAuth(); 
-  
-  console.log('connectedUser:', connectedUser ,); // Pour vérifier le contenu de l'utilisateur connecté
+  const { user: connectedUser } = useAuth();
+
+  console.log('connectedUser:', connectedUser); // Pour vérifier le contenu de l'utilisateur connecté
 
   // Typage pour animal
   const { id } = useParams<{ id: string }>();
@@ -45,8 +53,6 @@ const AnimalProfile = () => {
     }
   };
   useEffect(() => {
-    
-
     if (id) {
       fetchAnimalData();
     }
@@ -65,7 +71,7 @@ const AnimalProfile = () => {
       <div>
         <h1 className="title">{animal?.name}</h1>
       </div>
-<GeolocNotification />
+      <GeolocNotification />
       {/* Responsive Gallery and Info Sections */}
       <section className="container columns is-multiline">
         {/* Galerie d'images */}
@@ -77,14 +83,14 @@ const AnimalProfile = () => {
           )}
 
           {/* Formulaire d'upload */}
-          {connectedUser && connectedUser.userId === animal?.creator.id && 
-        <UploadImageForm 
-          userId={null} 
-          fetchUserImages={null} 
-          animalId={animal?.id}
-          fetchAnimalData={fetchAnimalData}
-        />
-      }
+          {connectedUser && connectedUser.userId === animal?.creator.id && (
+            <UploadImageForm
+              userId={null}
+              fetchUserImages={null}
+              animalId={animal?.id}
+              fetchAnimalData={fetchAnimalData}
+            />
+          )}
         </div>
 
         {/* Info animal */}
@@ -97,16 +103,21 @@ const AnimalProfile = () => {
               Race : <strong>{animal?.race}</strong>
             </div>
             <div className="column is-full-mobile is-half-tablet is-half-desktop">
-              Sexe : <strong>{animal?.sexe === 'F' ? 'Femelle' : 'Mâle'}</strong>
+              Sexe :{' '}
+              <strong>{animal?.sexe === 'F' ? 'Femelle' : 'Mâle'}</strong>
             </div>
             <div className="column is-full-mobile is-half-tablet is-half-desktop">
               Age :{' '}
               <strong>
-                {animal?.date_of_birth ? computeAge(animal.date_of_birth) : 'Inconnue'}
+                {animal?.date_of_birth
+                  ? computeAge(animal.date_of_birth)
+                  : 'Inconnue'}
               </strong>
             </div>
             <div className="column is-full">
-              <Link to="#localisation">Localisation</Link>
+              <button className="is-fullwidth button" onClick={scrollToSection}>
+                <MapMarker /> Trouver {animal?.name}
+              </button>
             </div>
             <div className="column is-full">
               <h2 className="subtitle">En quelques mots</h2>
@@ -119,12 +130,20 @@ const AnimalProfile = () => {
         {connectedUser && connectedUser.userId === animal?.creator.id && (
           <div className="notification is-info is-light is-fullwidth column">
             <p>
-              En tant que créateur du profil de cet animal, vous pouvez en éditer le contenu.
+              En tant que créateur du profil de cet animal, vous pouvez en
+              éditer le contenu.
             </p>
             <div className="is-flex is-justify-content-flex-end">
               <button
                 className="button is-primary"
-                onClick={() => openModal('editAnimalProfile', undefined, undefined, animal?.id)}
+                onClick={() =>
+                  openModal(
+                    'editAnimalProfile',
+                    undefined,
+                    undefined,
+                    animal?.id
+                  )
+                }
               >
                 Éditer
               </button>
@@ -139,52 +158,81 @@ const AnimalProfile = () => {
         <div>{animal?.long_story}</div>
         <h3 className="subtitle">Santé</h3>
         <div>{animal?.health}</div>
+        {connectedUser && connectedUser.userId === animal?.creator.id && (
+          <>
+            <h3 className="subtitle">Hebergements</h3>
+            <table className="table is-fullwidth">
+              <thead>
+                <tr>
+                  <th>Hebergeur</th>
+                  <th>Date d'entrée</th>
+                  <th>Date de sortie</th>
+                </tr>
+              </thead>
+              <tbody>
+                {animal.animalOwners.map((e) => {
+                  return (
+                    <tr>
+                      <td>
+                        <a href={`/profil/${e.user.id}`}>{e.user.name}</a>
+                      </td>
+                      <td>{dayjs(e.date_start).format('D MMM. YYYY')}</td>
+                      <td>
+                        {e.date_end
+                          ? dayjs(e.date_end).format('D MMM. YYYY')
+                          : '-'}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </>
+        )}
       </section>
 
       {/* Localisation */}
-      <section id="localisation" className="yellow-line">
+      <section ref={sectionRef} id="localisation" className="yellow-line">
         <h2 className="title">Où se trouve {animal?.name} ?</h2>
         <div className="container columns is-vcentered is-fluid">
           <div className="column is-full-mobile is-half-tablet is-half-desktop">
-          <MapComponent
-            animal={animal}
-            users={animal?.creator ? [animal.creator] : []}
-            filters={{ species: '', age: '', sexe: '', search_area: 30 }} // Valeurs par défaut pour filters
-          />
+            <MapComponent
+              animal={animal}
+              users={animal?.creator ? [animal.creator] : []}
+              filters={{ species: '', age: '', sexe: '', search_area: 30 }} // Valeurs par défaut pour filters
+            />
           </div>
           <div className="column is-full-mobile is-half-tablet is-half-desktop box">
-            <div className='columns is-fullwidth has-text-centered'>
-              <div className='column'>
-                <h3 className='subtitle'>
-                  Association responsable
-                </h3>
-              <p>
-              <strong>{animal?.creator.name}</strong>
-              <br />
-              {animal?.creator.address}
-              <br />
-              {animal?.creator.city}
-              <br />
-              {animal?.creator.country}
-              <br />
-              {animal?.creator.website ? (
-                <Link to={animal.creator.website}>
-                  {animal.creator.website}
-                </Link>
-              ) : (
-                <span>Pas de site web disponible</span>
-              )}
-            </p>
+            <div className="columns is-fullwidth has-text-centered">
+              <div className="column">
+                <h3 className="subtitle">Association responsable</h3>
+                <p>
+                  <strong>{animal?.creator.name}</strong>
+                  <br />
+                  {animal?.creator.address}
+                  <br />
+                  {animal?.creator.city}
+                  <br />
+                  {animal?.creator.country}
+                  <br />
+                  {animal?.creator.website ? (
+                    <Link to={animal.creator.website}>
+                      {animal.creator.website}
+                    </Link>
+                  ) : (
+                    <span>Pas de site web disponible</span>
+                  )}
+                </p>
               </div>
               {/* {animal && animal.animalOwners? && ()} */}
               {/* {JSON.stringify(animal.animalOwners[0].user.name)} */}
-              <div className='column'>
-              <h3 className='subtitle'>
-                  Hébergeur actuel
-                </h3>
+              <div className="column">
+                <h3 className="subtitle">Hébergeur actuel</h3>
                 <p>
-                <Link to={`/profil/${animal.animalOwners[0].user.id}`}>{animal.animalOwners[0].user.name}</Link><br/>
-                ({animal.animalOwners[0].user.type_user})
+                  <Link to={`/profil/${animal.animalOwners[0].user.id}`}>
+                    {animal.animalOwners[0].user.name}
+                  </Link>
+                  <br />({animal.animalOwners[0].user.type_user})
                 </p>
               </div>
             </div>
@@ -216,15 +264,24 @@ const AnimalProfile = () => {
               </div>
 
               <div className="column is-full-mobile is-half-tablet">
-              {userData && (userData.type_user === 'adoptant' || userData.type_user === 'famille d\'accueil') && animal?.id && (
-    <button
-      className="button is-secondary is-fullwidth"
-      onClick={() => openModal('addFosterlingRequest', connectedUser?.userId, undefined, animal?.id)}
-      >
-        Faire une demande d'adoption (ou d'accueil)
-    </button>
-  
-  )}
+                {userData &&
+                  (userData.type_user === 'adoptant' ||
+                    userData.type_user === "famille d'accueil") &&
+                  animal?.id && (
+                    <button
+                      className="button is-secondary is-fullwidth"
+                      onClick={() =>
+                        openModal(
+                          'addFosterlingRequest',
+                          connectedUser?.userId,
+                          undefined,
+                          animal?.id
+                        )
+                      }
+                    >
+                      Faire une demande d'adoption (ou d'accueil)
+                    </button>
+                  )}
                 {!connectedUser && (
                   <div className="notification is-info is-light">
                     <p>
