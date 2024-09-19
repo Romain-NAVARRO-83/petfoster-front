@@ -675,63 +675,18 @@ h3::first-letter {
   justify-content: center;
 }
 
+/* home page */
+
+@media(width <769px) {
 
 
-/* LOADEING ANIMATION */
-/* HTML: <div class="loader"></div> */
-.loaderanim {
-  width: 200px;
-  aspect-ratio: 1;
-  position: relative;
-}
+  /* home page */
 
-.loaderanim:before,
-.loaderanim:after {
-  content: "";
-  position: absolute;
-  border-radius: 50px;
-  box-shadow: 0 0 0 3px inset var(--green);
-  animation: l4 2.5s infinite;
-}
+  @media(width <769px) {
 
-.loaderanim:after {
-  animation-delay: -1.25s;
-}
+    .button.is-primary.is-large {
 
-@keyframes l4 {
-  0% {
-    inset: 0 35px 35px 0;
+      font-size: 1rem;
+
+    }
   }
-
-  12.5% {
-    inset: 0 35px 0 0;
-  }
-
-  25% {
-    inset: 35px 35px 0 0;
-  }
-
-  37.5% {
-    inset: 35px 0 0 0;
-  }
-
-  50% {
-    inset: 35px 0 0 35px;
-  }
-
-  62.5% {
-    inset: 0 0 0 35px;
-  }
-
-  75% {
-    inset: 0 0 35px 35px;
-  }
-
-  87.5% {
-    inset: 0 0 35px 0;
-  }
-
-  100% {
-    inset: 0 35px 35px 0;
-  }
-}
