@@ -53,9 +53,9 @@ const ContactPage = () => {
         
         {/* {errorMessage && <p className="has-text-danger">{errorMessage}</p>} */}
 
-        <div className="columns">
+        <div className="yellow-line">
           {/* Formulaire de contact */}
-          <div className="column is-half">
+          <div className="column">
             <h4 className="title is-4">Formulaire de contact</h4>
             <div className="box">
               <form 

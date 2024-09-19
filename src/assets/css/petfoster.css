@@ -545,3 +545,22 @@ p {
     display: none;
   }
 }
+
+/* TrouverAnimal */
+
+@media(width <811px) {
+  h1.title {
+    font-size: 1.4rem;
+    margin-bottom: 1rem; 
+  }
+
+
+  #user-type-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem; 
+    justify-items: center; 
+    margin-bottom: 0.2rem;
+  }
+
+  }
