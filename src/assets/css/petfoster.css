@@ -444,70 +444,7 @@ input[type=range]::-ms-thumb {
   outline: none;
 } */
 /* Special styling for WebKit/Blink */
-input[type=range]::-webkit-slider-thumb {
-  background-color: #000;
-}
 
-/* All the same stuff for Firefox */
-input[type=range]::-moz-range-thumb {
-  background-color: #000;
-}
-
-/* All the same stuff for IE */
-input[type=range]::-ms-thumb {
-  background-color: #000;
-}
-
-input[type=range]::-webkit-slider-runnable-track {
-  width: 100%;
-  height: 8.4px;
-  cursor: pointer;
-  background: #fff;
-  border-radius: 1.3px;
-  border-bottom: solid 3px #ddd;
-}
-
-input[type=range]:focus::-webkit-slider-runnable-track {
-  background: #fff;
-  border-bottom: solid 3px #ddd;
-}
-
-input[type=range]::-moz-range-track {
-  width: 100%;
-  height: 8.4px;
-  cursor: pointer;
-  background: #fff;
-  border-radius: 1.3px;
-  border-bottom: solid 3px #ddd;
-}
-
-input[type=range]::-ms-track {
-  width: 100%;
-  height: 8.4px;
-  cursor: pointer;
-  background: transparent;
-  border-color: transparent;
-  border-width: 16px 0;
-  color: transparent;
-}
-
-input[type=range]::-ms-fill-lower {
-  background: #fff;
-  border-radius: 2.6px;
-}
-
-input[type=range]:focus::-ms-fill-lower {
-  background: #fff;
-}
-
-input[type=range]::-ms-fill-upper {
-  background: #fff;
-  border-radius: 2.6px;
-}
-
-input[type=range]:focus::-ms-fill-upper {
-  background: #fff;
-}
 
 /* georama*/
 
@@ -719,23 +656,24 @@ h3::first-letter {
     margin-bottom: 0.2rem;
   }
 
-  }
-  
+}
 
- 
-    .picture-uploader {
-     
-      display: flex;
-      flex-direction: column;
-      align-items: center; /* Centre les éléments horizontalement */
-      justify-content: center;
-    }
 
-    .file-cta {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+
+.picture-uploader {
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Centre les éléments horizontalement */
+  justify-content: center;
+}
+
+.file-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 /* home page */
 
@@ -744,5 +682,6 @@ h3::first-letter {
   .button.is-primary.is-large {
 
     font-size: 1rem;
+
   }
 }

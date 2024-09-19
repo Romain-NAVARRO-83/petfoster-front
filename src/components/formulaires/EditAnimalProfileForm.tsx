@@ -118,7 +118,7 @@ const EditAnimalProfileForm = ({ animalId }: { animalId: number | null }) => {
   };
 
   if (loading) {
-    return <div>Chargement des données...</div>;
+    return <div className='loaderanim'></div>;
   }
 
   return (
