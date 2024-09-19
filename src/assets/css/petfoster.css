@@ -590,7 +590,7 @@ h3::first-letter {
 
 /* TrouverAnimal */
 
-@media(width <811px) {
+@media(width <826px) {
   h1.title {
     font-size: 1.4rem;
     margin-bottom: 1rem; 
