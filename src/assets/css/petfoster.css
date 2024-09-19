@@ -679,14 +679,9 @@ h3::first-letter {
 
 @media(width <769px) {
 
+  .button.is-primary.is-large {
 
-  /* home page */
+    font-size: 1rem;
 
-  @media(width <769px) {
-
-    .button.is-primary.is-large {
-
-      font-size: 1rem;
-
-    }
   }
+}
