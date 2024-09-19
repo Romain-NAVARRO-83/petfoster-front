@@ -286,7 +286,7 @@ const TrouverAnimal: React.FC = () => {
                   })
                   .map((profile) => (
                     <Link to={`/profil/${profile.users_id}`} key={profile.id}>
-                    <div className="columns card is-vcentered m-4" style={{ backgroundColor: 'hsl(48, 100%, 89%)' }}>
+                    <div className="yellow-card columns card is-vcentered m-4">
                       <div className="column has-text-centered">
                         <strong className="is-size-7">
                           {profile.userName}
