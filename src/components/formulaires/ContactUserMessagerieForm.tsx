@@ -105,7 +105,7 @@ function ContactUserMessagerieForm({
         name="receiver_id"
         id="receiver_id"
       /> */}
-      <button type="submit" className="button is-primary is-fullwidth">
+      <button type="submit" className="button is-primary is-fullwidth mt-3">
         Envoyer le message
       </button>
     </form>
