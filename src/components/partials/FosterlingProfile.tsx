@@ -1,3 +1,4 @@
+import { Pencil, Trash } from 'react-flaticons';
 import { useModal } from '../../hooks/ModalContext';
 import IdToSPecies from './IdToSpecies';
 // import { useEffect, useState } from 'react';
@@ -25,34 +26,28 @@ function FosterlingProfile({
 
   return (
     <tr>
-      <td>
+      <td aria-label="Espèce">
         <IdToSPecies speciesId={profile.species_id} />
       </td>
-      <td>{profile.age}</td>
-      <td>{profile.sexe}</td>
-      <td>{profile.quantity}</td>
-      <td>{profile.search_area} Km</td>
+      <td aria-label="Age">{profile.age}</td>
+      <td aria-label="Sexe">{profile.sexe}</td>
+      <td aria-label="Qté">{profile.quantity}</td>
+      <td aria-label="Perim.">{profile.search_area} Km</td>
       <td className="has-text-right">
-        <button
+        {/* <button
           className="button is-small is-ghost has-text-success"
           onClick={() => openModal('updateFosterlingProfile')}
           aria-label="modifier le profil"
         >
-          <span className="icon is-small">
-            <i className="fas fa-pencil-alt"></i>{' '}
-            {/* Icône de crayon pour éditer */}
-          </span>
-        </button>
+          <Pencil/>
+        </button> */}
 
         <button
           className="button is-small is-ghost has-text-danger"
           aria-label="Supprimer"
           onClick={() => deleteFunction(profile.id)}
         >
-          <span className="icon is-small">
-            <i className="fas fa-trash-alt"></i>{' '}
-            {/* Icône de poubelle pour supprimer */}
-          </span>
+          <Trash/>
         </button>
       </td>
     </tr>

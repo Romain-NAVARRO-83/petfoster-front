@@ -421,6 +421,94 @@ footer {
   z-index: 99;
 }
 
+.modal input[type="range"] {
+  border: 0;
+}
+
+.modal-card-head {
+  justify-content: space-between;
+}
+
+.modal-card-head>* {
+  flex-grow: 2;
+}
+
+/* .modal input[type=range]::-webkit-slider-thumb,
+input[type=range]::-moz-range-thumb,
+input[type=range]::-ms-thumb {
+  background-color: red;
+  border: solid 1px black;
+} */
+
+/* input[type="range"]:focus {
+  outline: none;
+} */
+/* Special styling for WebKit/Blink */
+input[type=range]::-webkit-slider-thumb {
+  background-color: #000;
+}
+
+/* All the same stuff for Firefox */
+input[type=range]::-moz-range-thumb {
+  background-color: #000;
+}
+
+/* All the same stuff for IE */
+input[type=range]::-ms-thumb {
+  background-color: #000;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  background: #fff;
+  border-radius: 1.3px;
+  border-bottom: solid 3px #ddd;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #fff;
+  border-bottom: solid 3px #ddd;
+}
+
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  background: #fff;
+  border-radius: 1.3px;
+  border-bottom: solid 3px #ddd;
+}
+
+input[type=range]::-ms-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  border-width: 16px 0;
+  color: transparent;
+}
+
+input[type=range]::-ms-fill-lower {
+  background: #fff;
+  border-radius: 2.6px;
+}
+
+input[type=range]:focus::-ms-fill-lower {
+  background: #fff;
+}
+
+input[type=range]::-ms-fill-upper {
+  background: #fff;
+  border-radius: 2.6px;
+}
+
+input[type=range]:focus::-ms-fill-upper {
+  background: #fff;
+}
+
 /* georama*/
 
 /* @font-face {
@@ -550,6 +638,7 @@ h3::first-letter {
   text-transform: uppercase;
 }
 
+/* transformer les tableaux en flex */
 
 @media(width <1024px) {
   #request-table th {
@@ -586,6 +675,31 @@ h3::first-letter {
   #request-table .request-status {
     text-align: right;
   }
+
+  #fosterling-profiles-table thead {
+    display: none;
+  }
+
+  #fosterling-profiles-table tbody tr {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  #fosterling-profiles-table tbody tr:not(:last-of-type) {
+    border-bottom: solid 1px #ddd;
+  }
+
+  #fosterling-profiles-table tbody tr>* {
+    flex-grow: 2;
+    border-bottom: 0;
+  }
+
+  #fosterling-profiles-table tbody td::before {
+    content: attr(aria-label);
+    font-size: 11px;
+    display: block;
+  }
 }
 
 /* TrouverAnimal */
@@ -593,15 +707,15 @@ h3::first-letter {
 @media(width <826px) {
   h1.title {
     font-size: 1.4rem;
-    margin-bottom: 1rem; 
+    margin-bottom: 1rem;
   }
 
 
   #user-type-info {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.5rem; 
-    justify-items: center; 
+    gap: 0.5rem;
+    justify-items: center;
     margin-bottom: 0.2rem;
   }
 
