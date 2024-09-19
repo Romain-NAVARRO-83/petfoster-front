@@ -172,7 +172,7 @@ function ProfilUtilisateur() {
               </div>
             )}
             {user?.fosterlingProfiles && user.fosterlingProfiles.length > 0 ? (
-              <table className="table is-fullwidth has-text-centered card">
+              <table id="fosterling-profiles-table" className="table is-fullwidth has-text-centered card">
                 <thead>
                   <tr>
                     <th className="has-text-centered">Espèce</th>

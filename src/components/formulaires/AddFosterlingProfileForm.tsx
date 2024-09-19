@@ -205,6 +205,7 @@ const AddFosterlingProfileForm = ({
                 placeholder="Entrez la quantité"
                 aria-label="Entrez la quantité"
                 id="quantity"
+                max="50"
               />
             </div>
           </div>
