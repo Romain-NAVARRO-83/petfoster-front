@@ -701,3 +701,22 @@ h3::first-letter {
     display: block;
   }
 }
+
+/* TrouverAnimal */
+
+@media(width <826px) {
+  h1.title {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+  }
+
+
+  #user-type-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    justify-items: center;
+    margin-bottom: 0.2rem;
+  }
+
+}
