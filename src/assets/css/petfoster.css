@@ -45,10 +45,9 @@ div:not(#splash-screen, #splash-screen > *):has(> h1) {
   position: relative;
 }
 
-#splash-screen>div:nth-child(1) {
+#splash-screen > div:nth-child(1) {
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 10px;
-  ;
 }
 
 #splash-screen .button {
@@ -59,9 +58,11 @@ div:not(#splash-screen, #splash-screen > *):has(> h1) {
 div:not(#splash-screen, #splash-screen > *):has(> h1)::before {
   content: '';
   background: rgb(0, 0, 0);
-  background: linear-gradient(180deg,
-      rgba(0, 0, 0, 0.7) 0%,
-      rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
   width: 100%;
   height: 150px;
   position: absolute;
@@ -79,11 +80,11 @@ div:not(#splash-screen, #splash-screen > *):has(> h1)::before {
   background-image: url(/img/vector/curb.svg);
 }
 
-#splash-screen+section+section {
+#splash-screen + section + section {
   position: relative;
 }
 
-#splash-screen+section+section::after {
+#splash-screen + section + section::after {
   content: '';
   position: absolute;
   top: 0;
@@ -149,7 +150,7 @@ nav.navbar {
     gap: 2em;
 }
 */
-footer>div>ul {
+footer > div > ul {
   columns: 2;
 }
 
@@ -160,14 +161,16 @@ footer>div>ul {
 .yellow-line {
   background-color: var(--yellow);
   background: rgb(255, 238, 173);
-  background: linear-gradient(150deg,
-      rgba(255, 238, 173, 1) 0%,
-      rgba(255, 173, 96, 1) 100%);
+  background: linear-gradient(
+    150deg,
+    rgba(255, 238, 173, 1) 0%,
+    rgba(255, 173, 96, 1) 100%
+  );
   padding-bottom: 75px;
   padding-top: 75px;
 }
 
-#home-map-container>*:not(#user-type-info) {
+#home-map-container > *:not(#user-type-info) {
   width: 500px;
   height: 500px;
   max-width: 100%;
@@ -181,7 +184,7 @@ footer>div>ul {
 }
 
 #user-type-info p {
-  background-color: rgba(255, 255, 255, .7);
+  background-color: rgba(255, 255, 255, 0.7);
   border-radius: 10px;
   padding: 5px;
 }
@@ -214,16 +217,16 @@ footer>div>ul {
     padding-top: 100px;
   }
 
-  header img[alt="Logo"] {
+  header img[alt='Logo'] {
     width: 40px;
   }
 
-  header img[alt="Pet Foster"] {
+  header img[alt='Pet Foster'] {
     width: 120px;
   }
 
   header:not(.scrolled) .navbar-burger {
-    background-color: rgba(255, 255, 255, .5)
+    background-color: rgba(255, 255, 255, 0.5);
   }
 }
 
@@ -296,10 +299,9 @@ footer>div>ul {
   flex-wrap: wrap;
   width: 100%;
   padding: 20px;
-
 }
 
-.map-and-animals>* {
+.map-and-animals > * {
   flex-grow: 2;
   flex-basis: 100%;
   padding: 20px;
@@ -318,7 +320,7 @@ footer>div>ul {
     padding: 0;
   }
 
-  .map-column>.card {
+  .map-column > .card {
     height: 40vh !important;
     border-radius: 0;
   }
@@ -333,7 +335,7 @@ footer>div>ul {
     flex-basis: 50%;
   }
 
-  .map-column>.card {
+  .map-column > .card {
     height: 500px !important;
   }
 }
@@ -360,18 +362,15 @@ footer>div>ul {
   transform: translateX(100%) translateY(-50%);
   transition: all ease-out 0.3s;
   /* border-radius: 10px 0 0 10px; */
-
 }
 
-
-
-#animal-filter>button {
+#animal-filter > button {
   transform: translateX(-100%);
   transition: all ease-out 0.3s;
   margin-bottom: 10px;
 }
 
-#animal-filter.open>button {
+#animal-filter.open > button {
   transform: translateX(0);
   transition: all ease-out 0.3s;
 }
@@ -380,7 +379,7 @@ footer>div>ul {
   /* transform: translateX(100%); */
   padding: 20px;
 
-  background-color: rgba(255, 255, 255, .8);
+  background-color: rgba(255, 255, 255, 0.8);
   border-radius: 10px;
   border: solid 2px #ddd;
 }
@@ -408,7 +407,8 @@ footer {
 
 @font-face {
   font-family: 'GeoramaRoman';
-  src: url('../../../public/font/GeoramaRoman-ExtraCondensedThin.woff2') format('woff2');
+  src: url('../../../public/font/GeoramaRoman-ExtraCondensedThin.woff2')
+    format('woff2');
   font-weight: 200;
   /* Light */
 }
@@ -426,7 +426,6 @@ footer {
   font-weight: 700;
   /* Bold */
 }
-
 
 h1 {
   font-family: 'GeoramaRoman', sans-serif;
@@ -450,7 +449,7 @@ p {
   margin: 0;
   padding-bottom: 5px;
   font-size: 1em;
-  text-align: center
+  text-align: center;
 }
 
 .leaflet-popup .mapopup-subheader {
@@ -478,7 +477,6 @@ p {
 .Toastify__toast-container--top-right {
   top: 100px;
 }
-
 
 /*  menu burger */
 @media (max-width: 1023px) {
@@ -514,4 +512,10 @@ p {
 .button.is-extra-small {
   font-size: 0.7rem;
   padding: 0.25rem 0.5rem;
+}
+
+h1::first-letter,
+h2::first-letter,
+h3::first-letter {
+  text-transform: uppercase;
 }
