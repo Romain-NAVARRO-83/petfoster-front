@@ -167,7 +167,7 @@ function LoginForm() {
         </div>
       </div>
 
-      {/* Identifiants de test */}
+      {/* Identifiants de test 
       <div className="notification is-info is-light columns">
         <ul className="column">
           <li>Adoptant</li>
@@ -184,7 +184,7 @@ function LoginForm() {
           <li>contact@spa-example.com</li>
           <li>P@ssword123456!</li>
         </ul>
-      </div>
+      </div>*/}
     </form>
   );
 }
