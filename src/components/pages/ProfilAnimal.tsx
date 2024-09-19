@@ -85,7 +85,7 @@ const AnimalProfile = () => {
           {animal?.pictures && animal.pictures.length > 0 ? (
             <GalleryComponent pictures={animal.pictures} />
           ) : (
-            <img src="https://placehold.co/600x400?text=Pas+d'images+pour+le+moment" alt="aucune image" width="300"/>
+            <img src="https://placehold.co/600x400?text=Pas+d'images+pour+le+moment" alt="aucune image" width="100%"/>
           )}
 
           {/* Formulaire d'upload */}

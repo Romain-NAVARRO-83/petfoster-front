@@ -52,7 +52,7 @@ const TrouverAnimal: React.FC = () => {
     species: '',
     age: '',
     sexe: '',
-    search_area: 30,
+    search_area: 70,
   });
 
   const handleChange = (
@@ -104,6 +104,7 @@ const TrouverAnimal: React.FC = () => {
 
   // Fetch users data based on filters
   useEffect(() => {
+    if (formData.search_area && location?.lat && location?.lng) {
     const speciesFilter = formData.species
       ? `&species=${formData.species}`
       : '';
@@ -119,6 +120,7 @@ const TrouverAnimal: React.FC = () => {
         setFetchUsersError('Error fetching data');
         setLoadingUsers(false);
       });
+    }
   }, [formData, location]);
 
   const [filterOpen, setFilterOpen] = useState<boolean>(false);
@@ -209,7 +211,7 @@ const TrouverAnimal: React.FC = () => {
                 name="search_area"
                 value={formData.search_area}
                 onChange={handleChange}
-                min="30"
+                min="70"
                 max="1000"
               />
               <p>Périmètre : {formData.search_area} Km</p>
@@ -261,8 +263,8 @@ const TrouverAnimal: React.FC = () => {
                       (formData.sexe === '' || animal.sexe === formData.sexe)
                     );
                   })
-                  .map((animal) => (
-                    <AnimalItemList animal={animal} key={animal.id} />
+                  .map((animal, index) => (
+                    <AnimalItemList animal={animal} key={index} />
                   ))}
             </div>
           ) : (
@@ -284,9 +286,9 @@ const TrouverAnimal: React.FC = () => {
                       (!formData.age || ageMatches)
                     );
                   })
-                  .map((profile) => (
-                    <Link to={`/profil/${profile.users_id}`} key={profile.id}>
-                    <div className="yellow-card columns card is-vcentered m-4">
+                  .map((profile, index) => (
+                    <Link to={`/profil/${profile.users_id}`} key={index}>
+                    <div className="yellow-card columns card is-vcentered m-4 is-mobile">
                       <div className="column has-text-centered">
                         <strong className="is-size-7">
                           {profile.userName}
@@ -301,7 +303,7 @@ const TrouverAnimal: React.FC = () => {
                       <div className="column is-narrow">
                         <GenderIcon gender={profile.sexe} size={15} />
                       </div>
-                      <div className="column">{profile.age}</div>
+                      <div className="column">{profile.age} an{profile.age === "-1" ? "" : 's'}</div>
                     </div>
                   </Link>
                   ))}
