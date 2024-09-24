@@ -10,8 +10,8 @@ export interface User {
   country: string;
   zip: number;
   city: string;
-  longitude: string;
-  latitude: string;
+  longitude: number;
+  latitude: number;
   phone: string;
   address: string;
   website: string;

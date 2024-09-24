@@ -3,7 +3,7 @@ import React, {
   useEffect,
   ChangeEvent,
   FormEvent,
-  useRef,
+  // useRef,
 } from 'react';
 import { Link } from 'react-router-dom';
 import computeAge from '../../utils/computeAgeTrouverAnimal';
