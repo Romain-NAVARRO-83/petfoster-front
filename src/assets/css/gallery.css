@@ -3,7 +3,7 @@
   /* border: solid 1px #ddd; */
   /* overflow: hidden; */
   margin-bottom: 20px;
-  background-color: #f0f0f0 !important
+  background-color: #f0f0f0 !important;
 }
 
 .mainslider img,
@@ -21,4 +21,8 @@
 
 .navslider {
   height: 100px;
+}
+.navslider .slick-prev:before,
+.navslider .slick-next:before {
+  color: #000;
 }

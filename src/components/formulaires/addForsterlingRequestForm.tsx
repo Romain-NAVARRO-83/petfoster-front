@@ -52,7 +52,7 @@ function AddFosterlingRequestForm({
     try {
       await instanceAxios.post('/requests', formData, {
         headers: {
-          'x-xsrf-token': csrfToken || '', // Inclure le token CSRF dans les headers
+          'x-xsrf-token': csrfToken || '',
         },
       });
       showSuccessToast('Message envoyé avec succès!');
@@ -70,9 +70,6 @@ function AddFosterlingRequestForm({
 
   return (
     <form onSubmit={handleSubmit}>
-      {/* <h3 className='title'>Demander à accueillir l'animal</h3> */}
-      {/* <p>Demandeur : {senderId}</p>
-      <p>Animal : {animalId}</p> */}
       <textarea
         name="content_request"
         id="content_request"

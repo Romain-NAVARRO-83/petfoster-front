@@ -11,17 +11,9 @@
   --bulma-primary-l: 70%;
 }
 
-
 body {
   min-height: 100vh;
 }
-
-/* #root {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: 100vh;
-} */
 
 .navbar-brand a img:first-child {
   margin: 10px 20px -30px 20px;
@@ -51,7 +43,7 @@ div:not(#splash-screen, #splash-screen > *):has(> h1) {
   position: relative;
 }
 
-#splash-screen>div:nth-child(1) {
+#splash-screen > div:nth-child(1) {
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 10px;
 }
@@ -64,9 +56,11 @@ div:not(#splash-screen, #splash-screen > *):has(> h1) {
 div:not(#splash-screen, #splash-screen > *):has(> h1)::before {
   content: '';
   background: rgb(0, 0, 0);
-  background: linear-gradient(180deg,
-      rgba(0, 0, 0, 0.7) 0%,
-      rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
   width: 100%;
   height: 150px;
   position: absolute;
@@ -84,11 +78,11 @@ div:not(#splash-screen, #splash-screen > *):has(> h1)::before {
   background-image: url(/img/vector/curb.svg);
 }
 
-#splash-screen+section+section {
+#splash-screen + section + section {
   position: relative;
 }
 
-#splash-screen+section+section::after {
+#splash-screen + section + section::after {
   content: '';
   position: absolute;
   top: 0;
@@ -154,7 +148,7 @@ nav.navbar {
     gap: 2em;
 }
 */
-footer>div>ul {
+footer > div > ul {
   columns: 2;
 }
 
@@ -173,14 +167,16 @@ a {
 .yellow-line {
   background-color: var(--yellow);
   background: rgb(255, 238, 173);
-  background: linear-gradient(150deg,
-      rgba(255, 238, 173, 1) 0%,
-      rgba(255, 173, 96, 1) 100%);
+  background: linear-gradient(
+    150deg,
+    rgba(255, 238, 173, 1) 0%,
+    rgba(255, 173, 96, 1) 100%
+  );
   padding-bottom: 75px;
   padding-top: 75px;
 }
 
-#home-map-container>*:not(#user-type-info) {
+#home-map-container > *:not(#user-type-info) {
   width: 500px;
   height: 500px;
   max-width: 100%;
@@ -205,7 +201,6 @@ a {
 }
 
 .animal-list {
-  /* max-height: 80vh; */
   max-height: 500px;
   padding: 10px;
   overflow-y: auto;
@@ -302,9 +297,6 @@ a {
   height: 100%;
 }
 
-/* div:has(#animal-filter)>* {
-  position: relative
-} */
 .map-and-animals {
   display: flex;
   flex-wrap: wrap;
@@ -312,7 +304,7 @@ a {
   padding: 20px;
 }
 
-.map-and-animals>* {
+.map-and-animals > * {
   flex-grow: 2;
   flex-basis: 100%;
   padding: 20px;
@@ -331,7 +323,7 @@ a {
     padding: 0;
   }
 
-  .map-column>.card {
+  .map-column > .card {
     height: 40vh !important;
     border-radius: 0;
   }
@@ -346,7 +338,7 @@ a {
     flex-basis: 50%;
   }
 
-  .map-column>.card {
+  .map-column > .card {
     height: 500px !important;
   }
 }
@@ -375,14 +367,14 @@ a {
   /* border-radius: 10px 0 0 10px; */
 }
 
-#animal-filter>button {
+#animal-filter > button {
   transform: translateX(-100%);
   transition: all ease-out 0.3s;
   margin-bottom: 10px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
-#animal-filter.open>button {
+#animal-filter.open > button {
   transform: translateX(0);
   transition: all ease-out 0.3s;
 }
@@ -421,7 +413,7 @@ footer {
   z-index: 99;
 }
 
-.modal input[type="range"] {
+.modal input[type='range'] {
   border: 0;
 }
 
@@ -429,7 +421,7 @@ footer {
   justify-content: space-between;
 }
 
-.modal-card-head>* {
+.modal-card-head > * {
   flex-grow: 2;
 }
 
@@ -444,7 +436,6 @@ input[type=range]::-ms-thumb {
   outline: none;
 } */
 /* Special styling for WebKit/Blink */
-
 
 /* georama*/
 
@@ -466,7 +457,6 @@ input[type=range]::-ms-thumb {
   font-family: 'GeoramaRoman';
   src: url('/font/Georama-Regular.woff2') format('woff2');
   font-weight: 700;
-
 }
 
 h1,
@@ -474,9 +464,6 @@ h2,
 h3 {
   font-family: 'GeoramaRoman', sans-serif;
 }
-
-
-
 
 .leaflet-popup-content .mapopup-header {
   font-weight: bold;
@@ -560,7 +547,7 @@ h3 {
     text-align: center;
   }
 
-  .navbar-item.has-dropdown>a {
+  .navbar-item.has-dropdown > a {
     display: none;
   }
 }
@@ -577,7 +564,7 @@ h3::first-letter {
 
 /* transformer les tableaux en flex */
 
-@media(width <1024px) {
+@media (width <1024px) {
   #request-table th {
     display: none;
   }
@@ -605,7 +592,7 @@ h3::first-letter {
   }
 
   #request-table .validator:has(.button)::before {
-    content: "Valider ou refuser la demande : ";
+    content: 'Valider ou refuser la demande : ';
     font-size: 0.8em;
   }
 
@@ -627,7 +614,7 @@ h3::first-letter {
     border-bottom: solid 1px #ddd;
   }
 
-  #fosterling-profiles-table tbody tr>* {
+  #fosterling-profiles-table tbody tr > * {
     flex-grow: 2;
     border-bottom: 0;
   }
@@ -641,12 +628,11 @@ h3::first-letter {
 
 /* TrouverAnimal */
 
-@media(width <826px) {
+@media (width <826px) {
   h1.title {
     font-size: 1.4rem;
     margin-bottom: 1rem;
   }
-
 
   #user-type-info {
     display: grid;
@@ -655,13 +641,9 @@ h3::first-letter {
     justify-items: center;
     margin-bottom: 0.2rem;
   }
-
 }
 
-
-
 .picture-uploader {
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -677,11 +659,8 @@ h3::first-letter {
 
 /* home page */
 
-@media(width <769px) {
-
+@media (width <769px) {
   .button.is-primary.is-large {
-
     font-size: 1rem;
-
   }
 }

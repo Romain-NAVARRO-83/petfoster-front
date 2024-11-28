@@ -15,48 +15,43 @@ import { User } from 'src/@interfaces/user';
 import { Animal } from 'src/@interfaces/animal';
 import GenderIcon from './GenderIcon';
 import IdToSPecies from './IdToSpecies';
-// import UserTypeInfo from './UserTypeInfo';
-// import GeolocNotification from './GeolocNotification';
 
-// Position par défaut si la géolocalisation n'est pas disponible
 const defaultPosition: LatLngExpression = [43.3365, 1.3396];
-
-// Icône personnalisée pour la position de l'utilisateur
 const userIcon = new LeafletIcon({
   iconUrl: '/img/vector/marker-round3.svg',
   iconSize: [25, 41],
-  iconAnchor: [12, 41], // Point d'ancrage pour l'icône
-  popupAnchor: [1, -34], // Position du popup par rapport au marqueur
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
 });
 const assoIcon = new LeafletIcon({
-  iconUrl: '/img/vector/marker-losange.svg', // Your custom icon
-  iconSize: [30, 30], // Size of the icon
-  iconAnchor: [15, 30], // Point d'ancrage pour l'icône
-  popupAnchor: [1, -34], // Position du popup par rapport au marqueur
+  iconUrl: '/img/vector/marker-losange.svg',
+  iconSize: [30, 30],
+  iconAnchor: [15, 30],
+  popupAnchor: [1, -34],
   shadowUrl:
-    'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png', // Default Leaflet shadow
-  shadowSize: [30, 30], // Default shadow size
-  shadowAnchor: [13, 30], // Default shadow anchor
+    'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  shadowSize: [30, 30],
+  shadowAnchor: [13, 30],
 });
 const fosterIcon = new LeafletIcon({
-  iconUrl: '/img/vector/marker-triangle2.svg', // Your custom icon
-  iconSize: [30, 30], // Size of the icon
-  iconAnchor: [15, 30], // Point d'ancrage pour l'icône
-  popupAnchor: [1, -34], // Position du popup par rapport au marqueur
+  iconUrl: '/img/vector/marker-triangle2.svg',
+  iconSize: [30, 30],
+  iconAnchor: [15, 30],
+  popupAnchor: [1, -34],
   shadowUrl:
-    'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png', // Default Leaflet shadow
-  shadowSize: [30, 30], // Default shadow size
-  shadowAnchor: [13, 30], // Default shadow anchor
+    'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  shadowSize: [30, 30],
+  shadowAnchor: [13, 30],
 });
 const adoptIcon = new LeafletIcon({
-  iconUrl: '/img/vector/marker-round2.svg', // Your custom icon
-  iconSize: [30, 30], // Size of the icon
-  iconAnchor: [15, 30], // Point d'ancrage pour l'icône
-  popupAnchor: [1, -34], // Position du popup par rapport au marqueur
+  iconUrl: '/img/vector/marker-round2.svg',
+  iconSize: [30, 30],
+  iconAnchor: [15, 30],
+  popupAnchor: [1, -34],
   shadowUrl:
-    'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png', // Default Leaflet shadow
-  shadowSize: [30, 30], // Default shadow size
-  shadowAnchor: [15, 30], // Default shadow anchor
+    'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  shadowSize: [30, 30],
+  shadowAnchor: [15, 30],
 });
 
 interface IFitMapToBoundsProps {
@@ -65,9 +60,8 @@ interface IFitMapToBoundsProps {
   location: { lat: number; lng: number } | null;
 }
 
-// Composant pour ajuster la carte afin qu'elle affiche tous les marqueurs
 function FitMapToBounds({ users, animal, location }: IFitMapToBoundsProps) {
-  const map = useMap(); // Accéder à l'instance de la carte
+  const map = useMap();
 
   useEffect(() => {
     const bounds = new LatLngBounds([]);
@@ -87,7 +81,6 @@ function FitMapToBounds({ users, animal, location }: IFitMapToBoundsProps) {
         }
       });
     }
-
     if (bounds.isValid()) {
       map.fitBounds(bounds);
     }
@@ -95,21 +88,18 @@ function FitMapToBounds({ users, animal, location }: IFitMapToBoundsProps) {
 
   return null;
 }
-
 interface IFilters {
   species: string;
   age: string;
   sexe: string;
   search_area: number;
 }
-
 interface MapComponentProps {
   users: User[] | null;
   animal: Animal | null;
   filters: IFilters | null;
-  showSearchArea?: boolean; // Prop optionnelle qui sert à afficher le rond uniquement sur certaines pages
+  showSearchArea?: boolean;
 }
-
 function MapComponent({
   users,
   animal,
@@ -153,12 +143,10 @@ function MapComponent({
           de votre position
         </h3>
       )}
-      {/* <GeolocNotification/> */}
-
       <MapContainer
-        center={mapCenter} // Centrer la carte sur la position de l'utilisateur (ou position par défaut)
-        zoom={13} // Zoom par défaut
-        scrollWheelZoom={false} // Désactiver le zoom avec la molette
+        center={mapCenter}
+        zoom={13}
+        scrollWheelZoom={false}
         style={{ height: '500px', zIndex: 1 }}
         className="card"
       >
@@ -179,9 +167,9 @@ function MapComponent({
         {/* Cercle de périmètre de recherche uniquement si showSearchArea est vrai */}
         {location && showSearchArea && (
           <Circle
-            center={mapCenter} // Le centre est la position de l'utilisateur
-            radius={filters?.search_area ? filters.search_area * 1000 : 30000} // Périmètre en mètres
-            pathOptions={{ color: 'blue', fillColor: 'blue', fillOpacity: 0.2 }} // Style du cercle (bleu, transparent)
+            center={mapCenter}
+            radius={filters?.search_area ? filters.search_area * 1000 : 30000}
+            pathOptions={{ color: 'blue', fillColor: 'blue', fillOpacity: 0.2 }}
           />
         )}
 
@@ -230,11 +218,9 @@ function MapComponent({
                     </div>
                   )}
                   {/* Liste des animaux du user (créés)*/}
-                  {/* user.type_user === "association" &&  */}
                   {user.createdAnimals && user.createdAnimals.length > 0 && (
                     <div className="column">
                       <p className="mapopup-subheader">à créé</p>
-                      {/* {JSON.stringify(user.createdAnimals)} */}
                       <ul>
                         {user.createdAnimals.map((animal) => (
                           <li key={animal.id}>
@@ -256,7 +242,6 @@ function MapComponent({
                             ? 'Recherche'
                             : 'Peut accueillir'}
                         </p>
-
                         <ul>
                           {user.fosterlingProfiles.map((profile) => (
                             <li key={profile.id}>
@@ -269,12 +254,10 @@ function MapComponent({
                         </ul>
                       </div>
                     )}
-                  {/* {JSON.stringify(user)} */}
                 </div>
               </Popup>
             </Marker>
           ))}
-
         {/* Composant pour ajuster la vue de la carte afin d'inclure tous les marqueurs */}
         <FitMapToBounds
           users={filteredUsers || null}

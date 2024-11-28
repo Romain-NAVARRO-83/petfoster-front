@@ -67,15 +67,14 @@ button:focus-visible {
   }
 }
 
-
 /*Jump to content */
 .skip-link {
   position: absolute;
-  top: -40px; /* Cache le lien hors de l'écran */
+  top: -40px;
   left: 0;
   z-index: 100;
 }
 
 .skip-link:focus {
-  top: 10px; /* Rend le lien visible lorsque l'utilisateur navigue avec le clavier */
+  top: 10px;
 }

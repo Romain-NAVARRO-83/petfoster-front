@@ -3,12 +3,7 @@ import { Pencil, Eye, Home } from 'react-flaticons';
 import { useModal } from '../../hooks/ModalContext';
 import { Animal } from 'src/@interfaces/animal';
 import { useAuth } from '../../hooks/AuthContext';
-// import axios from 'axios';
-// import { useToast } from '../../hooks/ToastContext';
-
-// Utilitaire pour calculer l'âge de l'animal
 import computeAge from '../../utils/computeAge';
-// import { useState, useEffect } from 'react';
 import MiniatureAnimal from './Miniature';
 import IdToSPecies from './IdToSpecies';
 import GenderIcon from './GenderIcon';
@@ -19,47 +14,8 @@ interface AnimalListItemProps {
 }
 
 function AnimalItemList({ animal }: AnimalListItemProps) {
-  // const { showErrorToast } = useToast();
-  // On récupère l'utilisateur connecté via le contexte Auth
   const { user: connectedUser } = useAuth();
-  // On récupère la fonction openModal via le contexte Modal
   const { openModal } = useModal();
-
-  // Vérification si l'objet animal ou animal.creator est indéfini
-  // if (!animal || !animal.creator) {
-  //   // Si animal ou creator est absent, on ne retourne rien (ou on peut afficher un indicateur de chargement)
-  //   return null;
-  // }
-  // const [csrfToken, setCsrfToken] = useState<string | null>(null);
-  // useEffect(() => {
-  //   const fetchCsrfToken = async () => {
-  //     try {
-  //       const response = await axios.get('http://localhost:3000/api/csrf-token', {});
-  //       setCsrfToken(response.data);
-  //     } catch (error) {
-  //       console.error('Erreur lors de la récupération du token CSRF:', error);
-  //     }
-  //   };
-  //   fetchCsrfToken();
-  // }, []);
-  // const [animalDetail, setAnimalDetail] = useState<Animal | null>(null)
-
-  // fecth plus de détail sur l'animal
-  // useEffect(() => {
-  //   const fetchAnimalData = async () => {
-  //     try {
-  //       const animalResponse = await axios.get(`http://localhost:3000/api/animals/${animal.id}`);
-  //       setAnimalDetail(animalResponse.data);
-  //     } catch (error) {
-  //       showErrorToast("Erreur réseau");
-  //     }
-  //     // finally {
-  //     //   setLoading(false);
-  //     // }
-  //   };
-
-  //   fetchAnimalData();
-  // }, [animal.id, showErrorToast]);
   return (
     <article className="box animal-item">
       <div className="columns is-vcentered is-mobile is-multiline">

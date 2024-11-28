@@ -81,8 +81,8 @@ const CreateAnimalProfileForm = () => {
   // Soumission du formulaire
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setErrorMessage(null); // Réinitialise les erreurs
-    setSuccessMessage(null); // Réinitialise le message de succès
+    setErrorMessage(null);
+    setSuccessMessage(null);
 
     if (!validateForm()) {
       showErrorToast("Le formulaire n'est pas validé");
@@ -98,7 +98,6 @@ const CreateAnimalProfileForm = () => {
       setSuccessMessage("Profil de l'animal créé avec succès !");
       showSuccessToast("Profil de l'animal créé avec succès !");
       closeModal();
-      // console.log('Réponse du serveur:', response.data);
     } catch (error: any) {
       if (error.response) {
         setErrorMessage(`Erreur API: ${error.response.data.message}`);
@@ -138,6 +137,8 @@ const CreateAnimalProfileForm = () => {
             name="name"
             placeholder="Le nom de l'animal"
             required
+            pattern="^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$"
+            title="Le nom ne peut contenir que des lettres, espaces, apostrophes et tirets."
             value={formData.name}
             onChange={handleChange}
           />

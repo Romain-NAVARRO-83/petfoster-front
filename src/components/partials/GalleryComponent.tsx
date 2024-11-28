@@ -3,26 +3,34 @@ import Slider from 'react-slick';
 import '../../assets/css/gallery.css';
 
 interface IGalleryComponentProps {
-  pictures: {
-    id: number;
-    URL_picture: string;
-    animals_id: number;
-    created_at: string;
-    updated_at: string | null; 
-  }[] | null;
-  userPictures?: {
-    id: number;
-    URL_picture: string;
-    users_id: number;
-    created_at: string;
-    updated_at: string | null;
-  }[] | null;
+  pictures:
+    | {
+        id: number;
+        URL_picture: string;
+        animals_id: number;
+        created_at: string;
+        updated_at: string | null;
+      }[]
+    | null;
+  userPictures?:
+    | {
+        id: number;
+        URL_picture: string;
+        users_id: number;
+        created_at: string;
+        updated_at: string | null;
+      }[]
+    | null;
 }
 
-const apiUrl = import.meta.env.VITE_API_URL;
-const placeholderImage = "/img/defaults/ominpet-the-destructor.webp"; 
+// const apiUrl = import.meta.env.IMG_URL;
+const apiUrl = 'http://localhost:3000';
+const placeholderImage = '/img/defaults/ominpet-the-destructor.webp';
 
-const GalleryComponent = ({ pictures, userPictures }: IGalleryComponentProps) => {
+const GalleryComponent = ({
+  pictures,
+  userPictures,
+}: IGalleryComponentProps) => {
   const [nav1, setNav1] = useState<Slider | null>(null);
   const [nav2, setNav2] = useState<Slider | null>(null);
 
@@ -30,21 +38,21 @@ const GalleryComponent = ({ pictures, userPictures }: IGalleryComponentProps) =>
   const mainSliderSettings: Record<string, any> = {
     slidesToShow: 1,
     slidesToScroll: 1,
-    arrows: false, 
-    fade: true, 
-    asNavFor: nav2, 
+    arrows: false,
+    fade: true,
+    asNavFor: nav2,
   };
 
   // Paramètres du slider de navigation (miniatures des images)
   const navSliderSettings: Record<string, any> = {
-    slidesToShow: 2, 
+    slidesToShow: 2,
     slidesToScroll: 1,
-    asNavFor: nav1, 
-    dots: true, 
-    centerMode: true, 
-    focusOnSelect: true, 
-    arrows: true, 
-    infinite: true, 
+    asNavFor: nav1,
+    dots: true,
+    centerMode: true,
+    focusOnSelect: true,
+    arrows: true,
+    infinite: true,
   };
 
   // Utilise "pictures" si disponible, sinon utilise "userPictures"
@@ -54,16 +62,16 @@ const GalleryComponent = ({ pictures, userPictures }: IGalleryComponentProps) =>
   if (images && images.length === 1) {
     const image = images[0];
     const imageSrc = userPictures
-      ? `${apiUrl}/img/utilisateurs/${image.URL_picture}` 
-      : `${apiUrl}/img/animaux/img750/${image.URL_picture}`; 
+      ? `${apiUrl}/img/utilisateurs/${image.URL_picture}`
+      : `${apiUrl}/img/animaux/img750/${image.URL_picture}`;
 
     return (
       <div className="single-image">
         <img
           src={imageSrc}
           alt={`Image ${image.id}`}
-          loading="lazy" 
-          onError={(e) => (e.currentTarget.src = placeholderImage)} 
+          loading="lazy"
+          // onError={(e) => (e.currentTarget.src = placeholderImage)}
         />
       </div>
     );
@@ -79,16 +87,16 @@ const GalleryComponent = ({ pictures, userPictures }: IGalleryComponentProps) =>
       >
         {images?.map((image) => {
           const imageSrc = userPictures
-            ? `${apiUrl}/img/utilisateurs/${image.URL_picture}` 
-            : `${apiUrl}/img/animaux/img750/${image.URL_picture}`; 
+            ? `${apiUrl}/img/utilisateurs/${image.URL_picture}`
+            : `${apiUrl}/img/animaux/img750/${image.URL_picture}`;
 
           return (
             <div key={image.id}>
               <img
                 src={imageSrc}
                 alt={`Image ${image.id}`}
-                loading="lazy" 
-                onError={(e) => (e.currentTarget.src = placeholderImage)} 
+                loading="lazy"
+                // onError={(e) => (e.currentTarget.src = placeholderImage)}
               />
             </div>
           );
@@ -99,19 +107,19 @@ const GalleryComponent = ({ pictures, userPictures }: IGalleryComponentProps) =>
       <Slider
         className="navslider"
         {...navSliderSettings}
-        ref={(slider: Slider | null) => setNav2(slider)} // 
+        ref={(slider: Slider | null) => setNav2(slider)} //
       >
         {images?.map((image) => {
           const imageSrc = userPictures
-            ? `${apiUrl}/img/utilisateurs/${image.URL_picture}` 
-            : `${apiUrl}/img/animaux/img750/${image.URL_picture}`; 
+            ? `${apiUrl}/img/utilisateurs/${image.URL_picture}`
+            : `${apiUrl}/img/animaux/img750/${image.URL_picture}`;
 
           return (
             <div key={image.id} className="card">
               <img
                 src={imageSrc}
                 alt={`Thumbnail ${image.id}`}
-                loading="lazy" 
+                loading="lazy"
                 onError={(e) => (e.currentTarget.src = placeholderImage)} // Remplace par l'image de placeholder si l'image n'est pas trouvée
               />
             </div>

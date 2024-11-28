@@ -60,7 +60,7 @@ function LoginForm() {
     }
 
     if (valid) {
-      setIsSubmitting(true); // Activer le mode soumission pour désactiver le bouton
+      setIsSubmitting(true);
       try {
         const response = await instanceAxios.post(
           '/loginh',
@@ -116,9 +116,9 @@ function LoginForm() {
             name="email"
             value={emailLogin}
             onChange={(e) => setEmailLogin(e.target.value)}
-            aria-describedby="emailErrorLogin" // Pour l'accessibilité
+            aria-describedby="emailErrorLogin"
             required
-            disabled={isSubmitting} // Désactiver le champ pendant la soumission
+            disabled={isSubmitting}
           />
         </div>
         {emailErrorLogin && (
@@ -141,9 +141,9 @@ function LoginForm() {
             name="password"
             value={passwordLogin}
             onChange={(e) => setPasswordLogin(e.target.value)}
-            aria-describedby="passwordErrorLogin" // Pour l'accessibilité
+            aria-describedby="passwordErrorLogin"
             required
-            disabled={isSubmitting} // Désactiver le champ pendant la soumission
+            disabled={isSubmitting}
           />
         </div>
         {passwordErrorLogin && (

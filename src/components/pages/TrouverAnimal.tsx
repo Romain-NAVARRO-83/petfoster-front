@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  ChangeEvent,
-  FormEvent,
-  // useRef,
-} from 'react';
+import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import computeAge from '../../utils/computeAgeTrouverAnimal';
 import instanceAxios from '../../../axiosSetup/axiosSetup';
@@ -27,7 +21,6 @@ type FormData = {
   search_area: number;
 };
 
-// Correspondance entre species_id et nom d'espèce
 const speciesMap: { [key: number]: string } = {
   1: 'Chat',
   2: 'Chien',
@@ -43,8 +36,8 @@ const speciesMap: { [key: number]: string } = {
   12: 'Rat',
 };
 
-const TrouverAnimal: React.FC = () => {
-  const divRef = React.useRef(null);
+function TrouverAnimal() {
+  const divRef = React.useRef<HTMLDivElement>(null);
   const [numChildren, setNumChildren] = useState<number>(0);
 
   const getNumberOfChildren = () => {
@@ -87,7 +80,6 @@ const TrouverAnimal: React.FC = () => {
   const [foundUsersFosterlingProfiles, setFoundUsersFosterlingProfiles] =
     useState<FosterlingProfileListItem[] | null>(null);
 
-  // Fetch all user animals and fosterling profiles
   useEffect(() => {
     if (allUsers) {
       setFoundUsersAnimals(
@@ -103,12 +95,11 @@ const TrouverAnimal: React.FC = () => {
             userName: user.name,
             userType: user.type_user,
           }))
-        ) // Flatten fosterlingProfiles
+        )
       );
     }
   }, [allUsers]);
 
-  // Fetch users data based on filters
   useEffect(() => {
     if (formData.search_area && location?.lat && location?.lng) {
       const speciesFilter = formData.species
@@ -128,11 +119,13 @@ const TrouverAnimal: React.FC = () => {
         });
     }
   }, [formData, location]);
+
   useEffect(() => {
     if (divRef.current) {
       setNumChildren(divRef.current.children.length);
     }
   }, [foundUsersAnimals, foundUsersFosterlingProfiles]);
+
   const [filterOpen, setFilterOpen] = useState<boolean>(false);
   const handleFilterOpen = () => {
     setFilterOpen(!filterOpen);
@@ -148,7 +141,6 @@ const TrouverAnimal: React.FC = () => {
         )}
       </div>
 
-      {/* {JSON.stringify(filteredAnimals?.length || '0')} */}
       <div id="animal-filter" className={filterOpen ? 'open' : ''}>
         <button
           onClick={handleFilterOpen}
@@ -169,6 +161,7 @@ const TrouverAnimal: React.FC = () => {
                   name="species"
                   value={formData.species}
                   onChange={handleChange}
+                  aria-label="Espèce"
                 >
                   <option value="">Toutes</option>
                   {Object.values(speciesMap).map((species) => (
@@ -227,6 +220,7 @@ const TrouverAnimal: React.FC = () => {
                 onChange={handleChange}
                 min="70"
                 max="1000"
+                aria-label="Périmetre de recherche"
               />
               <p>Périmètre : {formData.search_area} Km</p>
             </div>
@@ -338,6 +332,6 @@ const TrouverAnimal: React.FC = () => {
       </div>
     </main>
   );
-};
+}
 
 export default TrouverAnimal;
