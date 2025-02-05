@@ -62,6 +62,7 @@ function AnimalItemList({ animal }: AnimalListItemProps) {
           <Link
             to={`/animal/${animal.id}`}
             className="button has-text-info is-extra-small"
+            title={`voir le profil de ${animal.name}`}
           >
             <Eye />
           </Link>

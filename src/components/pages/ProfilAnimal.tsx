@@ -259,7 +259,9 @@ const AnimalProfile = () => {
                       openModal(
                         'contactUser',
                         connectedUser.userId,
-                        id ? parseInt(id) : undefined
+                        animal?.animalOwners[0].user.id
+                          ? animal.animalOwners[0].user.id
+                          : undefined
                       )
                     }
                   >

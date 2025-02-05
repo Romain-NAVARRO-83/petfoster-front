@@ -10,7 +10,7 @@ interface Picture {
   URL_picture: string;
 }
 
-const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = import.meta.env.IMG_URL;
 
 export default function MiniatureAnimal({ animal }: IMiniatureAnimlProps) {
   const [pictures, setPictures] = useState<Picture[] | null>(null);
@@ -39,13 +39,13 @@ export default function MiniatureAnimal({ animal }: IMiniatureAnimlProps) {
     <div className="animal-miniature has-text-centered">
       {pictures && pictures.length > 0 ? (
         <img
-          src={`${apiUrl}/img/animaux/img-120/${pictures[0].URL_picture}`}
+          // src={`${apiUrl}/img/animaux/img-120/${pictures[0].URL_picture}`}
+          src={`http://localhost:3000/img/animaux/img-120/${pictures[0].URL_picture}`}
           alt={animal?.name}
           width="64"
           height="64"
           loading="lazy"
           onError={(e) => {
-            // Replace image source with the placeholder when there's an error (e.g., 404)
             (e.target as HTMLImageElement).src = placeholderImage;
           }}
         />

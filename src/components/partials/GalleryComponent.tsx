@@ -71,7 +71,7 @@ const GalleryComponent = ({
           src={imageSrc}
           alt={`Image ${image.id}`}
           loading="lazy"
-          // onError={(e) => (e.currentTarget.src = placeholderImage)}
+          onError={(e) => (e.currentTarget.src = placeholderImage)}
         />
       </div>
     );
@@ -96,7 +96,7 @@ const GalleryComponent = ({
                 src={imageSrc}
                 alt={`Image ${image.id}`}
                 loading="lazy"
-                // onError={(e) => (e.currentTarget.src = placeholderImage)}
+                onError={(e) => (e.currentTarget.src = placeholderImage)}
               />
             </div>
           );
@@ -120,7 +120,7 @@ const GalleryComponent = ({
                 src={imageSrc}
                 alt={`Thumbnail ${image.id}`}
                 loading="lazy"
-                onError={(e) => (e.currentTarget.src = placeholderImage)} // Remplace par l'image de placeholder si l'image n'est pas trouvée
+                onError={(e) => (e.currentTarget.src = placeholderImage)}
               />
             </div>
           );

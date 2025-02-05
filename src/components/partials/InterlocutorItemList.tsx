@@ -13,14 +13,14 @@ interface InterlocutorItemListProps {
   setCurrentInterlocutor: (id: number) => void;
   fetchDisscussion: (connectedUserId: number, interlocutorId: number) => void;
 }
-const apiUrl = import.meta.env.VITE_API_URL;
+// const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = 'http://localhost:3000';
 function InterlocutorItemList({
   interlocutorLastMessage,
   setCurrentInterlocutor,
   fetchDisscussion,
 }: InterlocutorItemListProps) {
   const { user: connectedUser } = useAuth();
-
 
   return (
     <article
@@ -36,16 +36,16 @@ function InterlocutorItemList({
       <div className="is-vcentered is-flex is-align-items-center is-justify-content-space-between">
         <div style={{ gap: '10px' }} className="is-flex is-align-items-center">
           <div className="messagerie-user-miniature is-narrow has-text-centered">
-          <img
-  src={`${apiUrl}/img/utilisateurs/${interlocutorLastMessage.interlocutorId}-${interlocutorLastMessage.interlocutorName}-1.webp`}
-  alt={interlocutorLastMessage.interlocutorName}
-  onError={(e) => {
-    e.target.onerror = null; 
-    e.target.src = `${apiUrl}/img/utilisateurs/1-Alice Dupont-1.webp`;
-  }}
-  width="32"
-  height="32"
-/>
+            <img
+              src={`${apiUrl}/img/utilisateurs/${interlocutorLastMessage.interlocutorId}-${interlocutorLastMessage.interlocutorName}-1.webp`}
+              alt={interlocutorLastMessage.interlocutorName}
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = `${apiUrl}/img/utilisateurs/1-Alice Dupont-1.webp`;
+              }}
+              width="32"
+              height="32"
+            />
           </div>
 
           <p className="has-text-weight-bold is-size-6 has-text-left">
