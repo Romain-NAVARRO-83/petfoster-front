@@ -1,6 +1,6 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import computeAge from '../../utils/computeAgeTrouverAnimal';
 import instanceAxios from '../../../axiosSetup/axiosSetup';
 import AnimalItemList from '../partials/AnimalItemList';
@@ -39,7 +39,7 @@ const speciesMap: { [key: number]: string } = {
 
 function TrouverAnimal() {
   const divRef = React.useRef<HTMLDivElement>(null);
-  const [numChildren, setNumChildren] = useState<number>(0);
+  // const [setNumChildren] = useState<number>(0);
 
   const getNumberOfChildren = () => {
     if (divRef.current) {
@@ -73,8 +73,8 @@ function TrouverAnimal() {
   };
 
   const [allUsers, setAllUsers] = useState<User[] | null>(null);
-  const [loadingUsers, setLoadingUsers] = useState<boolean>(true);
-  const [fetchUsersError, setFetchUsersError] = useState<string | null>(null);
+  // const [setLoadingUsers] = useState<boolean>(true);
+  // const [setFetchUsersError] = useState<string | null>(null);
   const [foundUsersAnimals, setFoundUsersAnimals] = useState<Animal[] | null>(
     null
   );
@@ -112,18 +112,18 @@ function TrouverAnimal() {
         .get(apiUrl)
         .then((response) => {
           setAllUsers(response.data);
-          setLoadingUsers(false);
+          // setLoadingUsers(false);
         })
         .catch(() => {
-          setFetchUsersError('Error fetching data');
-          setLoadingUsers(false);
+          // setFetchUsersError('Error fetching data');
+          // setLoadingUsers(false);
         });
     }
   }, [formData, location]);
 
   useEffect(() => {
     if (divRef.current) {
-      setNumChildren(divRef.current.children.length);
+      // setNumChildren(divRef.current.children.length);
     }
   }, [foundUsersAnimals, foundUsersFosterlingProfiles]);
 
@@ -191,6 +191,7 @@ function TrouverAnimal() {
                 <div className="select">
                   <select
                     name="age"
+                    title="age"
                     value={formData.age}
                     onChange={handleChange}
                   >
@@ -212,6 +213,7 @@ function TrouverAnimal() {
                 <div className="select">
                   <select
                     name="sexe"
+                    title="sexe"
                     value={formData.sexe}
                     onChange={handleChange}
                   >
@@ -340,8 +342,7 @@ function TrouverAnimal() {
             <MapComponent
               users={allUsers}
               filters={formData}
-              showSearchArea={true}
-            />
+              showSearchArea={true} animal={null}            />
             <UserTypeInfo />
           </div>
         </div>

@@ -52,6 +52,11 @@ function UploadImageForm({
     //   return;
     // }
 
+    if (!image || !(image instanceof File)) {
+      console.error("L'image doit être un fichier de type File");
+      return;
+    }
+    
     const formData = new FormData();
     formData.append('image', image);
 

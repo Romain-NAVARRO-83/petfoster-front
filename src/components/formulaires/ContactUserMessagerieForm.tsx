@@ -3,8 +3,9 @@ import { useToast } from '../../hooks/ToastContext';
 import instanceAxios from '../../../axiosSetup/axiosSetup';
 
 interface ContactUserFormProps {
-  senderId: number | null; // ID de l'expéditeur
-  receiverId: number | null; // ID du destinataire
+  senderId: number | null;
+  receiverId: number | null;
+  fetchDisscussion: (senderId: number, receiverId: number) => void;
 }
 
 function ContactUserMessagerieForm({
@@ -49,7 +50,7 @@ function ContactUserMessagerieForm({
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     // console.log(formData);
     e.preventDefault();
 
@@ -68,7 +69,11 @@ function ContactUserMessagerieForm({
         }
       );
       showSuccessToast('Message envoyé avec succès!');
-      fetchDisscussion(senderId as number, receiverId);
+      if (senderId !== null && receiverId !== null) {
+        fetchDisscussion(senderId, receiverId);
+      } else {
+        console.error("Erreur : senderId ou receiverId est null", { senderId, receiverId });
+      }
     } catch (error) {
       console.error("Erreur lors de l'envoi du message", error);
       showErrorToast("Erreur lors de l'envoi du message.");

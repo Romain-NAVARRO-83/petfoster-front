@@ -40,8 +40,9 @@ function InterlocutorItemList({
               src={`${apiUrl}/img/utilisateurs/${interlocutorLastMessage.interlocutorId}-${interlocutorLastMessage.interlocutorName}-1.webp`}
               alt={interlocutorLastMessage.interlocutorName}
               onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = `${apiUrl}/img/utilisateurs/1-Alice Dupont-1.webp`;
+                const target = e.target as HTMLImageElement;
+                target.onerror = null;
+                target.src = `${apiUrl}/img/utilisateurs/1-Alice Dupont-1.webp`;
               }}
               width="32"
               height="32"

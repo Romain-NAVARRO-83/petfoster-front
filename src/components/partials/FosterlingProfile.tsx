@@ -1,5 +1,5 @@
-import { Pencil, Trash } from 'react-flaticons';
-import { useModal } from '../../hooks/ModalContext';
+import {Trash } from 'react-flaticons';
+// import { useModal } from '../../hooks/ModalContext';
 import IdToSPecies from './IdToSpecies';
 // import { useEffect, useState } from 'react';
 // import axios from 'axios';
@@ -21,7 +21,7 @@ function FosterlingProfile({
   profile,
   deleteFunction,
 }: FosterlingProfileProps) {
-  const { openModal } = useModal();
+  // const { openModal } = useModal();
   console.log(profile);
 
   return (

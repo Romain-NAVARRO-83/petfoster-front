@@ -96,8 +96,8 @@ interface IFilters {
 }
 interface MapComponentProps {
   users: User[] | null;
-  animal: Animal | null;
-  filters: IFilters | null;
+  animal?: Animal | null;
+  filters?: IFilters | null;
   showSearchArea?: boolean;
 }
 function MapComponent({
@@ -261,7 +261,7 @@ function MapComponent({
         {/* Composant pour ajuster la vue de la carte afin d'inclure tous les marqueurs */}
         <FitMapToBounds
           users={filteredUsers || null}
-          animal={animal}
+          animal={animal ?? null} 
           location={location}
         />
       </MapContainer>
