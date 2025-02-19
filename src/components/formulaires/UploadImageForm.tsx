@@ -6,7 +6,7 @@ import { Upload } from 'react-flaticons';
 
 interface UploadImageFormProps {
   userId: number | null; // L'ID de l'utilisateur connecté
-  fetchUserImages: () => void | null; // Fonction pour recharger les images après upload
+  fetchUserImages: () => Promise<void> | null; // Fonction pour recharger les images après upload
   animalId: number | null;
   fetchAnimalData: () => void | null;
 }

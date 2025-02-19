@@ -3,12 +3,12 @@ import { Pencil, Eye } from 'react-flaticons';
 import { useModal } from '../../hooks/ModalContext';
 import { Animal } from 'src/@interfaces/animal';
 import { useAuth } from '../../hooks/AuthContext';
-import instanceAxios from '../../../axiosSetup/axiosSetup';
+// import instanceAxios from '../../../axiosSetup/axiosSetup';
 import { useToast } from '../../hooks/ToastContext';
 
 // Utilitaire pour calculer l'âge de l'animal
 import computeAge from '../../utils/computeAge';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import MiniatureAnimal from './Miniature';
 import IdToSPecies from './IdToSpecies';
 
@@ -41,14 +41,14 @@ function AnimalItemList({ animal }: AnimalListItemProps) {
   //   };
   //   fetchCsrfToken();
   // }, []);
-  const [animalDetail, setAnimalDetail] = useState<Animal | null>(null);
+  // const [ setAnimalDetail] = useState<Animal | null>(null);
 
   // fecth plus de détail sur l'animal
   useEffect(() => {
     const fetchAnimalData = async () => {
       try {
-        const animalResponse = await instanceAxios.get(`/animals/${animal.id}`);
-        setAnimalDetail(animalResponse.data);
+        // const animalResponse = await instanceAxios.get(`/animals/${animal.id}`);
+        // setAnimalDetail(animalResponse.data);
       } catch (error) {
         showErrorToast('Erreur réseau');
       }

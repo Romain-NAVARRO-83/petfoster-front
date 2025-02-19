@@ -78,11 +78,13 @@ const RegistrationPage = () => {
         'Votre compte a bien été créé ! Vous pouvez maintenant vous connecter'
       );
       setActiveTab('login');
-    } catch (error) {
-      showErrorToast(
-        'Erreur, veuillez recommencer ' + error.response.data.error
-      );
-      console.log(error);
+    }catch (error) {
+      if (axios.isAxiosError(error)) {
+        showErrorToast('Erreur, veuillez recommencer ' + (error.response?.data?.error ?? 'Erreur inconnue'));
+      } else {
+        showErrorToast('Une erreur inattendue est survenue.');
+      }
+      console.error(error);
     }
 
     setLoading(false);
@@ -291,6 +293,7 @@ const RegistrationPage = () => {
                 <div className="control">
                   <div className="select">
                     <select
+                    title = "pays"
                       value={country}
                       onChange={(e) => setcountry(e.target.value)}
                       required
@@ -328,7 +331,7 @@ const RegistrationPage = () => {
                 </label>
                 <div className="control">
                   <div className="select">
-                    <select value={city} onChange={handleCityChange} required>
+                    <select title="Ville" value={city} onChange={handleCityChange} required>
                       <option value="">Sélectionnez une ville</option>
                       {citysOptions.map((cityOption, index) => (
                         <option key={index} value={cityOption}>

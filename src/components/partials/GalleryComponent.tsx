@@ -16,7 +16,7 @@ interface IGalleryComponentProps {
     | {
         id: number;
         URL_picture: string;
-        users_id: number;
+        users_id: number | null;
         created_at: string;
         updated_at: string | null;
       }[]

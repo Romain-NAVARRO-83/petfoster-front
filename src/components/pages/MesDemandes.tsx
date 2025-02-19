@@ -38,7 +38,7 @@ const FilterPage = () => {
     };
   
     const orderedList = [...requestsList].sort((a, b) => {
-      return ordreDesEtats[a.requestStatus as Etats] - ordreDesEtats[b.requestStatus as Etats];
+      return ordreDesEtats[a.request_status as Etats] - ordreDesEtats[b.request_status as Etats];
     });
   
     return orderedList;
