@@ -6,7 +6,7 @@ import Messagerie from '../partials/Messagerie';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext';
 import GeolocNotification from '../partials/GeolocNotification';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import UserTypeInfo from '../partials/UserTypeInfo';
 import { useModal } from '../../hooks/ModalContext';
 import instanceAxios from '../../../axiosSetup/axiosSetup';
@@ -33,13 +33,13 @@ function Accueil() {
 
   // Fetching animals data
   const [allAnimals, setAllAnimals] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [fetchError, setFetchError] = useState<string | null>(null);
+  // const [setLoading] = useState(true);
+  // const [setFetchError] = useState<string | null>(null);
 
   // Fetching users data
   const [allUsers, setAllUsers] = useState<any>(null);
-  const [loadingUsers, setLoadingUsers] = useState(true);
-  const [fetchUsersError, setFetchUsersError] = useState<string | null>(null);
+  // const [setLoadingUsers] = useState(true);
+  // const [setFetchUsersError] = useState<string | null>(null);
 
   // Fetch animals data
   useEffect(() => {
@@ -47,11 +47,11 @@ function Accueil() {
       .get('/animals')
       .then((response) => {
         setAllAnimals(response.data);
-        setLoading(false);
+        // setLoading(false);
       })
       .catch(() => {
-        setFetchError('Erreur lors de la récupération des données');
-        setLoading(false);
+        // setFetchError('Erreur lors de la récupération des données');
+        // setLoading(false);
       });
   }, [closeModal]);
 
@@ -61,11 +61,11 @@ function Accueil() {
       .get('/users')
       .then((response) => {
         setAllUsers(response.data);
-        setLoadingUsers(false);
+        // setLoadingUsers(false);
       })
       .catch(() => {
-        setFetchUsersError('Erreur lors de la récupération des données');
-        setLoadingUsers(false);
+        // setFetchUsersError('Erreur lors de la récupération des données');
+        // setLoadingUsers(false);
       });
   }, [closeModal]);
 

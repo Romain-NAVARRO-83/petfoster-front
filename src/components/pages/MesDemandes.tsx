@@ -29,23 +29,18 @@ const FilterPage = () => {
 
   function sortRequests(requestsList: FRequest[]) {
     type Etats = 'pending' | 'approved' | 'rejected';
-
+  
     // Fonction de comparaison pour le tri
-    const ordreDesEtats = {
-      Pending: 1 as number, // On met pending en premier
-      Approved: 2 as number, // approved en second
-      Rejected: 3 as number, // rejected en dernier
+    const ordreDesEtats: Record<Etats, number> = {
+      pending: 1,  // On met pending en premier
+      approved: 2,  // approved en second
+      rejected: 3,  // rejected en dernier
     };
-
+  
     const orderedList = [...requestsList].sort((a, b) => {
-      return (
-        ordreDesEtats[a.request_status as Etats] -
-        ordreDesEtats[b.request_status as Etats]
-      );
+      return ordreDesEtats[a.requestStatus as Etats] - ordreDesEtats[b.requestStatus as Etats];
     });
-
-    console.log('TRI !');
-
+  
     return orderedList;
   }
 

@@ -6,8 +6,8 @@ import { useModal } from '../../hooks/ModalContext';
 import { useAuth } from '../../hooks/AuthContext';
 import { PlusSmall } from 'react-flaticons';
 import { User } from 'src/@interfaces/user';
-import { UserAnimal } from 'src/@interfaces/userAnimals';
-import { Helmet } from 'react-helmet';
+// import { UserAnimal } from 'src/@interfaces/userAnimals';
+import { Helmet } from 'react-helmet-async';
 
 const MesAnimaux = () => {
   // State pour stocker les animaux (du user)
@@ -15,7 +15,7 @@ const MesAnimaux = () => {
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
-  const { openModal, isActive, closeModal } = useModal();
+  const { openModal, isActive} = useModal();
   const { user: connectedUser } = useAuth();
   const navigate = useNavigate();
   // Si l'utilisateur n'est pas connecté, rediriger vers la page d'accueil'

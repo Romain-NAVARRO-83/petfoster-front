@@ -1,6 +1,6 @@
 # Erreurs TypeScript
 
-1. **Unused Import**:
+1 OK. **Unused Import**:
 
    - **Fichier**: `src/components/partials/MapComponent.tsx`
    - **Ligne**: 11

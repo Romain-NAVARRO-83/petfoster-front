@@ -12,10 +12,10 @@ import GeolocNotification from '../partials/GeolocNotification';
 import UploadImageForm from '../formulaires/UploadImageForm';
 import { MapMarker } from 'react-flaticons';
 import dayjs from 'dayjs';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 
 const AnimalProfile = () => {
-  const sectionRef = useRef(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
 
   const scrollToSection = () => {
     sectionRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -98,9 +98,9 @@ const AnimalProfile = () => {
           {connectedUser && connectedUser.userId === animal?.creator.id && (
             <UploadImageForm
               userId={null}
-              fetchUserImages={null}
+              fetchUserImages={() => {}} 
               animalId={animal?.id}
-              fetchAnimalData={fetchAnimalData}
+              fetchAnimalData={() => { fetchAnimalData().catch(console.error); }} 
             />
           )}
         </div>
@@ -241,10 +241,10 @@ const AnimalProfile = () => {
               <div className="column">
                 <h3 className="subtitle">Hébergeur actuel</h3>
                 <p>
-                  <Link to={`/profil/${animal.animalOwners[0].user.id}`}>
-                    {animal.animalOwners[0].user.name}
+                  <Link to={`/profil/${animal?.animalOwners[0].user.id}`}>
+                    {animal?.animalOwners[0].user.name}
                   </Link>
-                  <br />({animal.animalOwners[0].user.type_user})
+                  <br />({animal?.animalOwners[0].user.type_user})
                 </p>
               </div>
             </div>

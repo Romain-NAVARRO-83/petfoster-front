@@ -9,7 +9,7 @@ import { useToast } from '../../hooks/ToastContext';
 import GalleryComponent from '../partials/GalleryComponent';
 import { User } from 'src/@interfaces/user';
 import UploadImageForm from '../formulaires/UploadImageForm';
-import UserImages from '../partials/UserImages';
+// import UserImages from '../partials/UserImages';
 
 function ProfilUtilisateur() {
   const { showSuccessToast, showErrorToast } = useToast();
@@ -18,7 +18,7 @@ function ProfilUtilisateur() {
   const { id } = useParams<{ id: string }>();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [error] = useState<Error | null>(null);
   const { user: connectedUser } = useAuth(); // Obtenir l'utilisateur connecté
 
   // Récupération du token CSRF

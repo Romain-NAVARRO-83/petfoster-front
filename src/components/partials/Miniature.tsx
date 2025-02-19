@@ -10,7 +10,7 @@ interface Picture {
   URL_picture: string;
 }
 
-const apiUrl = import.meta.env.IMG_URL;
+// const apiUrl = import.meta.env.IMG_URL;
 
 export default function MiniatureAnimal({ animal }: IMiniatureAnimlProps) {
   const [pictures, setPictures] = useState<Picture[] | null>(null);
