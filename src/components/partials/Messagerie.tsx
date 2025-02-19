@@ -82,7 +82,7 @@ function Messagerie() {
         <div className="column is-one-third messenger-item-list">
           {console.log(interlocutorsLastMessage)}
           {interlocutorsLastMessage && interlocutorsLastMessage.length > 0 ? (
-            interlocutorsLastMessage.map((item) => (
+            interlocutorsLastMessage.map((item: any) => (
               <InterlocutorItemList
                 interlocutorLastMessage={item}
                 key={item.id}
@@ -114,7 +114,7 @@ function Messagerie() {
           {currentInterlocutor && (
             <div className="box">
               <ContactUserMessagerieForm
-                senderId={connectedUser?.userId}
+                senderId={connectedUser?.userId ?? null}
                 receiverId={currentInterlocutor}
                 fetchDisscussion={fetchDisscussion}
               />
