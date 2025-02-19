@@ -98,7 +98,7 @@ const AnimalProfile = () => {
           {connectedUser && connectedUser.userId === animal?.creator.id && (
             <UploadImageForm
               userId={null}
-              fetchUserImages={() => {}} 
+              fetchUserImages={async () => {}} 
               animalId={animal?.id}
               fetchAnimalData={() => { fetchAnimalData().catch(console.error); }} 
             />
