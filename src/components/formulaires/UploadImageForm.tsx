@@ -5,8 +5,8 @@ import instanceAxios from '../../../axiosSetup/axiosSetup';
 import { Upload } from 'react-flaticons';
 
 interface UploadImageFormProps {
-  userId: number | null; // L'ID de l'utilisateur connecté
-  fetchUserImages: () => Promise<void> | null; // Fonction pour recharger les images après upload
+  userId: number | null; 
+  fetchUserImages?: () => Promise<void> | null; 
   animalId: number | null;
   fetchAnimalData: () => void | null;
 }

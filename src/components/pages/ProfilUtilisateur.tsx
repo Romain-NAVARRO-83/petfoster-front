@@ -95,14 +95,23 @@ function ProfilUtilisateur() {
             <div className="column is-half">
               <GalleryComponent
                 pictures={user?.pictures ?? []}
-                userPictures={user?.pictures ?? []}
+                userPictures={
+                  user?.pictures?.map((pic) => ({
+                    id: pic.id,
+                    URL_picture: pic.URL_picture,
+                    users_id: (pic as any).users_id ?? null,
+                    created_at: pic.created_at,
+                    updated_at: pic.updated_at,
+                  })) ?? []
+                }
               />
               {/* Ajout du formulaire d'upload */}
               {connectedUser && connectedUser.userId === user?.id && (
                 <UploadImageForm
                   userId={connectedUser.userId}
-                  fetchUserImages={fetchUserData}
-                />
+                  fetchUserImages={async () => fetchUserData()} animalId={null} fetchAnimalData={function (): void | null {
+                    throw new Error('Function not implemented.');
+                  } }                />
               )}
             </div>
 
