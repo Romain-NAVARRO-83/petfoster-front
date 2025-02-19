@@ -1,34 +1,29 @@
-# Dockerfile qui sert à lancer l'environnement
-# Node.js pour le développement de façon à ce
-# toute l'équipe utilise le même environnement
+# Utiliser l'image officielle de Node.js
+FROM node:20 AS builder
 
-# Depuis l'image Node de dockerhub version 20
-FROM node:20
-
-RUN apt-get update -y
-RUN apt-get install -y rsync
-
-WORKDIR /usr/src/cache
-
-# Recuperer le package.json pour la commande 'pnpm i'
-COPY ./package.json ./
-COPY ./pnpm-lock.yaml ./
-
-# Installer pnpm
-RUN npm install -g pnpm
-RUN pnpm i
-
-# Definir le repertoir de travail
+# Définir le répertoire de travail
 WORKDIR /usr/src/app
 
-# Copier le contenu du repertoire racine local dans le répertoire racine du container
-COPY ./ ./
+# Copier les fichiers de configuration
+COPY package.json pnpm-lock.yaml ./
 
-# Copier les modules Node.js du répertoire de cache au répertoire de l'application
-RUN rsync -arv /usr/src/cache/node_modules/. /usr/src/app/node_modules
+# Installer pnpm et les dépendances
+RUN npm install -g pnpm && pnpm install
 
-# Exposer le port pour pouvoir acceder au container depuis l'explorateur
-EXPOSE 5173
+# Copier tout le code source
+COPY . .
 
-# Commande à effectuer pour initialiser le container (Ici : 'pnpm run dev')
-CMD [ "pnpm", "run", "dev" ]
+# Build du projet
+RUN pnpm run build
+
+# Étape de production : Utiliser Nginx pour servir l'app
+FROM nginx:alpine
+
+# Copier les fichiers générés par Vite dans Nginx
+COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
+
+# Exposer le port 80
+EXPOSE 80
+
+# Lancer Nginx
+CMD ["nginx", "-g", "daemon off;"]
