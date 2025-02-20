@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';  // ✅ Importation ajoutée
 
 // Composants
 import Footer from './components/Footer';
@@ -20,29 +21,31 @@ import ScrollToTop from './components/partials/ScrollToTop';
 function App() {
   return (
     <>
-      <Router>
-        <ScrollToTop />
-        <Header />
-        <Routes>
-          <Route path="/" element={<Accueil />} />
-          <Route path="/information" element={<Information />} />
-          <Route
-            path="/politique-de-confidentialite"
-            element={<PolitiqueDeConfidentialite />}
-          />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/mes-animaux" element={<MesAnimaux />} />
-          <Route path="/mes-demandes" element={<MesDemandes />} />
-          <Route path="/trouver-animal" element={<TrouverAnimal />} />
-          <Route path="/animal/:id" element={<ProfilAnimal />} />
-          <Route path="/profil/:id" element={<ProfilUtilisateur />} />
-          <Route path="/connexion" element={<Connexion />} />
-          <Route path="*" element={<Error404 />} />
-        </Routes>
-      </Router>
+      <HelmetProvider> {/* ✅ Ajout du HelmetProvider */}
+        <Router>
+          <ScrollToTop />
+          <Header />
+          <Routes>
+            <Route path="/" element={<Accueil />} />
+            <Route path="/information" element={<Information />} />
+            <Route
+              path="/politique-de-confidentialite"
+              element={<PolitiqueDeConfidentialite />}
+            />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/mes-animaux" element={<MesAnimaux />} />
+            <Route path="/mes-demandes" element={<MesDemandes />} />
+            <Route path="/trouver-animal" element={<TrouverAnimal />} />
+            <Route path="/animal/:id" element={<ProfilAnimal />} />
+            <Route path="/profil/:id" element={<ProfilUtilisateur />} />
+            <Route path="/connexion" element={<Connexion />} />
+            <Route path="*" element={<Error404 />} />
+          </Routes>
+        </Router>
 
-      <Footer />
-      <ToastContainer />
+        <Footer />
+        <ToastContainer />
+      </HelmetProvider> {/* ✅ HelmetProvider encapsule toute l'application */}
     </>
   );
 }
