@@ -40,7 +40,7 @@ export default function MiniatureAnimal({ animal }: IMiniatureAnimlProps) {
       {pictures && pictures.length > 0 ? (
         <img
           // src={`${apiUrl}/img/animaux/img-120/${pictures[0].URL_picture}`}
-          src={`http://${apiURL}/img/animaux/img-120/${pictures[0].URL_picture}`}
+          src={`http://${apiUrl}/img/animaux/img-120/${pictures[0].URL_picture}`}
           alt={animal?.name}
           width="64"
           height="64"
