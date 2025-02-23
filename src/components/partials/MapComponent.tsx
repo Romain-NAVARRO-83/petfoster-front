@@ -151,7 +151,7 @@ function MapComponent({
         className="card"
       >
         <TileLayer
-          url="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png?api_key=095fb5e7-8948-4cf6-9046-41fb46e0203a"
+          url="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png?api_key=${process.env.REACT_APP_STADIA_API_KEY}"
           attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>'
         />
 
