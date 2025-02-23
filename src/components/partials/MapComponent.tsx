@@ -16,7 +16,7 @@ import { Animal } from 'src/@interfaces/animal';
 import GenderIcon from './GenderIcon';
 import IdToSPecies from './IdToSpecies';
 
-const apiKeyStadiamaps = import.meta.env.STADIA_API_KEY;
+const apiKeyStadiamaps = import.meta.env.VITE_STADIA_API_KEY;
 
 const defaultPosition: LatLngExpression = [43.3365, 1.3396];
 const userIcon = new LeafletIcon({
