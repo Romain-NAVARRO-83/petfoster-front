@@ -23,7 +23,7 @@ interface IGalleryComponentProps {
     | null;
 }
 
-const apiUrl = import.meta.env.IMG_URL;
+const apiUrl = import.meta.env.VITE_IMG_URL;
 // const apiUrl = 'http://localhost:3000';
 const placeholderImage = '/img/defaults/ominpet-the-destructor.webp';
 
