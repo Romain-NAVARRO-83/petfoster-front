@@ -16,6 +16,8 @@ import { Animal } from 'src/@interfaces/animal';
 import GenderIcon from './GenderIcon';
 import IdToSPecies from './IdToSpecies';
 
+const apiKeyStadiamaps = import.meta.env.REACT_APP_STADIA_API_KEY
+
 const defaultPosition: LatLngExpression = [43.3365, 1.3396];
 const userIcon = new LeafletIcon({
   iconUrl: '/img/vector/marker-round3.svg',
@@ -151,7 +153,7 @@ function MapComponent({
         className="card"
       >
         <TileLayer
-          url={`https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png?api_key=${import.meta.env.REACT_APP_STADIA_API_KEY}`}
+          url={`https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png?api_key=${apiKeyStadiamaps}`}
           attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>'
         />
 
