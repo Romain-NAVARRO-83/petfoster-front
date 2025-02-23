@@ -13,8 +13,8 @@ interface InterlocutorItemListProps {
   setCurrentInterlocutor: (id: number) => void;
   fetchDisscussion: (connectedUserId: number, interlocutorId: number) => void;
 }
-// const apiUrl = import.meta.env.VITE_API_URL;
-const apiUrl = 'http://localhost:3000';
+const apiUrl = import.meta.env.VITE_API_URL;
+// const apiUrl = 'http://localhost:3000';
 function InterlocutorItemList({
   interlocutorLastMessage,
   setCurrentInterlocutor,

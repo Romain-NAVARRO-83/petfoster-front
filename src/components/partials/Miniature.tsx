@@ -10,7 +10,7 @@ interface Picture {
   URL_picture: string;
 }
 
-// const apiUrl = import.meta.env.IMG_URL;
+const apiUrl = import.meta.env.IMG_URL;
 
 export default function MiniatureAnimal({ animal }: IMiniatureAnimlProps) {
   const [pictures, setPictures] = useState<Picture[] | null>(null);
@@ -40,7 +40,7 @@ export default function MiniatureAnimal({ animal }: IMiniatureAnimlProps) {
       {pictures && pictures.length > 0 ? (
         <img
           // src={`${apiUrl}/img/animaux/img-120/${pictures[0].URL_picture}`}
-          src={`http://localhost:3000/img/animaux/img-120/${pictures[0].URL_picture}`}
+          src={`http://${apiURL}/img/animaux/img-120/${pictures[0].URL_picture}`}
           alt={animal?.name}
           width="64"
           height="64"
