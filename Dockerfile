@@ -22,17 +22,19 @@ FROM nginx:alpine
 # Copier les fichiers générés par Vite dans Nginx
 COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
 
-RUN apt-get update -y
-RUN apt install -y python3 python3-venv libaugeas0
-RUN apt-get remove certbot
-RUN python3 -m venv /opt/certbot/
+# Installer les dépendances nécessaires pour Certbot
+RUN apk update && apk add --no-cache python3 py3-pip augeas
+
+# Configurer Certbot
+RUN python3 -m venv /opt/certbot
 RUN /opt/certbot/bin/pip install --upgrade pip
 RUN /opt/certbot/bin/pip install certbot certbot-nginx
 RUN ln -s /opt/certbot/bin/certbot /usr/bin/certbot
-# RUN /opt/certbot/bin/certbot certonly --nginx
-RUN echo "0 0,12 * * * root /opt/certbot/bin/python -c 'import random; import time; time.sleep(random.random() * 3600)' && sudo certbot renew -q" | tee -a /etc/crontab > /dev/null
 
-# Exposer le port 80
+# Ajouter la tâche cron pour le renouvellement automatique des certificats
+RUN echo "0 0,12 * * * root /opt/certbot/bin/python -c 'import random; import time; time.sleep(random.random() * 3600)' && certbot renew -q" | tee -a /etc/crontab > /dev/null
+
+# Exposer les ports 80 et 443
 EXPOSE 80 443
 
 # Lancer Nginx
