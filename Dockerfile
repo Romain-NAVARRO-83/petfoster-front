@@ -35,7 +35,6 @@ RUN ln -s /opt/certbot/bin/certbot /usr/bin/certbot
 COPY 40-run-certbot.sh /40-run-certbot.sh
 RUN chmod +x /40-run-certbot.sh
 
-
 # Ajouter la tâche cron pour le renouvellement automatique des certificats
 RUN echo "0 0,12 * * * root /opt/certbot/bin/python -c 'import random; import time; time.sleep(random.random() * 3600)' && certbot renew -q" | tee -a /etc/crontab > /dev/null
 
@@ -43,4 +42,4 @@ RUN echo "0 0,12 * * * root /opt/certbot/bin/python -c 'import random; import ti
 EXPOSE 80 443
 
 # Lancer Nginx
-CMD ["/40-run-certbot.sh"]
+ENTRYPOINT ["/40-run-certbot.sh"]
