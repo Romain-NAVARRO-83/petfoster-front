@@ -42,4 +42,5 @@ RUN echo "0 0,12 * * * root /opt/certbot/bin/python -c 'import random; import ti
 EXPOSE 80 443
 
 # Lancer Nginx
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["/40-run-certbot.sh"]
+# CMD ["nginx", "-g", "daemon off;"]
