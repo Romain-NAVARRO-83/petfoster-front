@@ -1,9 +1,9 @@
 #!/bin/sh
 
-# # Démarrer Nginx en arrière-plan
+# Démarrer Nginx en arrière-plan
 nginx &
 
-# # Attendre que Nginx démarre complètement
+# Attendre que Nginx démarre complètement
 sleep 5
 
 # Obtenir/renouveler le certificat SSL avec Certbot
