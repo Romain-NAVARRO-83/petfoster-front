@@ -22,6 +22,8 @@ FROM nginx:alpine
 # Copier les fichiers générés par Vite dans Nginx
 COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
 
+COPY default.conf /etc/nginx/conf.d/default.conf
+
 # Installer les dépendances nécessaires pour Certbot
 RUN apk update && apk add --no-cache python3 py3-pip augeas
 
